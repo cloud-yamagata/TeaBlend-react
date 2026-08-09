@@ -1,0 +1,136 @@
+/**
+ * 原料実績情報一覧（旧 MaterialRresult MainWindow 配色）
+ * 第1工場生産実績情報一覧（factory1Rresult*）に合わせる
+ */
+
+.materialRresultPage .tableWrap {
+  height: calc(100vh - 260px);
+}
+
+.materialRresultToolbarRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.materialRresultToolbarRowMenu {
+  background: var(--teablend-table-body-bg, honeydew);
+}
+
+.materialRresultToolbarRowSearch {
+  background: var(--teablend-table-body-bg, honeydew);
+  border-color: #d6dee8;
+  gap: 4px 5px;
+  min-height: 38px;
+}
+
+.materialRresultFieldLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0 8px;
+  min-height: 28px;
+  background: #9acd32;
+  border: 1px solid #2f4f2f;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.materialRresultMakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.materialRresultMakeYearWrap .f2EditMakeYearSpinner {
+  height: 30px;
+}
+
+.materialRresultMakeYearWrap .f2EditMakeYearValue {
+  width: 36px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.materialRresultMakeYearWrap .f2EditMakeYearStep {
+  min-width: 22px;
+  height: 14px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.materialRresultKeywordInput {
+  width: 100px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid #2f4f2f;
+  border-radius: 2px;
+  font-size: 14px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.materialRresultDateInput {
+  width: 140px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid #2f4f2f;
+  border-radius: 2px;
+  font-size: 14px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.materialRresultOrganicGroup {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 2px 6px;
+  margin: 0;
+  padding: 2px 8px;
+  min-height: 28px;
+  background: #98fb98;
+  border: 1px solid #2f4f2f;
+  border-radius: 2px;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.materialRresultOrganicGroup label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.materialRresultToolbarRowSearch .factory2DarkButton {
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.materialRresultMenuActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.materialRresultHint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.materialRresultHint.warn {
+  color: #b45309;
+}

@@ -1,0 +1,74 @@
+.factory1RresultTableWrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.factory1RresultTableInner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.factory1RresultMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: none;
+}
+
+.factory1RresultMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.factory1RresultMantineTable {
+  font-size: 13px;
+}
+
+.factory1RresultMantineTable .mantine-Table-td,
+.factory1RresultMantineTable .mantine-Table-th {
+  padding: 1px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.factory1RresultMantineTable .mantineScrollTableTh {
+  min-height: 45px;
+  font-size: 11px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  background-color: #228b22;
+}
+
+.factory1RresultMantineTable .mantineScrollTableTh .mantineScrollTableSortBtn {
+  white-space: normal;
+}
+
+.factory1RresultBulkCheckbox,
+.factory1RresultMaterialCheckbox {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.factory1RresultBulkCheckbox:disabled,
+.factory1RresultMaterialCheckbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.factory1RresultTablePlaceholder {
+  margin: 24px 12px;
+  color: #475569;
+  font-size: 14px;
+}

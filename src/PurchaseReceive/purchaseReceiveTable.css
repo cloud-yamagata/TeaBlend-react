@@ -1,0 +1,17 @@
+.purchaseReceiveMantineTableRoot .mantineScrollTable thead th {
+  background: #228b22;
+  color: #fff;
+}
+
+.purchaseReceiveMantineTableRoot .mantineScrollTable tbody tr:nth-child(even) {
+  background: #f0fff0;
+}
+
+.purchaseReceiveMantineTableRoot .mantineScrollTable tbody tr.isSelected {
+  background: #cce8cc;
+}
+
+.purchaseReceiveMantineTableRoot .mantineScrollTable tbody td {
+  padding: 1px 4px;
+  font-size: 13px;
+}

@@ -1,0 +1,39 @@
+.reportGridWrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.reportGridMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.reportGridMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.reportGridMantineTable {
+  font-size: 13px;
+}
+
+.reportGridMantineTable .mantine-Table-td,
+.reportGridMantineTable .mantine-Table-th {
+  padding: 2px 6px;
+}
+
+.reportGridMantineTable .mantineScrollTableTh {
+  min-height: var(--report-grid-header-min-height, 40px);
+  white-space: normal;
+  font-size: 12px;
+}
+
+.reportGridWrap .reportGridMantineRoot {
+  flex: 1;
+  min-height: 0;
+}

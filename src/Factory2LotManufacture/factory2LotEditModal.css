@@ -1,0 +1,536 @@
+/**
+ * 第2工場製造ロット登録画面（EditWindow.xaml 左ペイン相当）
+ */
+.f2EditOverlay {
+  z-index: 1500;
+}
+
+.f2EditPanel {
+  width: min(1120px, calc(100vw - 48px));
+  min-width: 1080px;
+  max-height: calc(100vh - 32px);
+  padding: 8px 12px 12px;
+  overflow: auto;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.f2EditPanelTitle {
+  margin: 0 8px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.f2EditToolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+  overflow-x: auto;
+}
+
+.f2EditToolbar button {
+  flex-shrink: 0;
+  min-width: 50px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  border: 1px solid #333;
+  background: #f0f0f0;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.f2EditToolbar button:disabled {
+  opacity: 0.55;
+}
+
+.f2EditPlanContext {
+  margin: 0 0 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+}
+
+.f2EditPlanNotice {
+  margin: 0 0 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #5a4a00;
+  background: #fff8e1;
+  border: 1px solid #e6c200;
+}
+
+.f2EditPlanNotice p {
+  margin: 0 0 4px;
+}
+
+.f2EditPlanNotice p:last-child {
+  margin-bottom: 0;
+}
+
+.f2EditGradeGroup {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.f2EditGradeLabel {
+  flex-shrink: 0;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.f2EditGradeNo {
+  flex-shrink: 0;
+  width: 40px;
+  height: 20px;
+  text-align: right;
+  border: 1px solid #000;
+  background: #fff;
+  font-size: 12px;
+}
+
+.f2EditBlock {
+  margin-bottom: 5px;
+}
+
+.f2EditRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.f2EditCellLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0 4px;
+  min-height: 30px;
+  border: 1px solid #000;
+  background: #e8e8f0;
+  text-align: center;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.f2EditCellValue {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 30px;
+  border: 1px solid #000;
+  border-left: none;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.f2EditRow > .f2EditCellValue:first-of-type {
+  border-left: 1px solid #000;
+}
+
+.f2EditRow > .f2EditCellLabel + .f2EditCellValue {
+  border-left: none;
+}
+
+.f2EditRow > .f2EditCellLabel:not(:first-child) {
+  border-left: none;
+}
+
+.f2EditMakeYearSpinner {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 22px;
+}
+
+.f2EditMakeYearValue {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.f2EditMakeYearButtons {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 14px;
+  border-left: 1px solid #ccc;
+}
+
+.f2EditMakeYearStep {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: #f0f0f0;
+  font-size: 8px;
+  line-height: 1;
+  cursor: pointer;
+  color: #333;
+}
+
+.f2EditMakeYearStep:last-child {
+  border-bottom: none;
+}
+
+.f2EditMakeYearStep:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.f2EditInput,
+.f2EditReadonly {
+  width: 100%;
+  height: 100%;
+  min-height: 28px;
+  padding: 2px 4px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.f2EditInput:focus {
+  outline: none;
+  background: #ffff99;
+}
+
+.f2EditReadonly {
+  background: #f8f8ff;
+}
+
+.f2EditInputRight,
+.f2EditReadonlyRight {
+  text-align: right;
+}
+
+.f2EditProductNo {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  gap: 0;
+}
+
+.f2EditProductNoPrefix {
+  width: 15px;
+}
+
+.f2EditProductNoSep {
+  width: 10px;
+  text-align: center;
+}
+
+.f2EditClassProcessRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.f2EditRadios {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 4px 8px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.f2EditRadios label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.f2EditRadiosCompact {
+  gap: 6px 10px;
+  padding: 2px 4px;
+}
+
+/** 部品名・環境時刻など 2行テーブル共通 */
+.f2EditSummaryTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.f2EditSummaryTable th,
+.f2EditSummaryTable td {
+  border: 1px solid #000;
+  padding: 0;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.f2EditSummaryTable th {
+  height: 20px;
+  background: #e8e8f0;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.f2EditSummaryTable td {
+  height: 30px;
+  background: #fff;
+}
+
+.f2EditSummaryTable .f2EditInput,
+.f2EditSummaryTable .f2EditReadonly {
+  min-height: 28px;
+}
+
+.f2EditSummaryTable .f2EditBtnPaleGreen {
+  width: 100%;
+  height: 20px;
+  margin: 0;
+}
+
+/** 室内温度・湿度・時刻（1行ヘッダ + 1行データ） */
+.f2EditEnvTable {
+  margin-top: 4px;
+}
+
+.f2EditEnvTable thead th {
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+.f2EditEnvNumber {
+  text-align: center;
+}
+
+.f2EditEnvTimeSingle {
+  width: 100%;
+  text-align: center;
+}
+
+.f2EditEnvRangeCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
+.f2EditEnvTimeRange {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+}
+
+.f2EditTimeSep {
+  flex-shrink: 0;
+  padding: 0 2px;
+  font-size: 12px;
+}
+
+.f2EditBtnPaleGreen {
+  width: 100%;
+  height: 20px;
+  border: none;
+  background: palegreen;
+  font-size: 11px;
+  cursor: default;
+}
+
+.f2EditBtnDarkGreen {
+  width: 100%;
+  height: 100%;
+  min-height: 28px;
+  border: none;
+  background: #006400;
+  color: #fff;
+  font-size: 12px;
+  cursor: default;
+}
+
+.f2EditSectionBadge {
+  background: yellowgreen !important;
+  font-weight: 600;
+}
+
+.f2EditCheckPanel {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #000;
+  flex-shrink: 0;
+}
+
+.f2EditCheckPanelTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 15px;
+  border-bottom: 1px solid #000;
+  background: #e8e8f0;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.f2EditCheckPanelBody {
+  display: flex;
+}
+
+.f2EditCheckCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 35px;
+  border-right: 1px solid #000;
+  font-size: 9px;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.f2EditCheckCell:last-child {
+  border-right: none;
+}
+
+.f2EditPartsSection {
+  margin-top: 5px;
+}
+
+.f2EditPartsSectionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 6px;
+}
+
+.f2EditPartsSectionTitle {
+  margin: 0;
+  font-size: 16px;
+}
+
+.f2EditStockZoomOpenButton {
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: #f0f0f0;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.f2EditStockZoomOpenButton:hover {
+  background: #e8e8e8;
+}
+
+.f2EditPartsInputTable td.f2EditActionCell {
+  padding: 0;
+}
+
+.f2EditZoomCell {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
+.f2EditZoomCell .f2EditBtnPaleGreen {
+  flex-shrink: 0;
+  width: auto;
+  min-width: 48px;
+  height: 100%;
+  min-height: 28px;
+  padding: 0 4px;
+}
+
+.f2EditZoomCell .f2EditInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.f2EditPartsGridWrap {
+  height: 260px;
+  margin-top: 5px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.f2EditStockEntryBlock {
+  margin-bottom: 8px;
+}
+
+.f2EditStockEntryTable th,
+.f2EditStockEntryTable td {
+  text-align: center;
+  padding: 0 4px;
+}
+
+.f2EditStockHeaderButton {
+  width: 100%;
+  height: 20px;
+}
+
+.f2EditStockPickButton {
+  width: 100%;
+  min-height: 28px;
+  height: 28px;
+}
+
+.f2EditReadonlyCell {
+  background: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.f2EditStockEntryActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/** 使用量：テキスト入力＋微調整（type=number の max 制限で入力しづらい問題を回避） */
+.f2EditUseQtyCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px;
+  min-width: 88px;
+}
+
+.f2EditDecimalInput {
+  width: 100%;
+  text-align: right;
+}
+
+.f2EditGridDeleteBtn {
+  height: 22px;
+  padding: 0 6px;
+  border: 1px solid #333;
+  background: #f0f0f0;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.f2EditGridDeleteBtn:hover {
+  background: #ffe5e5;
+}
+
+.f2EditSpacer {
+  height: 5px;
+}
+
+.f2EditSpacerLg {
+  height: 10px;
+}

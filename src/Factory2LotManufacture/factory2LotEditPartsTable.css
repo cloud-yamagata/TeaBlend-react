@@ -1,0 +1,35 @@
+.f2EditPartsGridWrap .f2EditPartsMantineRoot {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid #000;
+}
+
+.f2EditPartsGridWrap .f2EditPartsMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.f2EditPartsMantineTable {
+  font-size: 12px;
+}
+
+.f2EditPartsMantineTable .mantine-Table-td,
+.f2EditPartsMantineTable .mantine-Table-th {
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+.f2EditPartsMantineTable .mantineScrollTableTh {
+  min-height: 32px;
+  font-size: 11px;
+}
+
+.f2EditPartsMantineRoot .mantineScrollTableFooter {
+  display: none;
+}
+
+.f2EditPartsDeleteIcon {
+  margin: 0 auto;
+}

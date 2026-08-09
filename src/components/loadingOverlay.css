@@ -1,0 +1,285 @@
+/**
+ * 全画面共有のローディングオーバーレイ（`ui/busy` と連動）。
+ * お茶イメージは SVG/CSS のみ（外部画像なし）。
+ */
+
+.loadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(34 48 38 / 32%);
+  padding: 24px;
+}
+
+/* 起動時：茶畑画像を全面背景に */
+.loadingOverlay--splash {
+  background-image:
+    linear-gradient(rgb(18 32 22 / 42%), rgb(18 32 22 / 42%)),
+    var(--loading-splash-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.loadingOverlayPanel {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid #c5d4c0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8faf6 100%);
+  box-shadow: 0 16px 40px rgb(34 48 38 / 22%);
+}
+
+.loadingOverlay--splash .loadingOverlayPanel {
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px 32px 20px;
+  min-width: 240px;
+  max-width: min(92vw, 360px);
+  text-align: center;
+  background: rgb(255 255 255 / 92%);
+  border-color: rgb(255 255 255 / 70%);
+  box-shadow: 0 20px 48px rgb(15 23 42 / 30%);
+}
+
+.loadingOverlayTextBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.loadingOverlayText {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a2e1a;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+}
+
+.loadingOverlay--splash .loadingOverlayText {
+  font-size: 15px;
+  animation: loadingSplashMessagePulse 2.6s ease-in-out infinite;
+}
+
+.loadingOverlaySubText {
+  font-size: 12px;
+  font-weight: 600;
+  color: #3d5c42;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.loadingOverlay--splash .loadingOverlaySubText {
+  animation: loadingSplashSubPulse 2.6s ease-in-out infinite;
+  animation-delay: 0.45s;
+}
+
+/* 起動中であることが伝わる、ゆっくりした明暗（呼吸） */
+@keyframes loadingSplashMessagePulse {
+  0%,
+  100% {
+    opacity: 1;
+    color: #1a2e1a;
+  }
+  50% {
+    opacity: 0.48;
+    color: #4a6b50;
+  }
+}
+
+@keyframes loadingSplashSubPulse {
+  0%,
+  100% {
+    opacity: 0.92;
+    color: #3d5c42;
+  }
+  50% {
+    opacity: 0.38;
+    color: #6b8a72;
+  }
+}
+
+/* --- 共通アイコン枠 --- */
+.loadingTeaIcon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  color: #2d6a3e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 候補E: 井ヶ田ロゴ */
+.loadingTeaIcon--igetaLogo {
+  width: auto;
+  height: auto;
+  max-width: 220px;
+}
+
+.loadingIgetaLogo {
+  display: block;
+  max-width: 200px;
+  max-height: 72px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  animation: loadingLogoPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes loadingLogoPulse {
+  0%,
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.52;
+    filter: brightness(0.82);
+  }
+}
+
+/* 処理中オーバーレイ（非スプラッシュ）でもメッセージに軽い呼吸 */
+.loadingOverlay:not(.loadingOverlay--splash) .loadingOverlayText {
+  animation: loadingBusyTextPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes loadingBusyTextPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.62;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingIgetaLogo,
+  .loadingOverlayText,
+  .loadingOverlaySubText {
+    animation: none !important;
+  }
+}
+
+.loadingTeaSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 候補A: 湯気付きカップ（デフォルト） */
+.loadingTeaIcon--cupSteam .loadingTeaSteam {
+  fill: none;
+  stroke: #6b9b7a;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: loadingTeaSteamRise 1.6s ease-in-out infinite;
+}
+
+.loadingTeaSteam--1 {
+  animation-delay: 0s;
+}
+
+.loadingTeaSteam--2 {
+  animation-delay: 0.35s;
+}
+
+.loadingTeaSteam--3 {
+  animation-delay: 0.7s;
+}
+
+@keyframes loadingTeaSteamRise {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  35% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* 候補B: 回転する茶葉 */
+.loadingTeaIcon--leafSpin .loadingTeaLeaf {
+  transform-origin: 16px 16px;
+  animation: loadingTeaLeafSpin 1.4s ease-in-out infinite;
+}
+
+@keyframes loadingTeaLeafSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.06);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* 候補C: ティーポット（湯気パルス） */
+.loadingTeaIcon--teapot {
+  animation: loadingTeaPotPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes loadingTeaPotPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.88;
+  }
+}
+
+/* 候補D: 3枚の茶葉が周回 */
+.loadingTeaIcon--leavesOrbit {
+  position: relative;
+}
+
+.loadingTeaOrbitLeaf {
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  background: #2d6a3e;
+  border-radius: 0 80% 0 80%;
+  top: 50%;
+  left: 50%;
+  margin: -7px 0 0 -5px;
+  transform-origin: 5px 20px;
+  animation: loadingTeaOrbit 1.3s linear infinite;
+}
+
+.loadingTeaOrbitLeaf--1 {
+  animation-delay: 0s;
+  opacity: 1;
+}
+
+.loadingTeaOrbitLeaf--2 {
+  animation-delay: -0.43s;
+  opacity: 0.75;
+}
+
+.loadingTeaOrbitLeaf--3 {
+  animation-delay: -0.86s;
+  opacity: 0.55;
+}
+
+@keyframes loadingTeaOrbit {
+  to {
+    transform: rotate(360deg);
+  }
+}

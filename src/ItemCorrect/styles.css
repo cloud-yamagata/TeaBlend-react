@@ -1,0 +1,130 @@
+/**
+ * 商品マスタメンテナンス（仕上品仕入登録の検索行＋メニューを踏襲）
+ */
+
+.itemCorrectPage .toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.itemCorrectHint {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.itemCorrectMenuRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 4px 0;
+  background: var(--teablend-table-body-bg, honeydew);
+  border-radius: 8px;
+}
+
+.itemCorrectMenuItem {
+  min-width: 64px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #166534;
+  border-radius: 4px;
+  background: #166534;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.itemCorrectMenuItem:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.itemCorrectMenuItem:not(:disabled):hover {
+  background: #15803d;
+}
+
+.itemCorrectSearchRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.itemCorrectSearchRow .searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-self: flex-end;
+}
+
+.itemCorrectSearchRow .searchFieldLabel {
+  font-size: 12px;
+  color: #334155;
+}
+
+.itemCorrectSearchRow .searchFieldLabelSpacer {
+  visibility: hidden;
+}
+
+.itemCorrectSearchRow .searchControl {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.itemCorrectSearchRow .searchControlItemName {
+  width: 200px;
+}
+
+.itemCorrectSearchRow .factory2GroupBox {
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.itemCorrectSearchRow .itemCorrectItemGroupWithSearch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.itemCorrectSearchRow .searchSubmitButton {
+  flex-shrink: 0;
+  height: 32px;
+  min-width: 72px;
+  padding: 0 14px;
+  border: 1px solid #14532d;
+  border-radius: 6px;
+  background: #14532d;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.itemCorrectSearchRow .searchSubmitButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.itemCorrectPage .status {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.itemCorrectPage .status.error {
+  color: #b91c1c;
+}

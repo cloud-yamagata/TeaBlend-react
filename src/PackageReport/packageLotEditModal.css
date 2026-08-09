@@ -1,0 +1,1324 @@
+/**
+ * 製造報告書登録画面（EditWindow.xaml 左ペイン相当）
+ */
+.pkgEditOverlay {
+  z-index: 1500;
+}
+
+.pkgEditOverlay.modalOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 45%);
+  padding: 16px;
+}
+
+.pkgEditWindow {
+  width: min(700px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #333;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pkgEditWindowHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #ccc;
+  background: #f5f5f5;
+}
+
+.pkgEditWindowTitle {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  border-bottom: none;
+}
+
+.pkgEditCloseBtn {
+  flex-shrink: 0;
+  min-width: 56px;
+  height: 20px;
+  padding: 0 8px;
+  font-size: 12px;
+  border: 1px solid #333;
+  background: #f0f0f0;
+  cursor: pointer;
+}
+
+.pkgEditCloseBtn:hover {
+  background: #e4e4e4;
+}
+
+.pkgEditPanel {
+  flex: 1;
+  min-height: 0;
+  padding: 8px 10px 10px;
+  overflow: auto;
+  font-size: 12px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+}
+
+.pkgEditForm {
+  --pkg-edit-section-gap: 8px;
+  --pkg-edit-border-width: 1px;
+  --pkg-edit-border-color: #000;
+  --pkg-edit-border: var(--pkg-edit-border-width) solid var(--pkg-edit-border-color);
+  --pkg-edit-border-inner-color: #c8c8c8;
+  --pkg-edit-border-inner: var(--pkg-edit-border-width) solid var(--pkg-edit-border-inner-color);
+  width: 660px;
+  max-width: 100%;
+}
+
+.pkgEditToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--pkg-edit-section-gap);
+}
+
+.pkgEditToolbarTitle {
+  margin: 0 6px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pkgEditToolbar button {
+  min-width: 50px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  border: 1px solid #333;
+  background: #f0f0f0;
+  cursor: pointer;
+}
+
+.pkgEditToolbar button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.pkgEditRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 660px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* 隣接セル罫線の重ね合わせ（外枠欠け・二重線防止） */
+.pkgEditRow > * + *,
+.pkgEditTeaRow > * + *,
+.pkgEditTimeFieldRow > * + *,
+.pkgEditShelfRow > * + * {
+  margin-left: calc(-1 * var(--pkg-edit-border-width));
+}
+
+.pkgEditCellLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--pkg-edit-border);
+  background: lavender;
+  text-align: center;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  font-size: 12px;
+}
+
+.pkgEditCellBody {
+  border: var(--pkg-edit-border);
+  background: #fff;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pkgEditInput {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 20px;
+  border: none;
+  padding: 2px 4px;
+  font-size: 12px;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.pkgEditInput:focus {
+  outline: none;
+  background: #ffff00;
+}
+
+.pkgEditInputReadonly {
+  background: ghostwhite;
+}
+
+.pkgEditInputRight {
+  text-align: right;
+}
+
+/* エリア間の行余白（--pkg-edit-section-gap で一括調整） */
+.pkgEditSectionGap {
+  height: var(--pkg-edit-section-gap);
+}
+
+.pkgEditSectionNote {
+  margin: var(--pkg-edit-section-gap) 0 0;
+  font-size: 12px;
+}
+
+/* 製造No・商品名ZOOM */
+.pkgEditHeaderRow {
+  width: 660px;
+  max-width: 100%;
+}
+
+.pkgEditHeaderRow .pkgEditHeaderProductNo {
+  width: 50px;
+  min-height: 30px;
+}
+
+.pkgEditHeaderRow .pkgEditHeaderProductNoVal {
+  width: 90px;
+  min-height: 30px;
+}
+
+.pkgEditHeaderRow .pkgEditHeaderItemZoomBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  min-height: 30px;
+  padding: 2px 4px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.pkgEditHeaderRow .pkgEditHeaderItemZoom {
+  flex: 1;
+  min-width: 0;
+  min-height: 30px;
+  padding: 0;
+}
+
+.pkgEditItemZoomFields {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  width: 100%;
+  height: 100%;
+  min-height: 30px;
+}
+
+.pkgEditItemZoomCell {
+  border-right: var(--pkg-edit-border);
+  min-width: 0;
+  min-height: 30px;
+  overflow: hidden;
+}
+
+.pkgEditItemZoomNameCell {
+  border-right: none;
+}
+
+.pkgEditItemZoomNo {
+  text-align: center;
+}
+
+.pkgEditItemZoomName {
+  text-align: left;
+}
+
+.pkgEditZoomButton {
+  box-sizing: border-box;
+  border: var(--pkg-edit-border);
+  background: #006400;
+  color: #fff;
+  cursor: pointer;
+}
+
+.pkgEditZoomButton:hover:not(:disabled) {
+  background: #004d00;
+}
+
+.pkgEditZoomButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.pkgEditProductNoText {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+/* 茶区分・製造日・温湿度（1行固定・この行幅を基準に調整） */
+.pkgEditTeaRow {
+  display: grid;
+  grid-template-columns: 50px 222px 50px 100px 238px;
+  align-items: stretch;
+  min-height: 30px;
+  width: 660px;
+  max-width: 100%;
+}
+
+.pkgEditTeaClassLbl {
+  min-height: 30px;
+  white-space: nowrap;
+}
+
+.pkgEditTeaClassBody {
+  min-height: 30px;
+  padding: 0;
+  overflow: visible;
+}
+
+.pkgEditTeaRadios {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  padding: 2px 4px;
+  font-size: 12px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.pkgEditTeaRadios label {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pkgEditWorkDateLbl {
+  min-height: 30px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.pkgEditWorkDateBody {
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  min-height: 30px;
+}
+
+.pkgEditWorkDateInput {
+  width: 96px;
+  height: 22px;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.pkgEditWorkDateInput:focus {
+  background: #ffff00;
+  outline: none;
+}
+
+.pkgEditEnvBody {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 2px;
+  padding: 2px 4px;
+  font-size: 12px;
+  min-height: 30px;
+  overflow: visible;
+}
+
+.pkgEditEnvLabel {
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+.pkgEditEnvInput {
+  width: 35px;
+  height: 20px;
+  border: 1px solid #ccc;
+  text-align: right;
+  font-size: 12px;
+}
+
+.pkgEditEnvInput:focus {
+  background: #ffff00;
+  outline: none;
+}
+
+.pkgEditDetailSection {
+  width: 690px;
+  max-width: 100%;
+}
+
+.pkgEditDetailDataGrid input.pkgEditInputError {
+  background: #fff5f5;
+  box-shadow: inset 0 0 0 1px #c62828;
+}
+
+/* 必須項目未入力（現行 WPF 相当の赤枠・メッセージは出さない） */
+.pkgEditInput.pkgEditMandatoryEmpty,
+input.pkgEditMandatoryEmpty,
+textarea.pkgEditMandatoryEmpty,
+.pkgEditEnvTimeSingle.pkgEditMandatoryEmpty,
+.pkgEditEnvTimeRange.pkgEditMandatoryEmpty {
+  box-shadow: inset 0 0 0 1px #c62828;
+}
+
+.pkgEditRemQuantityError {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #c62828;
+}
+
+/* 明細グリッド（外枠は outline：border だと列幅合計と重なり右罫線が欠ける） */
+.pkgEditDetailGrid {
+  --pkg-detail-name-w: 170px;
+  --pkg-detail-lot-w: 100px;
+  display: grid;
+  /* 品名・ロット固定、残り4列は等幅 */
+  grid-template-columns: var(--pkg-detail-name-w) var(--pkg-detail-lot-w) repeat(4, minmax(0, 1fr));
+  grid-template-rows: 20px 60px;
+  width: 690px;
+  max-width: 100%;
+  box-sizing: border-box;
+  outline: var(--pkg-edit-border);
+  outline-offset: 0;
+}
+
+.pkgEditDetailGrid input,
+.pkgEditDetailGrid textarea {
+  border: none;
+  width: 100%;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.pkgEditDetailGrid input:focus,
+.pkgEditDetailGrid textarea:focus {
+  background: #ffff00;
+  outline: none;
+}
+
+.pkgEditDetailHead {
+  display: contents;
+}
+
+.pkgEditDetailHead > div {
+  grid-row: 1;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: lavender;
+  font-size: 12px;
+  border-right: var(--pkg-edit-border-inner);
+  border-bottom: var(--pkg-edit-border);
+  box-sizing: border-box;
+}
+
+.pkgEditDetailHead > div:nth-child(1) {
+  grid-column: 1;
+  border-right: var(--pkg-edit-border);
+}
+
+.pkgEditDetailHead > div:nth-child(2) { grid-column: 2; }
+.pkgEditDetailHead > div:nth-child(3) { grid-column: 3; }
+.pkgEditDetailHead > div:nth-child(4) { grid-column: 4; }
+.pkgEditDetailHead > div:nth-child(5) { grid-column: 5; }
+.pkgEditDetailHead > div:nth-child(6) {
+  grid-column: 6;
+  border-right: none;
+}
+
+.pkgEditPartNameCell {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: 20px 40px;
+  border-right: var(--pkg-edit-border);
+  box-sizing: border-box;
+  height: 60px;
+}
+
+/* 1段目：明細3行の1行目相当（商品No・中央） */
+.pkgEditPartNameNoRow {
+  min-height: 20px;
+  border-bottom: var(--pkg-edit-border-inner);
+  overflow: hidden;
+}
+
+.pkgEditPartNameNo {
+  height: 20px;
+  text-align: center;
+}
+
+/* 2段目：明細2・3行目を結合した高さ（商品名・左寄せ） */
+.pkgEditPartNameNameRow {
+  min-height: 40px;
+  overflow: hidden;
+}
+
+.pkgEditPartNameName {
+  height: 40px;
+  resize: none;
+  padding: 2px 4px;
+  text-align: left;
+  line-height: 1.3;
+}
+
+/* 3行×5列データ部（外枠=親グリッド太線、内枠=gap細線） */
+.pkgEditDetailDataGrid {
+  grid-column: 2 / 7;
+  grid-row: 2;
+  display: grid;
+  /* 親の列2〜6と完全同期（数量4列が等幅になる） */
+  grid-template-columns: subgrid;
+  grid-template-rows: repeat(3, 20px);
+  row-gap: 1px;
+  column-gap: 0;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: #d0d0d0;
+}
+
+/* 行間のみ gap のため、列区切りはセル右線 */
+.pkgEditDetailDataGrid > *:not(:nth-child(5n)) {
+  box-shadow: inset -1px 0 0 #d0d0d0;
+}
+
+.pkgEditDetailDataCell {
+  min-height: 20px;
+  min-width: 0;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.pkgEditDetailDataGrid input.pkgEditDetailDataCell {
+  padding: 1px 7px 1px 4px;
+  text-align: right;
+}
+
+.pkgEditDetailDataGrid input.pkgEditDetailDataCell::placeholder {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* ロット列：製造No + ZOOM（B案） */
+.pkgEditLotCell {
+  display: flex;
+  align-items: stretch;
+  min-height: 20px;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.pkgEditLotNoInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  padding: 1px 1px 1px 2px;
+  font-size: 11px;
+  text-align: right;
+  background: ghostwhite;
+  box-sizing: border-box;
+}
+
+.pkgEditLotZoomBtn {
+  flex-shrink: 0;
+  width: 20px;
+  min-width: 20px;
+  padding: 0;
+  border: none;
+  border-left: 1px solid #c8c8c8;
+  background: #006400;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pkgEditLotZoomBtn:hover:not(:disabled) {
+  background: #004d00;
+}
+
+.pkgEditLotZoomBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  background: #94a3b8;
+}
+
+.pkgEditLotClearBtn {
+  flex-shrink: 0;
+  width: 20px;
+  min-width: 20px;
+  padding: 0;
+  border: none;
+  border-left: 1px solid #c8c8c8;
+  background: #b91c1c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pkgEditLotClearBtn:hover:not(:disabled) {
+  background: #991b1b;
+}
+
+.pkgEditLotClearBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  background: #94a3b8;
+}
+
+.pkgEditDetailReadonly {
+  background: #f0f0f0;
+  text-align: right;
+  padding: 1px 7px 1px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.pkgEditDetailSampleLbl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: lavender;
+  font-size: 12px;
+}
+
+/* 賞味期限・清掃記録・時刻（同一エリア） */
+.pkgEditShelfCleaningArea {
+  display: flex;
+  align-items: stretch;
+  width: 660px;
+  max-width: 100%;
+  min-height: 111px;
+  box-sizing: border-box;
+}
+
+.pkgEditShelfCleaningLeft {
+  display: flex;
+  flex-direction: column;
+  width: 325px;
+  flex-shrink: 0;
+}
+
+/* 賞味期限行 */
+.pkgEditShelfRow {
+  width: 100%;
+  flex: 0 0 50px;
+}
+
+.pkgEditShelfBestLbl,
+.pkgEditShelfFailLbl {
+  width: 75px;
+}
+
+.pkgEditOxygenLbl {
+  min-height: 45px;
+}
+
+.pkgEditShelfRow .pkgEditCellLabel {
+  min-height: 50px;
+}
+
+.pkgEditShelfDate {
+  width: 100px;
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.pkgEditShelfFail {
+  /* 隣接セル罫線重ね分(+3px)で左カラム幅325pxに揃える */
+  width: 78px;
+  min-height: 50px;
+}
+
+.pkgEditShelfFailInput {
+  width: 40px;
+  margin: 14px auto 0;
+  display: block;
+}
+
+
+/* 清掃記録（左カラム下段・機械選択テーブルと縦中央揃え） */
+.pkgEditCleaningSubRow {
+  display: flex;
+  flex: 0 0 61px;
+  align-items: center;
+  gap: 0;
+  min-height: 61px;
+  margin-top: auto;
+  width: 100%;
+}
+
+.pkgEditCleaningTitle {
+  width: 60px;
+  flex-shrink: 0;
+  height: 61px;
+  padding: 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+/* 自動包装機・粉末・手詰（2行×5列・上段右端に揃える） */
+.pkgEditCleanMachineTable {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 16px 45px;
+  border: var(--pkg-edit-border);
+  box-sizing: border-box;
+  background: #d0d0d0;
+  gap: 1px;
+}
+
+.pkgEditCleanMachineHead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: lavender;
+  font-size: 12px;
+  text-align: center;
+  box-sizing: border-box;
+  min-height: 16px;
+}
+
+.pkgEditCleanMachineHeadSpan {
+  grid-column: 1 / 4;
+  grid-row: 1;
+}
+
+.pkgEditCleanMachineHead:nth-of-type(2) {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.pkgEditCleanMachineHead:nth-of-type(3) {
+  grid-column: 5;
+  grid-row: 1;
+}
+
+.pkgEditCleanMachineCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: #fff;
+  min-height: 45px;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.pkgEditCleanMachineLbl {
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.pkgEditCleanMachineCell input {
+  margin: 0;
+}
+
+/* 袋詰・清掃時刻（右カラム・残り幅いっぱい・外枠は行セルの罫線のみ） */
+.pkgEditTimeBlock {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  border: none;
+  margin-left: calc(-1 * var(--pkg-edit-border-width));
+  box-sizing: border-box;
+}
+
+.pkgEditTimeFieldRow {
+  display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  min-height: 25px;
+  width: 100%;
+}
+
+.pkgEditTimeFieldRow + .pkgEditTimeFieldRow {
+  margin-top: calc(-1 * var(--pkg-edit-border-width));
+}
+
+.pkgEditTimeBlock .pkgEditCellLabel {
+  width: 108px;
+  flex-shrink: 0;
+  height: auto;
+  min-height: 0;
+  font-size: 12px;
+}
+
+.pkgEditTimeBlock .pkgEditCellBody {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.pkgEditEnvTimeSingle {
+  width: 100%;
+  min-height: 23px;
+  text-align: center;
+  border: none;
+}
+
+.pkgEditEnvRangeCell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.pkgEditEnvTimeRange {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  min-height: 23px;
+  text-align: center;
+  border: none;
+}
+
+.pkgEditTimeSep {
+  flex-shrink: 0;
+  padding: 0 2px;
+  font-size: 12px;
+}
+
+/* 自動包装機 */
+.pkgEditAutoSection {
+  width: 660px;
+  max-width: 100%;
+}
+
+.pkgEditAutoPackWrap {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.pkgEditBaChecks {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 2px 6px;
+  flex-shrink: 0;
+}
+
+.pkgEditBaChecks label {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* 作業前後チェック（テーブル・罫線連続） */
+.pkgEditBaCheckTable {
+  border-collapse: collapse;
+  table-layout: fixed;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.pkgEditBaCheckTable th,
+.pkgEditBaCheckTable td {
+  border: var(--pkg-edit-border);
+  padding: 0 2px;
+  min-height: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  font-weight: normal;
+  text-align: center;
+}
+
+.pkgEditBaCheckColSide {
+  width: 20px;
+}
+
+.pkgEditBaCheckColTask {
+  width: 50px;
+}
+
+.pkgEditBaCheckColWork {
+  width: 72px;
+}
+
+.pkgEditBaCheckColChk {
+  width: 35px;
+}
+
+.pkgEditBaCheckSideTitle {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  background: lavender;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 2px 0;
+}
+
+.pkgEditBaCheckHeadNoteMerged,
+.pkgEditBaCheckHeadWork,
+.pkgEditBaCheckHeadTask,
+.pkgEditBaCheckHeadCol,
+.pkgEditBaCheckHeadSide,
+.pkgEditBaCheckHeadGap {
+  background: lavender;
+  white-space: nowrap;
+}
+
+.pkgEditBaCheckHeadNoteMerged {
+  text-align: left;
+  padding-left: 4px;
+}
+
+.pkgEditBaCheckTable .pkgEditBaCheckTask {
+  text-align: left;
+  padding-left: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.pkgEditBaCheckCell {
+  padding: 0;
+}
+
+.pkgEditBaCheckCell input {
+  margin: 0;
+  display: block;
+  margin-inline: auto;
+}
+
+.pkgEditBaCheckCellMerged {
+  padding: 0;
+  vertical-align: middle;
+}
+
+.pkgEditBaCheckPair {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  min-height: 80px;
+}
+
+.pkgEditBaCheckPair input {
+  margin: 0;
+}
+
+.pkgEditBaCheckColSideLbl {
+  width: 28px;
+}
+
+.pkgEditBaCheckColChkPair {
+  width: 42px;
+}
+
+.pkgEditBaCheckSideLabelVert {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 10px;
+  line-height: 1.2;
+  padding: 4px 2px;
+  white-space: nowrap;
+}
+
+.pkgEditAutoPackRight {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.pkgEditLiftTable {
+  width: 162px;
+}
+
+.pkgEditLiftTable .pkgEditBaCheckColTask {
+  width: 72px;
+}
+
+.pkgEditAutoPackHeadTable,
+.pkgEditAutoPackTable {
+  width: 460px;
+}
+
+.pkgEditAutoPackRight .pkgEditAutoPackTable tr:first-child > th,
+.pkgEditAutoPackRight .pkgEditAutoPackTable tr:first-child > td {
+  border-top: none;
+}
+
+.pkgEditPanelTable {
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin-left: 30px;
+  font-size: 12px;
+}
+
+.pkgEditPanelTable th,
+.pkgEditPanelTable td {
+  border: var(--pkg-edit-border);
+  height: 20px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: normal;
+  padding: 0 4px;
+  background: lavender;
+  white-space: nowrap;
+}
+
+.pkgEditPanelLabel {
+  width: 200px;
+}
+
+.pkgEditPanelBtn {
+  width: 50px;
+}
+
+/* UBA・格付 */
+.pkgEditUbaRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 660px;
+  max-width: 100%;
+}
+
+.pkgEditUbaRow .pkgEditGradeLbl,
+.pkgEditUbaRow .pkgEditGradeBody {
+  flex-shrink: 0;
+}
+
+.pkgEditUbaChecks {
+  flex: 0 0 auto;
+  width: 500px;
+}
+
+.pkgEditUbaCheckLine {
+  display: flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px 0;
+}
+
+.pkgEditUbaCheckLine span:first-child {
+  width: 250px;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.pkgEditGradeLbl {
+  width: 20px;
+  min-height: 45px;
+}
+
+.pkgEditGradeBody {
+  width: 80px;
+  min-height: 45px;
+  margin-left: calc(-1 * var(--pkg-edit-border-width));
+}
+
+.pkgEditGradeInput {
+  width: 50px;
+  margin: 10px 14px 0 auto;
+  display: block;
+}
+
+/* フッター（備考・印鑑・重量 — テーブル・高さ180px統一） */
+.pkgEditFooterTable {
+  width: 660px;
+  max-width: 100%;
+  margin-top: var(--pkg-edit-section-gap);
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 12px;
+}
+
+.pkgEditFooterColRemarks {
+  width: 350px;
+}
+
+.pkgEditFooterColMid,
+.pkgEditFooterColWeight {
+  width: 150px;
+}
+
+.pkgEditFooterTable > tbody > tr > td {
+  border: var(--pkg-edit-border);
+  padding: 0;
+  vertical-align: top;
+  height: 180px;
+  box-sizing: border-box;
+}
+
+.pkgEditFooterRemarksCell {
+  padding: 4px;
+}
+
+.pkgEditFooterRemarksHead {
+  line-height: 1.3;
+}
+
+.pkgEditFooterRemarksInput {
+  display: block;
+  width: 100%;
+  height: 140px;
+  margin-top: 2px;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.pkgEditFooterRemarksInput:focus {
+  background: #ffff00;
+  outline: none;
+}
+
+.pkgEditFooterMidCell,
+.pkgEditFooterWeightCell {
+  padding: 0;
+}
+
+.pkgEditFooterMidTable,
+.pkgEditFooterWeightTable {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.pkgEditFooterMidTable th,
+.pkgEditFooterMidTable td,
+.pkgEditFooterWeightTable th,
+.pkgEditFooterWeightTable td {
+  border: var(--pkg-edit-border);
+  padding: 0 2px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  font-weight: normal;
+  text-align: center;
+}
+
+/* フッター内テーブル：外枠は親 td の罫線のみ（二重線防止） */
+.pkgEditFooterMidTable > thead > tr:first-child > th,
+.pkgEditFooterMidTable > thead > tr:first-child > td,
+.pkgEditFooterMidTable > tbody > tr:first-child > th,
+.pkgEditFooterMidTable > tbody > tr:first-child > td,
+.pkgEditFooterWeightTable > thead > tr:first-child > th,
+.pkgEditFooterWeightTable > thead > tr:first-child > td,
+.pkgEditFooterWeightTable > tbody > tr:first-child > th,
+.pkgEditFooterWeightTable > tbody > tr:first-child > td {
+  border-top: none;
+}
+
+.pkgEditFooterMidTable > tbody > tr:last-child > th,
+.pkgEditFooterMidTable > tbody > tr:last-child > td,
+.pkgEditFooterWeightTable > tbody > tr:last-child > th,
+.pkgEditFooterWeightTable > tbody > tr:last-child > td {
+  border-bottom: none;
+}
+
+.pkgEditFooterMidTable > thead > tr > :first-child,
+.pkgEditFooterMidTable > tbody > tr > :first-child,
+.pkgEditFooterWeightTable > thead > tr > :first-child,
+.pkgEditFooterWeightTable > tbody > tr > :first-child {
+  border-left: none;
+}
+
+.pkgEditFooterMidTable > thead > tr > :last-child,
+.pkgEditFooterMidTable > tbody > tr > :last-child,
+.pkgEditFooterWeightTable > thead > tr > :last-child,
+.pkgEditFooterWeightTable > tbody > tr > :last-child {
+  border-right: none;
+}
+
+.pkgEditFooterMidColLbl {
+  width: 60px;
+}
+
+.pkgEditFooterStampRow {
+  height: 70px;
+}
+
+.pkgEditFooterStampLbl {
+  width: 20px;
+  background: lavender;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 2px 0;
+}
+
+.pkgEditFooterStampBox {
+  background: #fff;
+}
+
+.pkgEditFooterSectionHead {
+  height: 20px;
+  background: lavender;
+  white-space: nowrap;
+}
+
+.pkgEditFooterWeightTestRow {
+  height: 45px;
+}
+
+.pkgEditFooterWeightTestCell {
+  text-align: left;
+  padding: 4px 6px;
+  vertical-align: top;
+}
+
+.pkgEditFooterWeightTestLine {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.pkgEditFooterWeightTestLine input {
+  width: 50px;
+  height: 20px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 12px;
+}
+
+.pkgEditFooterOxygenRow {
+  height: 45px;
+}
+
+.pkgEditFooterOxygenLbl {
+  background: lavender;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 2px;
+}
+
+.pkgEditFooterOxygenCell {
+  text-align: left;
+  padding: 4px;
+  vertical-align: top;
+}
+
+.pkgEditFooterOxygenLine {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 18px;
+}
+
+.pkgEditFooterOxygenLine input {
+  width: 40px;
+  height: 20px;
+  border: 1px solid #ccc;
+  text-align: right;
+  font-size: 12px;
+}
+
+.pkgEditFooterWeightColNo,
+.pkgEditFooterWeightColVal {
+  width: 50px;
+}
+
+.pkgEditFooterWeightColLbl {
+  width: 30px;
+}
+
+.pkgEditFooterWeightColUnit {
+  width: 15px;
+}
+
+.pkgEditFooterWeightTable thead th {
+  height: 20px;
+}
+
+.pkgEditFooterWeightTable tbody tr {
+  height: 32px;
+}
+
+.pkgEditFooterWeightNoCell,
+.pkgEditFooterWeightValCell {
+  padding: 0;
+}
+
+.pkgEditFooterWeightInput {
+  width: 100%;
+  height: 24px;
+  border: none;
+  text-align: right;
+  font-size: 12px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.pkgEditFooterWeightLblCell,
+.pkgEditFooterWeightUnitCell {
+  font-size: 12px;
+}
+
+.pkgEditFooterWeightInput:focus,
+.pkgEditFooterWeightTestLine input:focus,
+.pkgEditFooterOxygenLine input:focus {
+  background: #ffff00;
+  outline: none;
+}

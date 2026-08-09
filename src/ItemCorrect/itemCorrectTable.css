@@ -1,0 +1,44 @@
+.itemCorrectMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: none;
+}
+
+.itemCorrectMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.itemCorrectMantineTable {
+  font-size: 13px;
+}
+
+.itemCorrectMantineTable .mantine-Table-td,
+.itemCorrectMantineTable .mantine-Table-th {
+  padding: 1px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemCorrectMantineTable .mantineScrollTableTh {
+  min-height: 45px;
+  font-size: 11px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  background-color: #228b22;
+}
+
+.itemCorrectMantineTable .mantineScrollTableTh .mantineScrollTableSortBtn {
+  white-space: normal;
+}
+
+.itemCorrectPage .tableWrap {
+  height: calc(100vh - 240px);
+  min-height: 280px;
+}

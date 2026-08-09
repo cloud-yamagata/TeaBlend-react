@@ -1,0 +1,199 @@
+.purchaseResaleListToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #f0fff0;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+}
+
+.purchaseResaleListOverlay.modalOverlay {
+  z-index: 1200;
+}
+
+.purchaseResaleListModal {
+  width: min(1240px, 98vw);
+  max-height: 94vh;
+  overflow: auto;
+  margin: 2vh auto;
+  padding: 12px 16px 16px;
+  background: #fff;
+  border: 1px solid #2f4f2f;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.purchaseResaleListHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.purchaseResaleListHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #2f4f2f;
+}
+
+.purchaseResaleListClose {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #475569;
+}
+
+.purchaseResaleListHint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.purchaseResaleListHint.warn {
+  color: #b45309;
+}
+
+.purchaseResaleListHint.error {
+  color: #c61b1b;
+}
+
+.purchaseResaleListSearchPanel {
+  margin-bottom: 8px;
+  padding: 8px;
+  background: #f0fff0;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+}
+
+.purchaseResaleListSearchFields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.purchaseResaleListSearchField {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.purchaseResaleListYearWrap .f2EditMakeYearSpinner {
+  height: 30px;
+}
+
+.purchaseResaleListYearWrap .f2EditMakeYearValue {
+  width: 36px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.purchaseResaleListYearWrap .f2EditMakeYearStep {
+  min-width: 22px;
+  height: 14px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.purchaseResaleListTransferGroup .purchaseResaleListTransferInput {
+  width: 120px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.purchaseResaleListTeaLifeGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 2px 8px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  background: #f0fff0;
+  font-size: 13px;
+}
+
+.purchaseResaleListTeaLifeGroup legend {
+  padding: 0 4px;
+  font-size: 12px;
+}
+
+.purchaseResaleListTeaLifeGroup label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.purchaseResaleListContextLimit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.purchaseResaleListTableWrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.purchaseResaleListPage .tableWrap {
+  height: calc(100vh - 280px);
+}
+
+.purchaseResaleListMantineTableRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: none;
+}
+
+.purchaseResaleListMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.purchaseResaleListTableWrap:not(.tableWrap) {
+  height: min(52vh, 520px);
+}
+
+.purchaseResaleListTablePlaceholder {
+  margin: 24px 0;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.purchaseResaleListMantineTableRoot .mantineScrollTable thead th {
+  background: #228b22;
+  color: #fff;
+}
+
+.purchaseResaleListMantineTableRoot .mantineScrollTable tbody tr:nth-child(even) {
+  background: #f0fff0;
+}
+
+.purchaseResaleListMantineTableRoot .mantineScrollTable tbody tr.isSelected {
+  background: #cce8cc;
+}
+
+.purchaseResaleListPage .toolbar .title {
+  color: #2f4f2f;
+}

@@ -1,0 +1,16 @@
+version: 1
+# ビルド済みアプリで未選択時の既定（本社）
+defaultId: honsya
+targets:
+  - id: local
+    label: ローカル
+    baseUrl: http://127.0.0.1:8000
+  - id: honsya
+    label: 本社
+    baseUrl: http://192.168.0.238:8000
+  - id: kaihatsu
+    label: 開発
+    baseUrl: http://192.168.10.149:8000
+  - id: tailscale
+    label: TailScale
+    baseUrl: http://100.88.163.34:8000

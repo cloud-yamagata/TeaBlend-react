@@ -1,0 +1,39 @@
+.finishCategoryTableWrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.finishCategoryPage .tableWrap {
+  height: calc(100vh - 280px);
+}
+
+.finishCategoryMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+
+.finishCategoryMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.finishCategoryMantineTable th,
+.finishCategoryMantineTable td {
+  font-size: 13px;
+}
+
+.finishCategoryMantineRoot .mantineScrollTable thead th {
+  background: #228b22;
+  color: #fff;
+}
+
+.finishCategoryMantineRoot .mantineScrollTableFooter {
+  flex-shrink: 0;
+}

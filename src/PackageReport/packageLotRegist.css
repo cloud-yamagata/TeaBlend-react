@@ -1,0 +1,94 @@
+/**
+ * パッケージロット登録（PackageReport MainWindow.xaml 配色）
+ */
+@import "../MonthlyPlan/styles.css";
+
+.packageLotPage .tableWrap {
+  height: calc(100vh - 220px);
+  min-height: 280px;
+}
+
+.packageLotMenuRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+  padding: 4px 0;
+  background: var(--teablend-table-body-bg, honeydew);
+  border-bottom: 1px solid #d6dee8;
+}
+
+.packageLotMenuItem {
+  min-width: 50px;
+  height: 30px;
+  padding: 0 12px;
+  font-size: 14px;
+  border: 1px solid #333;
+  background: #f0f0f0;
+  cursor: pointer;
+}
+
+.packageLotMenuItem:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.packageLotHint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+/** 検索条件（第3工場仕上茶移動推移表の searchPanel に近い 1 行レイアウト） */
+.packageLotSearchRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.packageLotSearchRow .packageLotSearchGroupBox {
+  flex-shrink: 0;
+  align-self: center;
+  margin: 0;
+}
+
+.packageLotSearchDateField {
+  flex-shrink: 0;
+}
+
+.packageLotSearchDateField .searchControl {
+  min-width: 140px;
+}
+
+.packageLotSearchRow .packageLotItemZoomGroup {
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.packageLotSearchRow .searchControlItemNo {
+  min-width: 90px;
+  width: 90px;
+}
+
+.packageLotSearchRow .packageLotItemZoomGroup .searchField:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.packageLotSearchRow .packageLotItemZoomGroup .searchControlItemName {
+  width: 100%;
+  min-width: 120px;
+}
+
+.packageLotSearchRow .searchActions {
+  flex-shrink: 0;
+  margin-left: 0;
+}

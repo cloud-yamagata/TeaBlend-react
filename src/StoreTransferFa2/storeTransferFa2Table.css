@@ -1,0 +1,46 @@
+.storeTransferFa2TableWrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.storeTransferFa2MantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: none;
+}
+
+.storeTransferFa2MantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.storeTransferFa2MantineTable {
+  font-size: 13px;
+}
+
+.storeTransferFa2MantineTable .mantine-Table-td,
+.storeTransferFa2MantineTable .mantine-Table-th {
+  padding: 1px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.storeTransferFa2MantineTable .mantineScrollTableTh {
+  min-height: 45px;
+  font-size: 11px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  background-color: forestgreen;
+  color: #fff;
+}
+
+.storeTransferFa2MantineTable .mantineScrollTableTh .mantineScrollTableSortBtn {
+  white-space: normal;
+}

@@ -1,0 +1,94 @@
+version: 1
+title: TeaBlend
+groups:
+  - title: 生産登録
+    items:
+      - label: ブレンドロット登録(第三工場)
+        screenKey: LotRegist
+      - label: パッケージロット登録
+        screenKey: PackageReport
+      - label: 仕上品在庫調整
+        screenKey: PartsAdjust
+      - label: 各種レポート
+        screenKey: SqlReport
+  - title: 出荷／受け入れ
+    items:
+      - label: 出荷引当
+        screenKey: StoreAllocation
+      - label: 仕上品受入
+        screenKey: PartsReceive
+      - label: 仕上品仕入
+        screenKey: MaterialPurchase
+        path: /material-purchase
+  - title: システム管理
+    items:
+      - label: 入出庫実績
+        screenKey: StoreTransfer
+      - label: 商品マスタメンテナンス
+        screenKey: ItemCorrect
+      - label: 直送先マスタメンテナンス
+        screenKey: ShipmentCorrect
+      - label: 商品原料対照表メンテナンス
+        screenKey: ItemBomCorrect
+  - title: 第２工場生産登録
+    items:
+      - label: 第二工場ロット製造登録
+        screenKey: CroudeTea
+        path: /factory2-lot-manufacture
+      - label: 配合個別情報登録
+        screenKey: BlendCategorys
+      - label: 仕上個別情報登録
+        screenKey: FinishCategorys
+      - label: 火入個別情報登録
+        screenKey: FirepanCategorys
+      - label: 仕入原料一覧（既存）
+        screenKey: MaterialList
+        path: /material-list
+      - label: 月次計画（既存）
+        screenKey: MonthlyPlan
+        path: /monthly-plan
+  - title: 第２工場入出荷管理
+    items:
+      - label: 第2工場入出庫実績
+        screenKey: StoreTransferFa2
+      - label: ロット分割
+        screenKey: LotDivide
+      - label: 転売先マスタメンテナンス
+        screenKey: ResaleCorrect
+  - title: 仕入原料管理
+    items:
+      - label: 仕入実績情報一覧
+        screenKey: PurchaseTtransfer
+      - label: 振分一覧
+        screenKey: PurchaseResaleList
+        path: /purchase-resale-list
+      - label: 仕入受入
+        screenKey: PurchaseReceive
+  - title: 第２工場原料管理
+    items:
+      - label: 第1工場生産実績情報一覧
+        screenKey: Factory1Rresult
+      - label: 原料実績情報一覧
+        screenKey: MaterialRresult
+      - label: 第二工場ロット製造登録(21年以降)
+        screenKey: CroudeTeaTest
+  - title: 各種レポート
+    items:
+      - label: ロット別仕上茶在庫一覧
+        screenKey: LotBulkTeaStockList
+      - label: 第2工場ロット在庫一覧
+        screenKey: Factory2LotStockList
+      - label: 第2工場ロット在庫推移表
+        screenKey: Factory2LotStockTransition
+      - label: 第3工場仕上茶移動推移表
+        screenKey: Factory3BulkTeaTransition
+      - label: 第３工場商品茶移動推移
+        screenKey: Factory3ItemTeaTransition
+      - label: 通常品ロット使用実績
+        screenKey: UsuallLotUusedAadoptedList
+      - label: 月別仕上茶前年対比使用量
+        screenKey: BulkTeaYearOnYearUsage
+      - label: 月別仕上茶前年対比生産量
+        screenKey: BulkTeaYearOnYearProduction
+      - label: ロット構造一覧
+        screenKey: LotStructureList

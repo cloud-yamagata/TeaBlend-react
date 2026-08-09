@@ -1,0 +1,16 @@
+/**
+ * 直送先マスタ編集固有スタイル（商品マスタ編集と同様）
+ */
+
+.shipmentCorrectEditOverlay.ptEditOverlay {
+  z-index: 1300;
+}
+
+.shipmentCorrectEditPanel.ptEditPanel {
+  width: min(480px, calc(100vw - 32px));
+}
+
+.ptEditForm .ptEditInput.inputError {
+  box-shadow: inset 0 0 0 2px #c62828 !important;
+  background: #fff5f5 !important;
+}

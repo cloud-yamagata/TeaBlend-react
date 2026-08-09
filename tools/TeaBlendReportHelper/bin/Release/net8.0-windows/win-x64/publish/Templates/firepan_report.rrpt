@@ -1,0 +1,326 @@
+{
+  version: 0,
+  paper: {
+    landscape: true,
+    margin: {bottom:30.0,left:47.0,right:30.0,top:20.0},
+    scale_unit: "point",
+    type: "a4"
+  },
+  caption: "ブレンド表",
+  group: {
+    contents: [
+      {
+        size: {
+          initial: 45.0
+        },
+        caption: "タイトル",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,y2:45.0},caption:"タイトル",font:{size:20},halign:"center",text:"製　造　表　(火入用)",valign:"bottom"},
+          {id:"__trial__",type:"text",layout:{y2:10},_:"この要素は手動で編集・削除しないで下さい",background:true,color:"gray",font:{size:10},text:"RapidReport http://rapidreport.systembase.co.jp/"}
+        ]
+      },
+      {
+        size: {
+          initial: 150.0
+        },
+        caption: "ヘッダー",
+        every_page: true,
+        sub: [
+          {
+            caption: "ブレンド名",
+            layout: {x1:0.0,x2:495.0,y1:0.0,y2:30.0},
+            elements: [
+              {type:"text",layout:{x1:145.0,y1:0.0,x2:210.0,y2:30.0},font:{},halign:"center",rect:{},text:"火入後用途",valign:"center"},
+              {type:"field",layout:{x1:210.0,y1:0.0,x2:335.0,y2:30.0},exp:"(&\r\n   (if (= .make_year '') '' (& '(' .make_year ')' ))\r\n   .blend_name_base   \r\n   (if (= .count '') '' (& '(' .count ')' ))\r\n)",halign:"left",mock:"w10 => Ｘ＃＃＃＃＃＃＃＃Ｘ",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:65.0,y2:30.0},font:{},halign:"center",rect:{},text:"火入表\r\n№",valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:0.0,x2:145.0,y2:30.0},exp:"(& .organic_class_base '-' .product_no)",halign:"center",mock:"w10 => Ｘ＃＃＃＃＃＃＃＃Ｘ",rect:{},valign:"center"},
+              {type:"field",layout:{x1:335.0,y1:0.0,x2:495.0,y2:30.0},exp:".lot_name",halign:"left",mock:"w10 => Ｘ＃＃＃＃＃＃＃＃Ｘ",rect:{},valign:"center",wrap:true}
+            ]
+          },
+          {
+            caption: "ブレンド日",
+            layout: {rev_x2:true,x1:495.0,x2:0.0,y1:0.0,y2:30.0},
+            elements: [
+              {type:"field",layout:{x1:140.0,y1:10.0,x2:170.0,y2:25.0},exp:"(year .work_date)",font:{size:10.0},formatter:{format:"####",type:"default"},halign:"right",valign:"center"},
+              {type:"field",layout:{x1:190.0,y1:10.0,x2:210.0,y2:25.0},exp:"(month .work_date)",font:{size:10.0},formatter:{format:"##",type:"default"},halign:"right",valign:"center"},
+              {type:"field",layout:{x1:230.0,y1:10.0,x2:250.0,y2:25.0},exp:"(day .work_date)",font:{size:10.0},formatter:{format:"##",type:"default"},halign:"right",valign:"center"},
+              {type:"line",layout:{x1:0.0,y1:25.0,x2:270.0,y2:25.0}},
+              {type:"text",layout:{x1:0.0,y1:10.0,x2:50.0,y2:25.0},font:{size:10.0},formatter:{format:"##",type:"default"},halign:"center",text:"室内温度・湿度",valign:"center"},
+              {type:"field",layout:{x1:50.0,y1:10.0,x2:80.0,y2:25.0},exp:".temperature",font:{size:10.0},formatter:{format:"####",type:"default"},halign:"right",valign:"center"},
+              {type:"text",layout:{x1:80.0,y1:10.0,x2:95.0,y2:25.0},font:{size:10.0},formatter:{format:"##",type:"default"},halign:"center",text:"℃",valign:"center"},
+              {type:"field",layout:{x1:95.0,y1:10.0,x2:125.0,y2:25.0},exp:".humidity",font:{size:10.0},formatter:{format:"####",type:"default"},halign:"right",valign:"center"},
+              {type:"text",layout:{x1:125.0,y1:10.0,x2:140.0,y2:25.0},font:{size:10.0},formatter:{format:"##",type:"default"},halign:"center",text:"％",valign:"center"},
+              {type:"text",layout:{x1:250.0,y1:10.0,x2:270.0,y2:25.0},font:{size:10.0},formatter:{format:"##",type:"default"},halign:"center",text:"日",valign:"center"},
+              {type:"text",layout:{x1:170.0,y1:10.0,x2:190.0,y2:25.0},font:{size:10.0},formatter:{format:"##",type:"default"},halign:"center",text:"年",valign:"center"},
+              {type:"text",layout:{x1:210.0,y1:10.0,x2:230.0,y2:25.0},font:{size:10.0},formatter:{format:"##",type:"default"},halign:"center",text:"月",valign:"center"}
+            ]
+          },
+          {
+            caption: "使用機械",
+            layout: {rev_x2:true,rev_y2:true,x1:0.0,x2:340.0,y1:40.0,y2:0.0},
+            elements: [
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:90.0,y2:30.0},halign:"center",rect:{},text:"使用機械",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:30.0,x2:90.0,y2:70.0},halign:"center",rect:{},text:"掃除時間",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:70.0,x2:90.0,y2:110.0},halign:"center",rect:{},text:"使用時間",valign:"center"},
+              {type:"text",layout:{x1:305.0,y1:0.0,x2:365.0,y2:30.0},halign:"center",rect:{},text:"担当者\r\n",valign:"center"},
+              {type:"text",layout:{x1:365.0,y1:0.0,x2:425.0,y2:30.0},halign:"center",rect:{},text:"確認者\r\n",valign:"center"},
+              {type:"field",layout:{x1:305.0,y1:30.0,x2:365.0,y2:70.0},halign:"center",rect:{},valign:"center"},
+              {type:"field",layout:{x1:305.0,y1:70.0,x2:365.0,y2:110.0},halign:"center",rect:{},valign:"center"},
+              {type:"field",layout:{x1:365.0,y1:30.0,x2:425.0,y2:70.0},halign:"center",rect:{},valign:"center"},
+              {type:"field",layout:{x1:365.0,y1:70.0,x2:425.0,y2:110.0},halign:"center",rect:{},valign:"center"},
+              {type:"field",layout:{x1:115.0,y1:35.0,x2:145.0,y2:65.0},exp:".work_before_cleaning_start_hh",halign:"center",valign:"center"},
+              {type:"text",layout:{x1:145.0,y1:35.0,x2:160.0,y2:65.0},halign:"center",text:"：",valign:"center"},
+              {type:"field",layout:{x1:160.0,y1:35.0,x2:190.0,y2:65.0},exp:".work_before_cleaning_start_mm",halign:"center",valign:"center"},
+              {type:"text",layout:{x1:190.0,y1:35.0,x2:210.0,y2:65.0},halign:"center",text:"～",valign:"center"},
+              {type:"field",layout:{x1:210.0,y1:35.0,x2:240.0,y2:65.0},exp:".work_before_cleaning_end_hh",halign:"center",valign:"center"},
+              {type:"text",layout:{x1:240.0,y1:35.0,x2:255.0,y2:65.0},halign:"center",text:"：",valign:"center"},
+              {type:"field",layout:{x1:255.0,y1:35.0,x2:285.0,y2:65.0},exp:".work_before_cleaning_end_mm",halign:"center",valign:"center"},
+              {type:"field",layout:{x1:115.0,y1:75.0,x2:145.0,y2:105.0},exp:".work_start_hh",halign:"center",valign:"center"},
+              {type:"text",layout:{x1:145.0,y1:75.0,x2:160.0,y2:105.0},halign:"center",text:"：",valign:"center"},
+              {type:"field",layout:{x1:160.0,y1:75.0,x2:190.0,y2:105.0},exp:".work_start_mm",halign:"center",valign:"center"},
+              {type:"text",layout:{x1:190.0,y1:75.0,x2:210.0,y2:105.0},halign:"center",text:"～",valign:"center"},
+              {type:"field",layout:{x1:210.0,y1:75.0,x2:240.0,y2:105.0},exp:".work_end_hh",halign:"center",valign:"center"},
+              {type:"text",layout:{x1:240.0,y1:75.0,x2:255.0,y2:105.0},halign:"center",text:"：",valign:"center"},
+              {type:"field",layout:{x1:255.0,y1:75.0,x2:285.0,y2:105.0},exp:".work_end_mm",halign:"center",valign:"center"},
+              {type:"field",layout:{x1:90.0,y1:30.0,x2:305.0,y2:70.0},halign:"center",rect:{},valign:"center"},
+              {type:"field",layout:{x1:90.0,y1:70.0,x2:305.0,y2:110.0},halign:"center",rect:{},valign:"center"},
+              {type:"text",layout:{x1:180.0,y1:0.0,x2:235.0,y2:30.0},halign:"center",text:"②号\r\n火入機",valign:"center"},
+              {type:"text",layout:{x1:110.0,y1:0.0,x2:160.0,y2:30.0},font:{},halign:"center",text:"①号\r\n火入機",valign:"center"},
+              {type:"field",layout:{x1:95.0,y1:10.0,x2:105.0,y2:20.0},exp:"(if (= .use_device_unit1_chk true) 'レ' '')",font:{size:10.0},formatter:{format:"##0.0#",type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:165.0,y1:10.0,x2:175.0,y2:20.0},exp:"(if (= .use_device_unit2_chk true) 'レ' '')",font:{size:10.0},formatter:{format:"##0.0#",type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:90.0,y1:0.0,x2:305.0,y2:30.0},halign:"center",rect:{},valign:"center"},
+              {type:"field",layout:{x1:240.0,y1:10.0,x2:250.0,y2:20.0},exp:"(if (= .use_device_unit3_chk true) 'レ' '')",font:{size:10.0},formatter:{format:"##0.0#",type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"text",layout:{x1:255.0,y1:0.0,x2:305.0,y2:30.0},halign:"center",text:"③\r\nほうじ機",valign:"center"}
+            ]
+          },
+          {
+            caption: "茶区分",
+            layout: {x1:585.0,x2:735.0,y1:70.0,y2:120.0},
+            elements: [
+              {type:"text",layout:{x1:50.0,y1:5.0,x2:120.0,y2:20.0},distribute:true,font:{size:9.0},formatter:{type:"default"},halign:"center",text:"有機栽培茶",valign:"center"},
+              {type:"text",layout:{x1:50.0,y1:20.0,x2:120.0,y2:35.0},distribute:true,font:{size:9.0},formatter:{type:"default"},halign:"center",text:"無農薬栽培茶",valign:"center"},
+              {type:"text",layout:{x1:50.0,y1:35.0,x2:120.0,y2:50.0},distribute:true,font:{size:9.0},formatter:{type:"default"},halign:"center",text:"普通煎茶",valign:"center"},
+              {type:"field",layout:{x1:130.0,y1:5.0,x2:140.0,y2:18.0},exp:"(if (= .organic_class_base 'A') 'レ' '')",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:130.0,y1:20.0,x2:140.0,y2:33.0},exp:"(if (= .organic_class_base 'B') 'レ' '')",font:{size:10.0},formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:130.0,y1:35.0,x2:140.0,y2:48.0},exp:"(if (= .organic_class_base 'C') 'レ' '')",font:{size:10.0},formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:45.0,y2:50.0},formatter:{type:"default"},halign:"center",rect:{},text:"茶区分",valign:"center",vertical:true},
+              {type:"text",layout:{x1:45.0,y1:0.0,x2:150.0,y2:50.0},formatter:{type:"default"},halign:"center",rect:{},valign:"center",vertical:true}
+            ]
+          },
+          {
+            caption: "担当",
+            layout: {x1:585.0,x2:735.0,y1:40.0,y2:70.0},
+            elements: [
+              {type:"line",layout:{x1:0.0,y1:25.0,x2:150.0,y2:25.0}},
+              {type:"text",layout:{x1:0.0,y1:10.0,x2:50.0,y2:25.0},font:{size:10.0},formatter:{format:"##",type:"default"},halign:"center",text:"担当",valign:"center"}
+            ]
+          },
+          {
+            caption: "確認チェック",
+            layout: {x1:425.0,x2:525.0,y1:40.0,y2:150.0},
+            elements: [
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:100.0,y2:30.0},halign:"center",rect:{},text:"確認チェック\r\n",valign:"center"},
+              {type:"text",layout:{x1:5.0,y1:35.0,x2:75.0,y2:50.0},distribute:true,formatter:{type:"default"},halign:"center",text:"作業前清掃",valign:"center"},
+              {type:"text",layout:{x1:5.0,y1:50.0,x2:75.0,y2:65.0},distribute:true,formatter:{type:"default"},halign:"center",text:"装置設定確認",valign:"center"},
+              {type:"text",layout:{x1:5.0,y1:65.0,x2:75.0,y2:80.0},distribute:true,formatter:{type:"default"},halign:"center",text:"空動作確認",valign:"center"},
+              {type:"text",layout:{x1:5.0,y1:80.0,x2:75.0,y2:95.0},distribute:true,formatter:{type:"default"},halign:"center",text:"残留物確認",valign:"center"},
+              {type:"text",layout:{x1:5.0,y1:95.0,x2:75.0,y2:110.0},distribute:true,formatter:{type:"default"},halign:"center",text:"作業後清掃",valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:30.0,x2:100.0,y2:110.0},halign:"center",rect:{},valign:"center"},
+              {type:"field",layout:{x1:80.0,y1:35.0,x2:90.0,y2:50.0},exp:"(if (= .work_before_cleaning_chk true) 'レ' '')",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:80.0,y1:50.0,x2:90.0,y2:65.0},exp:"(if (= .device_chk true) 'レ' '')",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:80.0,y1:65.0,x2:90.0,y2:80.0},exp:"(if (= .operation_chk true) 'レ' '')",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:80.0,y1:80.0,x2:90.0,y2:95.0},exp:"(if (= .rest_chk true) 'レ' '')",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:80.0,y1:95.0,x2:90.0,y2:110.0},exp:"(if (= .work_after_cleaning_chk true) 'レ' '')",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"}
+            ]
+          }
+        ]
+      },
+      {
+        size: {
+          initial: 5.0
+        },
+        caption: "余白",
+        every_page: true
+      },
+      {
+        size: {
+          initial: 200.0,
+          rev_initial: true
+        },
+        caption: "背景",
+        elements: [
+          {type:"text",layout:{x1:0,y1:770,x2:555,y2:800},caption:"ページ数",halign:"center",text:"#{page_count}/#{page_count.total}",valign:"center"}
+        ],
+        group: {
+          layout: {},
+          contents: [
+            {
+              size: {
+                initial: 30.0
+              },
+              aggregate_src: true,
+              caption: "ヘッダ",
+              every_page: true,
+              elements: [
+                {type:"text",layout:{x1:0.0,y1:0.0,x2:90.0,y2:30.0},customize:[{}],formatter:{type:"default"},halign:"center",rect:{},text:"仕上表NO",valign:"center"},
+                {type:"text",layout:{x1:90.0,y1:0.0,x2:305.0,y2:30.0},halign:"center",rect:{},text:"原料茶　品名",valign:"center"},
+                {type:"text",layout:{x1:305.0,y1:0.0,x2:365.0,y2:30.0},halign:"center",rect:{},text:"火入前数量",valign:"center"},
+                {type:"text",layout:{x1:735.0,y1:0.0,x2:765.0,y2:30.0},halign:"center",rect:{},text:"使用火入機",valign:"center",wrap:true},
+                {type:"text",layout:{x1:585.0,y1:15.0,x2:615.0,y2:30.0},halign:"center",rect:{},text:"右",valign:"center"},
+                {type:"text",layout:{x1:695.0,y1:0.0,x2:735.0,y2:30.0},halign:"center",rect:{},shrink_to_fit:true,text:"温度",valign:"center"},
+                {type:"text",layout:{x1:655.0,y1:0.0,x2:695.0,y2:30.0},halign:"center",rect:{},shrink_to_fit:true,text:"投入量",valign:"center"},
+                {type:"text",layout:{x1:615.0,y1:0.0,x2:655.0,y2:30.0},halign:"center",rect:{},shrink_to_fit:true,text:"遠赤",valign:"center"},
+                {type:"text",layout:{x1:525.0,y1:0.0,x2:615.0,y2:15.0},halign:"center",rect:{},text:"バーナーON",valign:"center"},
+                {type:"text",layout:{x1:555.0,y1:15.0,x2:585.0,y2:30.0},halign:"center",rect:{},text:"中",valign:"center"},
+                {type:"text",layout:{x1:525.0,y1:15.0,x2:555.0,y2:30.0},halign:"center",rect:{},text:"左",valign:"center"},
+                {type:"text",layout:{x1:445.0,y1:0.0,x2:525.0,y2:15.0},halign:"center",rect:{},text:"設定温度",valign:"center"},
+                {type:"text",layout:{x1:445.0,y1:15.0,x2:485.0,y2:30.0},halign:"center",rect:{},text:"左",valign:"center"},
+                {type:"text",layout:{x1:485.0,y1:15.0,x2:525.0,y2:30.0},halign:"center",rect:{},text:"右",valign:"center"},
+                {type:"text",layout:{x1:405.0,y1:0.0,x2:445.0,y2:30.0},halign:"center",rect:{},shrink_to_fit:true,text:"本機",valign:"center"},
+                {type:"text",layout:{x1:365.0,y1:0.0,x2:405.0,y2:30.0},halign:"center",rect:{},shrink_to_fit:true,text:"排気",valign:"center"}
+              ]
+            },
+            {
+              size: {
+                initial: 80.0
+              },
+              caption: "ボディ",
+              elements: [
+                {type:"field",layout:{x1:0.0,y1:0.0,x2:400.0,y2:0.0,rev_x2:true,rev_y2:true}},
+                {type:"field",layout:{x1:365.0,y1:0.0,x2:405.0,y2:80.0},exp:".fir_value_1",halign:"center",rect:{},valign:"center"},
+                {type:"field",layout:{x1:405.0,y1:0.0,x2:445.0,y2:80.0},exp:".fir_value_2",halign:"center",rect:{},valign:"center"},
+                {type:"field",layout:{x1:615.0,y1:0.0,x2:655.0,y2:80.0},exp:".fir_value_5",halign:"center",rect:{},valign:"center"},
+                {type:"field",layout:{x1:655.0,y1:0.0,x2:695.0,y2:80.0},exp:".fir_value_6",halign:"center",rect:{},valign:"center"},
+                {type:"field",layout:{x1:695.0,y1:0.0,x2:735.0,y2:80.0},exp:".fir_value_7",halign:"center",rect:{},valign:"center"},
+                {type:"field",layout:{x1:735.0,y1:0.0,x2:765.0,y2:80.0},exp:"(if (= .use_device_unit1_chk true) '①' (if (= .use_device_unit2_chk true) '②' (if (= .use_device_unit3_chk true) 'ほうじ機' '')))",halign:"center",rect:{},valign:"center",wrap:true},
+                {type:"field",layout:{x1:445.0,y1:0.0,x2:485.0,y2:80.0},exp:".fir_value_3a",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+                {type:"field",layout:{x1:485.0,y1:0.0,x2:525.0,y2:80.0},exp:".fir_value_3b",halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+                {type:"field",layout:{x1:525.0,y1:0.0,x2:555.0,y2:80.0},exp:".fir_value_4a",halign:"center",rect:{},valign:"center"},
+                {type:"field",layout:{x1:555.0,y1:0.0,x2:585.0,y2:80.0},exp:".fir_value_4b",halign:"center",rect:{},valign:"center"},
+                {type:"field",layout:{x1:585.0,y1:0.0,x2:615.0,y2:80.0},exp:".fir_value_4c",halign:"center",rect:{},valign:"center"}
+              ],
+              group: {
+                caption: "明細グループ",
+                detail: true,
+                layout: {
+                  max_count: 4.0,
+                  blank: true
+                },
+                custom_fields: [
+                  {}
+                ],
+                contents: [
+                  {
+                    size: {
+                      initial: 20.0
+                    },
+                    caption: "明細",
+                    elements: [
+                      {type:"field",layout:{x1:0.0,y1:0.0,x2:90.0,y2:20.0},exp:"(if (= .part_process_type '03') (if (= .organic_class_part 'A') (& 'A仕-' .part_product_no) (& '仕-' .part_product_no)) '')",formatter:{format:"####",type:"default"},halign:"center",rect:{},valign:"center"},
+                      {type:"field",layout:{x1:90.0,y1:0.0,x2:305.0,y2:20.0},exp:".part_lot_name",formatter:{format:"####",type:"default"},halign:"left",rect:{},valign:"center"},
+                      {type:"field",layout:{x1:305.0,y1:0.0,x2:365.0,y2:20.0},decimal_place:1.0,exp:".use_quantity",formatter:{format:"#,###,##0.00",type:"default"},halign:"right",rect:{},valign:"center"}
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              size: {
+                initial: 95.0
+              },
+              caption: "フッタ",
+              every_page: true,
+              elements: [
+                {type:"field",layout:{x1:305.0,y1:0.0,x2:365.0,y2:25.0},exp:"(+ sum.use_quantity .correct_weight)",formatter:{format:"#,###,##0.00",type:"default"},halign:"right",valign:"center"},
+                {type:"text",layout:{x1:670.0,y1:0.0,x2:765.0,y2:25.0},halign:"center",rect:{},text:"大海袋",valign:"center"},
+                {type:"text",layout:{x1:535.0,y1:0.0,x2:670.0,y2:25.0},halign:"center",rect:{},text:"窒素ダンボール",valign:"center"},
+                {type:"text",layout:{x1:0.0,y1:25.0,x2:90.0,y2:50.0},halign:"center",rect:{},text:"出来上り実量",valign:"center"},
+                {type:"text",layout:{x1:265.0,y1:0.0,x2:305.0,y2:25.0},halign:"center",rect:{},text:"小計",valign:"center"},
+                {type:"text",layout:{x1:90.0,y1:25.0,x2:535.0,y2:50.0},halign:"center",rect:{},valign:"center"},
+                {type:"text",layout:{x1:0.0,y1:0.0,x2:265.0,y2:25.0},halign:"center",rect:{},valign:"center"},
+                {type:"text",layout:{x1:140.0,y1:25.0,x2:155.0,y2:50.0},font:{size:8.0},formatter:{type:"default"},halign:"center",text:"kg",valign:"bottom"},
+                {type:"text",layout:{x1:190.0,y1:25.0,x2:215.0,y2:50.0},font:{size:6.0},formatter:{type:"default"},halign:"center",text:"ケース",valign:"bottom"},
+                {type:"text",layout:{x1:260.0,y1:25.0,x2:275.0,y2:50.0},font:{size:8.0},formatter:{type:"default"},halign:"center",text:"kg",valign:"bottom"},
+                {type:"text",layout:{x1:330.0,y1:25.0,x2:355.0,y2:50.0},font:{size:6.0},formatter:{type:"default"},halign:"center",text:"ケース",valign:"bottom"},
+                {type:"text",layout:{x1:430.0,y1:25.0,x2:445.0,y2:50.0},font:{size:8.0},formatter:{type:"default"},halign:"center",text:"kg",valign:"bottom"},
+                {type:"field",layout:{x1:90.0,y1:25.0,x2:140.0,y2:50.0},exp:".unit_weight",font:{size:10.0},formatter:{format:"##0.0#",type:"default"},halign:"right",valign:"center"},
+                {type:"field",layout:{x1:170.0,y1:25.0,x2:190.0,y2:50.0},exp:".unit_number",font:{size:10.0},formatter:{format:"##",type:"default"},halign:"right",valign:"center"},
+                {type:"field",layout:{x1:385.0,y1:25.0,x2:430.0,y2:50.0},exp:".complete_quantity",font:{size:10.0},formatter:{format:"###.##",type:"default"},halign:"right",valign:"center"},
+                {type:"field",layout:{x1:305.0,y1:25.0,x2:330.0,y2:50.0},exp:".fraction_number",font:{size:10.0},formatter:{format:"##",type:"default"},halign:"right",valign:"center"},
+                {type:"field",layout:{x1:230.0,y1:25.0,x2:260.0,y2:50.0},exp:".fraction_weight",font:{size:10.0},formatter:{format:"##0.0#",type:"default"},halign:"right",valign:"center"},
+                {type:"text",layout:{x1:155.0,y1:25.0,x2:170.0,y2:50.0},font:{size:10.0},formatter:{type:"default"},halign:"center",text:"×",valign:"center"},
+                {type:"text",layout:{x1:275.0,y1:25.0,x2:305.0,y2:50.0},font:{size:10.0},formatter:{type:"default"},halign:"center",text:"×",valign:"center"},
+                {type:"text",layout:{x1:355.0,y1:25.0,x2:385.0,y2:50.0},font:{size:10.0},formatter:{type:"default"},halign:"center",text:"＝",valign:"center"},
+                {type:"text",layout:{x1:215.0,y1:25.0,x2:230.0,y2:50.0},font:{size:10.0},formatter:{type:"default"},halign:"center",text:"＋",valign:"center"},
+                {type:"text",layout:{x1:0.0,y1:50.0,x2:765.0,y2:95.0},halign:"center",rect:{},valign:"center"},
+                {type:"text",layout:{x1:535.0,y1:25.0,x2:765.0,y2:50.0},halign:"center",rect:{},valign:"center"},
+                {type:"text",layout:{x1:0.0,y1:50.0,x2:90.0,y2:95.0},halign:"center",rect:{},text:"備考",valign:"center"},
+                {type:"field",layout:{x1:490.0,y1:25.0,x2:535.0,y2:50.0},exp:"(* (/ .complete_quantity sum.use_quantity) 100)",font:{size:10.0},formatter:{format:"###.##",type:"default"},halign:"left",valign:"center"},
+                {type:"text",layout:{x1:465.0,y1:25.0,x2:490.0,y2:50.0},font:{size:8.0},formatter:{type:"default"},halign:"center",text:"歩留",valign:"top"},
+                {type:"text",layout:{x1:365.0,y1:0.0,x2:535.0,y2:25.0},halign:"center",rect:{},text:"上り梱包形態",valign:"center"},
+                {type:"field",layout:{x1:540.0,y1:5.0,x2:550.0,y2:20.0},exp:"(if (= .packing_case1_chk true) 'レ' '')",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+                {type:"field",layout:{x1:675.0,y1:5.0,x2:685.0,y2:20.0},exp:"(if (= .packing_case2_chk true) 'レ' '')",formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+                {type:"field",layout:{x1:90.0,y1:50.0,x2:765.0,y2:95.0},exp:".remarks_base",halign:"left",rect:{},valign:"center"}
+              ]
+            }
+          ]
+        }
+      },
+      {
+        size: {
+          initial: 5.0
+        },
+        caption: "余白",
+        every_page: true
+      },
+      {
+        size: {
+          initial: 115.0
+        },
+        caption: "官能検査",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:70.0,y2:115.0},halign:"center",rect:{},text:"官能検査",valign:"center"},
+          {type:"text",layout:{x1:70.0,y1:0.0,x2:135.0,y2:15.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:70.0,y1:15.0,x2:135.0,y2:65.0},halign:"center",rect:{},text:"火入前〇",valign:"center"},
+          {type:"text",layout:{x1:70.0,y1:65.0,x2:135.0,y2:115.0},halign:"center",rect:{},text:"火入後●",valign:"center"},
+          {type:"text",layout:{x1:135.0,y1:0.0,x2:200.0,y2:15.0},halign:"center",rect:{},text:"水色",valign:"center"},
+          {type:"text",layout:{x1:200.0,y1:0.0,x2:265.0,y2:15.0},halign:"center",rect:{},text:"味",valign:"center"},
+          {type:"text",layout:{x1:135.0,y1:30.0,x2:200.0,y2:65.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:200.0,y1:30.0,x2:265.0,y2:65.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:200.0,y1:80.0,x2:265.0,y2:115.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:265.0,y1:80.0,x2:330.0,y2:115.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:265.0,y1:0.0,x2:330.0,y2:15.0},halign:"center",rect:{},text:"香",valign:"center"},
+          {type:"text",layout:{x1:265.0,y1:30.0,x2:330.0,y2:65.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:330.0,y1:0.0,x2:400.0,y2:15.0},halign:"center",rect:{},text:"総合評価",valign:"center"},
+          {type:"field",layout:{x1:330.0,y1:15.0,x2:400.0,y2:65.0},exp:"(+ .sensual_test_color_before .sensual_test_taste_before .sensual_test_aroma_before)",formatter:{format:"###.##",type:"default"},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:400.0,y1:0.0,x2:715.0,y2:15.0},halign:"center",rect:{},text:"火入時留意点・所見",valign:"center"},
+          {type:"field",layout:{x1:400.0,y1:15.0,x2:715.0,y2:65.0},exp:".sensual_test_comment_before",halign:"left",rect:{},valign:"center"},
+          {type:"field",layout:{x1:400.0,y1:65.0,x2:715.0,y2:115.0},exp:".sensual_test_comment_after",halign:"left",rect:{},valign:"center"},
+          {type:"text",layout:{x1:715.0,y1:0.0,x2:765.0,y2:15.0},halign:"center",rect:{},text:"試験者",valign:"center"},
+          {type:"text",layout:{x1:715.0,y1:15.0,x2:765.0,y2:65.0},halign:"center",rect:{},valign:"center"},
+          {type:"field",layout:{x1:135.0,y1:15.0,x2:200.0,y2:30.0},exp:".sensual_test_color_before",halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:135.0,y1:80.0,x2:200.0,y2:115.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:715.0,y1:65.0,x2:765.0,y2:115.0},halign:"center",rect:{},valign:"center"},
+          {type:"field",layout:{x1:200.0,y1:15.0,x2:265.0,y2:30.0},exp:".sensual_test_taste_before",halign:"center",rect:{},valign:"center"},
+          {type:"field",layout:{x1:265.0,y1:15.0,x2:330.0,y2:30.0},exp:".sensual_test_aroma_before",halign:"center",rect:{},valign:"center"},
+          {type:"field",layout:{x1:330.0,y1:65.0,x2:400.0,y2:115.0},exp:"(+ .sensual_test_color_after .sensual_test_taste_after .sensual_test_aroma_after)",formatter:{format:"###.##",type:"default"},halign:"center",rect:{},valign:"center"},
+          {type:"field",layout:{x1:135.0,y1:65.0,x2:200.0,y2:80.0},exp:".sensual_test_color_after",halign:"center",rect:{},valign:"center"},
+          {type:"field",layout:{x1:200.0,y1:65.0,x2:265.0,y2:80.0},exp:".sensual_test_taste_after",halign:"center",rect:{},valign:"center"},
+          {type:"field",layout:{x1:265.0,y1:65.0,x2:330.0,y2:80.0},exp:".sensual_test_aroma_after",halign:"center",rect:{},valign:"center"}
+        ]
+      },
+      {
+        size: {
+          initial: 15.0
+        },
+        caption: "フッター",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,y2:15.0},font:{size:8.0},formatter:{type:"default"},halign:"right",text:"株式会社 井ヶ田製茶北郷茶園 第２工場",valign:"center"}
+        ]
+      }
+    ]
+  }
+}

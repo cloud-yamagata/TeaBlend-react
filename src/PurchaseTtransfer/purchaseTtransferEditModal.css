@@ -1,0 +1,275 @@
+/**
+ * 仕入実績情報メンテナンス（EditWindow.xaml 左ペイン相当）
+ */
+.ptEditOverlay.modalOverlay {
+  z-index: 1300;
+}
+
+.ptEditPanel {
+  width: min(360px, calc(100vw - 32px));
+  max-height: calc(100vh - 24px);
+  margin: 12px auto;
+  padding: 8px 10px 12px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #333;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+}
+
+.ptEditPanelTitle {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2f4f2f;
+}
+
+.ptEditToolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 6px;
+  overflow-x: auto;
+}
+
+.ptEditToolbar button {
+  flex-shrink: 0;
+  min-width: 60px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  border: 1px solid #333;
+  background: #006400;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ptEditToolbar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ptEditForm {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 0;
+}
+
+/** 年度・仕入先・入札NO（必須・Plum ラベル） */
+.ptEditFormHead {
+  background: #fff;
+}
+
+/**
+ * 仕入日以降（WPF EditWindow Grid Background=Honeydew）
+ * 添付画像左ペインの淡いミント系背景
+ */
+.ptEditFormBody {
+  background: honeydew;
+}
+
+.ptEditFormBody .ptEditLabelCell:not(.required) {
+  background: honeydew;
+}
+
+.ptEditFormBody .ptEditValueCell {
+  background: honeydew;
+}
+
+.ptEditFormBody .ptEditInput,
+.ptEditFormBody .ptEditSelect,
+.ptEditFormBody .ptEditYearWrap {
+  background: honeydew;
+}
+
+.ptEditFormBody .ptEditInput:focus,
+.ptEditFormBody .ptEditSelect:focus {
+  background: yellow;
+}
+
+.ptEditFormBody .ptEditInput:disabled,
+.ptEditFormBody .ptEditSelect:disabled,
+.ptEditFormBody .ptEditInputDisabled {
+  background: #e8f5e9;
+  color: #64748b;
+}
+
+.ptEditFormBody .ptEditSelect.preset {
+  background: yellowgreen;
+}
+
+.ptEditFormBody .ptEditSelect:disabled.preset,
+.ptEditFormBody .ptEditSelect.ptEditInputDisabled.preset {
+  background: #c5e1a5;
+  color: #64748b;
+}
+
+.ptEditFormBody .trConstantZoomField,
+.ptEditFormBody .trConstantZoomFieldInput {
+  background: honeydew;
+}
+
+.ptEditFormBody .trConstantZoomFieldInput:focus {
+  background: yellow;
+}
+
+.ptEditFormBody .trConstantZoomFieldInput:disabled,
+.ptEditFormBody .trConstantZoomFieldInput:read-only {
+  background: #e8f5e9;
+}
+
+.ptEditRow {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 0;
+  min-height: 24px;
+  border-bottom: 1px solid #000;
+}
+
+.ptEditRow:last-child {
+  border-bottom: none;
+}
+
+.ptEditFormHead .ptEditRow:last-child,
+.ptEditFormBody .ptEditRow:last-child {
+  border-bottom: 1px solid #000;
+}
+
+.ptEditFormBody .ptEditRow:last-child {
+  border-bottom: none;
+}
+
+.ptEditLabelCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 4px;
+  border-right: 1px solid #000;
+  background: #fff;
+  font-size: 14px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.ptEditLabelCell.required {
+  background: plum;
+}
+
+.ptEditLabelCell.withCheck {
+  justify-content: flex-start;
+  padding-left: 2px;
+}
+
+.ptEditLabelCell.withCheck .ptEditLabelText {
+  flex: 1;
+  text-align: center;
+}
+
+.ptEditLabelCell input[type="checkbox"] {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.ptEditValueCell {
+  display: flex;
+  align-items: stretch;
+  min-height: 24px;
+  background: #fff;
+}
+
+.ptEditInput,
+.ptEditSelect {
+  width: 100%;
+  min-height: 24px;
+  padding: 0 4px;
+  border: none;
+  border-left: 1px solid royalblue;
+  font-size: 16px;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.ptEditInput:focus,
+.ptEditSelect:focus {
+  outline: none;
+  background: yellow;
+}
+
+.ptEditInput:disabled,
+.ptEditSelect:disabled,
+.ptEditInputDisabled {
+  background: ghostwhite;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.ptEditSelect:disabled.preset,
+.ptEditSelect.ptEditInputDisabled.preset {
+  background: ghostwhite;
+}
+
+.ptEditInput.requiredField {
+  background: #fff;
+}
+
+.ptEditSelect.preset {
+  background: yellowgreen;
+}
+
+.ptEditInput.numeric {
+  text-align: right;
+}
+
+.ptEditInput.date {
+  font-size: 14px;
+}
+
+.ptEditPair {
+  display: flex;
+  width: 100%;
+}
+
+.ptEditPair .ptEditInput:first-child {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.ptEditPair .ptEditInput:last-child {
+  flex: 1;
+}
+
+.ptEditYearWrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 4px;
+  border-left: 1px solid royalblue;
+  box-sizing: border-box;
+}
+
+.ptEditYearWrap .f2EditMakeYearSpinner {
+  margin-left: auto;
+}
+
+.ptEditYearWrap .f2EditMakeYearValue {
+  width: 48px;
+  height: 22px;
+  font-size: 16px;
+  text-align: right;
+}
+
+.ptEditError {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #b91c1c;
+}
+
+.ptEditStatus {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #334155;
+}

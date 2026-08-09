@@ -1,0 +1,336 @@
+{
+  version: 0,
+  paper: {
+    margin: {bottom:30.0,left:66.0,right:30.0,top:30.0},
+    scale_unit: "point",
+    type: "a4"
+  },
+  reset_page_count: true,
+  group: {
+    page_break: true,
+    contents: [
+      {
+        size: {
+          initial: 30.0
+        },
+        caption: "タイトル",
+        comment: "タイトル",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:365.0,y2:30.0},caption:"タイトル",font:{bold:true,size:18.0},halign:"right",shrink_to_fit:true,text:"JAS有機･無農薬格付確認 シート",valign:"bottom"},
+          {type:"field",layout:{x1:385.0,y1:10.0,x2:492.0,y2:25.0},exp:"global.today",font:{size:14.0},formatter:{format:"yyyy年MM月dd日",type:"default"},halign:"center",mock:"t",valign:"center"},
+          {id:"__trial__",type:"text",layout:{y2:10},_:"この要素は手動で編集・削除しないで下さい",background:true,color:"gray",font:{size:10},text:"RapidReport http://rapidreport.systembase.co.jp/"}
+        ]
+      },
+      {
+        size: {
+          initial: 25.0
+        },
+        caption: "格付№",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:55.0,y2:25.0},halign:"center",rect:{},text:"格付№",valign:"center"},
+          {type:"field",layout:{x1:55.0,y1:0.0,x2:160.0,y2:25.0},exp:"(& .grade_no '-' .product_no)",font:{bold:true,size:14.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:160.0,y1:0.0,x2:215.0,y2:25.0},halign:"center",rect:{},text:"記入者",valign:"center"},
+          {type:"text",layout:{x1:375.0,y1:0.0,x2:499.0,y2:25.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:320.0,y1:0.0,x2:375.0,y2:25.0},halign:"center",rect:{},text:"確認者",valign:"center"},
+          {type:"text",layout:{x1:215.0,y1:0.0,x2:320.0,y2:25.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"}
+        ]
+      },
+      {
+        size: {
+          initial: 25.0
+        },
+        caption: "清掃時間",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:0.0,y2:0.0,rev_x2:true,rev_y2:true},font:{bold:true},formatter:{type:"default"},halign:"center",rect:{},text:"※清掃時間・作業時間は「製造表　仕上」「製造表　火入」「ブレンド表」それぞれに記入",valign:"center"}
+        ]
+      },
+      {
+        size: {
+          initial: 470.0
+        },
+        caption: "使用部品",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:195.0,y1:440.0,x2:499.0,y2:470.0},halign:"center",rect:{},valign:"center"}
+        ],
+        sub: [
+          {
+            caption: "該当作業",
+            layout: {rev_y2:true,x1:0.0,x2:105.0,y1:0.0,y2:0.0},
+            elements: [
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:105.0,y2:20.0},background:true,color:"white",font:{},formatter:{type:"default"},halign:"center",rect:{fill_color:"black"},text:"該当作業",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:20.0,x2:35.0,y2:40.0},font:{size:9.0},halign:"center",rect:{},shrink_to_fit:true,text:"ブレンド\r\nのみ",valign:"center"},
+              {type:"text",layout:{x1:35.0,y1:15.0,x2:70.0,y2:40.0},font:{size:9.0},halign:"center",rect:{},shrink_to_fit:true,text:"半仕上",valign:"center"},
+              {type:"text",layout:{x1:70.0,y1:15.0,x2:105.0,y2:40.0},font:{size:9.0},halign:"center",rect:{},shrink_to_fit:true,text:"仕上",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:40.0,x2:35.0,y2:140.0},halign:"center",text:"〇",valign:"center"},
+              {type:"line",layout:{x1:15.0,y1:125.0,x2:15.0,y2:340.0},end_cap:"arrow"},
+              {type:"text",layout:{x1:35.0,y1:140.0,x2:70.0,y2:240.0},halign:"center",text:"〇",valign:"center"},
+              {type:"line",layout:{x1:50.0,y1:125.0,x2:50.0,y2:155.0},end_cap:"arrow"},
+              {type:"text",layout:{x1:35.0,y1:40.0,x2:70.0,y2:140.0},halign:"center",text:"〇",valign:"center"},
+              {type:"line",layout:{x1:50.0,y1:245.0,x2:50.0,y2:340.0},end_cap:"arrow"},
+              {type:"text",layout:{x1:70.0,y1:40.0,x2:105.0,y2:140.0},halign:"center",text:"〇",valign:"center"},
+              {type:"line",layout:{x1:85.0,y1:125.0,x2:85.0,y2:155.0},end_cap:"arrow"},
+              {type:"line",layout:{x1:85.0,y1:230.0,x2:85.0,y2:260.0},end_cap:"arrow"},
+              {type:"text",layout:{x1:70.0,y1:440.0,x2:105.0,y2:470.0},halign:"center",text:"〇",valign:"center"},
+              {type:"text",layout:{x1:70.0,y1:340.0,x2:105.0,y2:440.0},halign:"center",text:"〇",valign:"center"},
+              {type:"line",layout:{x1:85.0,y1:410.0,x2:85.0,y2:440.0},end_cap:"arrow"},
+              {type:"line",layout:{x1:85.0,y1:325.0,x2:85.0,y2:355.0},end_cap:"arrow"},
+              {type:"text",layout:{x1:35.0,y1:340.0,x2:70.0,y2:440.0},halign:"center",text:"〇",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:340.0,x2:35.0,y2:440.0},halign:"center",text:"〇",valign:"center"},
+              {type:"text",layout:{x1:70.0,y1:140.0,x2:105.0,y2:240.0},halign:"center",text:"〇",valign:"center"},
+              {type:"text",layout:{x1:70.0,y1:240.0,x2:105.0,y2:340.0},halign:"center",text:"〇",valign:"center"},
+              {type:"text",layout:{x1:35.0,y1:440.0,x2:70.0,y2:470.0},halign:"center",text:"〇",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:440.0,x2:35.0,y2:470.0},halign:"center",text:"〇",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:40.0,x2:35.0,y2:470.0},halign:"center",rect:{},valign:"center"},
+              {type:"text",layout:{x1:35.0,y1:40.0,x2:70.0,y2:470.0},halign:"center",rect:{},valign:"center"},
+              {type:"text",layout:{x1:70.0,y1:40.0,x2:105.0,y2:470.0},halign:"center",rect:{},valign:"center"}
+            ]
+          },
+          {
+            caption: "工程項目",
+            layout: {rev_y2:true,x1:105.0,x2:195.0,y1:0.0,y2:0.0},
+            elements: [
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:90.0,y2:40.0},halign:"center",rect:{},text:"工程項目",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:90.0,y2:470.0},halign:"center",rect:{},valign:"center"},
+              {type:"text",layout:{x1:15.0,y1:40.0,x2:90.0,y2:140.0},halign:"center",text:"JAS原料確認",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:40.0,x2:15.0,y2:140.0},halign:"center",text:"A",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:140.0,x2:15.0,y2:240.0},halign:"center",text:"B",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:140.0,x2:15.0,y2:140.0},halign:"center",text:"C",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:240.0,x2:15.0,y2:240.0},halign:"center",text:"C",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:40.0,x2:15.0,y2:470.0},halign:"center",text:"E",valign:"center"},
+              {type:"text",layout:{x1:15.0,y1:140.0,x2:90.0,y2:240.0},halign:"center",text:"製茶仕上",valign:"center"},
+              {type:"text",layout:{x1:15.0,y1:240.0,x2:90.0,y2:340.0},halign:"center",text:"火入仕上",valign:"center"},
+              {type:"text",layout:{x1:15.0,y1:340.0,x2:90.0,y2:440.0},halign:"center",text:"ブレンド",valign:"center"},
+              {type:"text",layout:{x1:15.0,y1:440.0,x2:90.0,y2:470.0},halign:"center",shrink_to_fit:true,text:"パッキング保管",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:240.0,x2:15.0,y2:340.0},halign:"center",text:"C",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:340.0,x2:15.0,y2:440.0},halign:"center",text:"D",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:440.0,x2:15.0,y2:470.0},halign:"center",text:"E",valign:"center"}
+            ]
+          },
+          {
+            caption: "合否判定",
+            layout: {rev_y2:true,x1:195.0,x2:265.0,y1:0.0,y2:30.0},
+            elements: [
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:70.0,y2:20.0},background:true,color:"white",font:{},formatter:{type:"default"},halign:"center",rect:{fill_color:"black"},shrink_to_fit:true,text:"調査書書類確認",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:20.0,x2:70.0,y2:40.0},halign:"center",rect:{},text:"合否判定",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:40.0,x2:35.0,y2:140.0},halign:"center",text:"合",valign:"center"},
+              {type:"text",layout:{x1:35.0,y1:40.0,x2:70.0,y2:140.0},halign:"center",text:"否",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:140.0,x2:35.0,y2:240.0},halign:"center",text:"合",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:240.0,x2:35.0,y2:340.0},halign:"center",text:"合",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:340.0,x2:35.0,y2:440.0},halign:"center",text:"合",valign:"center"},
+              {type:"text",layout:{x1:35.0,y1:140.0,x2:70.0,y2:240.0},halign:"center",text:"否",valign:"center"},
+              {type:"text",layout:{x1:35.0,y1:240.0,x2:70.0,y2:340.0},halign:"center",text:"否",valign:"center"},
+              {type:"text",layout:{x1:35.0,y1:340.0,x2:70.0,y2:440.0},halign:"center",text:"否",valign:"center"}
+            ]
+          },
+          {
+            caption: "伝票種類",
+            layout: {rev_y2:true,x1:265.0,x2:335.0,y1:0.0,y2:30.0},
+            elements: [
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:70.0,y2:40.0},halign:"center",rect:{},text:"伝票種類",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:40.0,x2:70.0,y2:240.0},halign:"center",rect:{},text:"製造表　仕上",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:240.0,x2:70.0,y2:340.0},halign:"center",rect:{},text:"製造表　火入",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:340.0,x2:70.0,y2:440.0},halign:"center",rect:{},text:"ブレンド表",valign:"center"}
+            ]
+          },
+          {
+            aggregate_src: true,
+            caption: "伝票No",
+            layout: {x1:335.0,x2:465.0,y1:0.0,y2:40.0},
+            elements: [
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:130.0,y2:40.0},halign:"center",rect:{},text:"伝票No",valign:"center"}
+            ]
+          },
+          {
+            aggregate_src: true,
+            caption: "仕上",
+            layout: {x1:335.0,x2:465.0,y1:40.0,y2:235.0},
+            group: {
+              caption: "明細グループ",
+              detail: true,
+              layout: {
+                max_count: 10.0,
+                blank: true
+              },
+              custom_fields: [
+                {}
+              ],
+              contents: [
+                {
+                  size: {
+                    initial: 20.0
+                  },
+                  aggregate_src: true,
+                  caption: "仕入No",
+                  elements: [
+                    {type:"field",layout:{x1:0.0,y1:0.0,x2:0.0,y2:0.0,rev_x2:true,rev_y2:true},exp:".process03",font:{bold:true,size:14.0},formatter:{format:"#####",type:"default"},valign:"center"}
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            caption: "火入",
+            layout: {x1:335.0,x2:465.0,y1:240.0,y2:340.0},
+            elements: [
+              {type:"field",layout:{x1:0.0,y1:0.0,x2:65.0,y2:20.0},exp:".process04_01",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:20.0,x2:65.0,y2:40.0},exp:".process04_02",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:40.0,x2:65.0,y2:60.0},exp:".process04_03",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:60.0,x2:65.0,y2:80.0},exp:".process04_04",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:80.0,x2:65.0,y2:100.0},exp:".process04_05",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:0.0,x2:130.0,y2:20.0},exp:".process04_06",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:20.0,x2:130.0,y2:40.0},exp:".process04_07",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:40.0,x2:130.0,y2:60.0},exp:".process04_08",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:60.0,x2:130.0,y2:80.0},exp:".process04_09",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:80.0,x2:130.0,y2:100.0},exp:".process04_10",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:130.0,y2:100.0},halign:"center",rect:{},valign:"center"}
+            ]
+          },
+          {
+            caption: "ブレンド表",
+            layout: {x1:335.0,x2:465.0,y1:340.0,y2:440.0},
+            elements: [
+              {type:"field",layout:{x1:0.0,y1:0.0,x2:65.0,y2:20.0},exp:".product_no",font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:20.0,x2:65.0,y2:40.0},font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:40.0,x2:65.0,y2:60.0},font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:60.0,x2:65.0,y2:80.0},font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:0.0,y1:80.0,x2:65.0,y2:100.0},font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:0.0,x2:130.0,y2:20.0},font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:20.0,x2:130.0,y2:40.0},font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:60.0,x2:130.0,y2:80.0},font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"field",layout:{x1:65.0,y1:80.0,x2:130.0,y2:100.0},font:{bold:true,size:14.0},formatter:{format:"######",type:"default"},halign:"left",shrink_to_fit:true,valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:130.0,y2:100.0},halign:"center",rect:{},valign:"center"}
+            ]
+          },
+          {
+            caption: "備考",
+            layout: {rev_y2:true,x1:465.0,x2:499.0,y1:0.0,y2:30.0},
+            elements: [
+              {type:"text",layout:{x1:0.0,y1:0.0,x2:34.0,y2:40.0},halign:"center",rect:{},text:"備考",valign:"center"},
+              {type:"text",layout:{x1:0.0,y1:40.0,x2:34.0,y2:440.0},halign:"center",rect:{},valign:"center"}
+            ]
+          }
+        ]
+      },
+      {
+        size: {
+          initial: 35.0
+        },
+        caption: "梱包工程",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:70.0,y2:35.0},distribute:true,font:{size:9.0},halign:"center",rect:{},text:"上り 荷口 ロット",valign:"center"},
+          {type:"text",layout:{x1:245.0,y1:20.0,x2:330.0,y2:35.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"field",layout:{x1:70.0,y1:0.0,x2:245.0,y2:35.0},exp:"(& (if (= .make_year '') '' (& '(' .make_year ')' ))\r\n   .lot_name\r\n   (if (= .count '') '' (& '(' .count ')' ))\r\n)",font:{bold:true,size:14.0},formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"field",layout:{x1:250.0,y1:25.0,x2:259.0,y2:34.0},exp:"(if (&& (> .process02_01 0)\r\n        (<= .process03 0)\r\n        (<= .process04_01 0)) 'レ' '')",font:{bold:true,size:14.0},formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:265.0,y1:20.0,x2:330.0,y2:35.0},distribute:true,font:{size:8.0},halign:"center",text:"荒茶(マーク無)",valign:"center"},
+          {type:"field",layout:{x1:335.0,y1:25.0,x2:344.0,y2:34.0},exp:"(if (&& (> .process03 0)\r\n        (<= .process04_01 0)) 'レ' '')",font:{bold:true,size:14.0},formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:350.0,y1:20.0,x2:415.0,y2:35.0},distribute:true,font:{size:8.0},halign:"center",text:"半仕上(マーク〇)",valign:"center"},
+          {type:"text",layout:{x1:435.0,y1:20.0,x2:499.0,y2:35.0},distribute:true,font:{size:8.0},halign:"center",text:"仕上り(マーク●)",valign:"center"},
+          {type:"field",layout:{x1:420.0,y1:25.0,x2:429.0,y2:34.0},exp:"(if (> .process04_01 0) 'レ' '')",font:{bold:true,size:14.0},formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:245.0,y1:0.0,x2:499.0,y2:20.0},font:{size:9.0},halign:"center",rect:{},text:"出来上がり状態を チェックしてください",valign:"center"},
+          {type:"text",layout:{x1:435.0,y1:20.0,x2:499.0,y2:35.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:330.0,y1:20.0,x2:415.0,y2:35.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"}
+        ]
+      },
+      {
+        size: {
+          initial: 35.0
+        },
+        caption: "製造内訳",
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:390.0},halign:"center",rect:{},valign:"center"},
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:35.0},distribute:true,halign:"center",rect:{},text:"荷口",valign:"center"},
+          {type:"field",layout:{x1:35.0,y1:0.0,x2:100.0,y2:0.0,rev_y2:true},exp:".unit_weight",font:{bold:true,size:14.0},formatter:{format:"###.##",type:"default"},halign:"right",shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:100.0,y1:0.0,x2:115.0,y2:0.0,rev_y2:true},halign:"left",text:"㎏",valign:"bottom"},
+          {type:"text",layout:{x1:115.0,y1:0.0,x2:135.0,y2:0.0,rev_y2:true},halign:"center",text:"×",valign:"center"},
+          {type:"field",layout:{x1:135.0,y1:0.0,x2:185.0,y2:0.0,rev_y2:true},exp:".unit_number",font:{bold:true,size:14.0},formatter:{format:"##0",type:"default"},halign:"right",shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:185.0,y1:0.0,x2:200.0,y2:0.0,rev_y2:true},halign:"left",text:"個",valign:"bottom"},
+          {type:"text",layout:{x1:200.0,y1:0.0,x2:225.0,y2:0.0,rev_y2:true},halign:"center",text:"+",valign:"center"},
+          {type:"field",layout:{x1:225.0,y1:0.0,x2:290.0},exp:".fraction_weight",font:{bold:true,size:14.0},formatter:{format:"###.##",type:"default"},halign:"right",shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:290.0,y1:0.0,x2:305.0},halign:"left",text:"㎏",valign:"bottom"},
+          {type:"text",layout:{x1:305.0,y1:0.0,x2:325.0},halign:"center",text:"×",valign:"center"},
+          {type:"text",layout:{x1:390.0,y1:0.0,x2:499.0},font:{bold:true,size:14.0},halign:"center",rect:{},valign:"center"},
+          {type:"field",layout:{x1:325.0,y1:0.0,x2:375.0},exp:".fraction_number",font:{bold:true,size:14.0},formatter:{type:"default"},halign:"right",shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:375.0,y1:0.0,x2:390.0},halign:"left",text:"個",valign:"bottom"},
+          {type:"text",layout:{x1:390.0,y1:0.0,x2:405.0},halign:"left",text:"計",valign:"top"},
+          {type:"field",layout:{x1:405.0,y1:0.0,x2:485.0},exp:".complete_quantity",font:{bold:true,size:14.0},formatter:{format:"###.##",type:"default"},halign:"right",shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:485.0,y1:0.0,x2:499.0,y2:0.0,rev_y2:true},halign:"left",text:"㎏",valign:"bottom"}
+        ]
+      },
+      {
+        size: {
+          initial: 30.0
+        },
+        caption: "備考",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:499.0,y2:30.0},formatter:{type:"default"},halign:"left",rect:{},shrink_to_fit:true,text:"備　考",valign:"top"}
+        ]
+      },
+      {
+        size: {
+          initial: 5.0
+        },
+        caption: "余白",
+        every_page: true
+      },
+      {
+        size: {
+          initial: 45.0
+        },
+        caption: "格付確認",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:180.0,y2:45.0},font:{bold:true,size:10.0},halign:"center",rect:{},text:"格付け確認　総合判定",valign:"center"},
+          {type:"text",layout:{x1:180.0,y1:0.0,x2:260.0,y2:20.0},background:true,color:"white",font:{size:9.0},formatter:{type:"default"},halign:"center",rect:{fill_color:"black"},text:"JAS有機栽培",valign:"center"},
+          {type:"text",layout:{x1:260.0,y1:0.0,x2:340.0,y2:20.0},background:true,color:"white",font:{size:9.0},formatter:{type:"default"},halign:"center",rect:{fill_color:"black"},text:"特別栽培",valign:"center"},
+          {type:"text",layout:{x1:340.0,y1:0.0,x2:420.0,y2:20.0},background:true,color:"white",font:{size:9.0},formatter:{type:"default"},halign:"center",rect:{fill_color:"black"},text:"無農薬栽培",valign:"center"},
+          {type:"text",layout:{x1:420.0,y1:0.0,x2:499.0,y2:20.0},background:true,color:"white",font:{size:9.0},formatter:{type:"default"},halign:"center",rect:{fill_color:"black"},text:"一般茶",valign:"center"},
+          {type:"field",layout:{x1:180.0,y1:20.0,x2:260.0,y2:45.0},exp:"(if (= .organic_class 'A') '○' '')",font:{size:14.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"text",layout:{x1:260.0,y1:20.0,x2:340.0,y2:45.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"field",layout:{x1:340.0,y1:20.0,x2:420.0,y2:45.0},exp:"(if (= .organic_class 'B') '○' '')",font:{size:14.0},formatter:{type:"default"},halign:"center",rect:{},shrink_to_fit:true,valign:"center"},
+          {type:"field",layout:{x1:420.0,y1:20.0,x2:499.0,y2:45.0},exp:"(if (= .organic_class 'C') '○' '')",font:{size:14.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"}
+        ]
+      },
+      {
+        size: {
+          initial: 30.0
+        },
+        caption: "ラベル枚数",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:180.0,y2:30.0},font:{bold:true,size:10.0},halign:"center",rect:{},text:"ラベル貼付枚数",valign:"center"},
+          {type:"field",layout:{x1:180.0,y1:0.0,x2:325.0,y2:30.0},exp:"(+ .unit_number .fraction_number)",font:{size:16.0},formatter:{format:"##0",type:"default"},halign:"right",valign:"center"},
+          {type:"text",layout:{x1:340.0,y1:0.0,x2:499.0,y2:30.0},font:{bold:true},halign:"left",rect:{},text:"有機不適合処分先",valign:"top"},
+          {type:"text",layout:{x1:325.0,y1:0.0,x2:340.0,y2:30.0},halign:"left",text:"枚",valign:"bottom"}
+        ]
+      },
+      {
+        size: {
+          initial: 25.0
+        },
+        caption: "総合判定",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:270.0,y2:25.0},distribute:true,font:{bold:true,size:10.0},halign:"center",rect:{},text:"以上を持ってこの製品の格付け確認とする",valign:"center"},
+          {type:"text",layout:{x1:270.0,y1:0.0,x2:340.0,y2:25.0},halign:"center",rect:{},text:"格付け担当",valign:"center"},
+          {type:"text",layout:{x1:340.0,y1:0.0,x2:499.0,y2:25.0},halign:"center",rect:{},shrink_to_fit:true,valign:"center"}
+        ]
+      },
+      {
+        size: {
+          initial: 15.0
+        },
+        caption: "フッター",
+        every_page: true,
+        elements: [
+          {type:"text",layout:{x1:0.0,y1:0.0,x2:499.0,y2:17.0},font:{size:8.0},formatter:{type:"default"},halign:"right",text:"株式会社 井ヶ田製茶北郷茶園 第2工場　",valign:"center"}
+        ]
+      }
+    ]
+  }
+}

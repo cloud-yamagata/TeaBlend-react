@@ -1,0 +1,130 @@
+/**
+ * 仕上個別情報登録（旧 FinishCategorys MainWindow 配色）
+ */
+.finishCategoryPage .tableWrap {
+  height: calc(100vh - 280px);
+}
+
+.finishCategoryToolbarRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+}
+
+.finishCategoryToolbarRowMenu {
+  background: var(--teablend-table-body-bg, honeydew);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.finishCategoryToolbarRowSearch {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 4px 6px;
+  background: var(--teablend-table-body-bg, honeydew);
+}
+
+.finishCategorySearchField {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.finishCategoryMakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.finishCategoryMakeYearWrap .f2EditMakeYearSpinner {
+  height: 30px;
+}
+
+.finishCategoryMakeYearWrap .f2EditMakeYearValue {
+  width: 36px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.finishCategoryMakeYearWrap .f2EditMakeYearStep {
+  min-width: 22px;
+  height: 14px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.finishCategoryGroupBox {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px 10px;
+  padding: 4px 10px;
+  min-height: 30px;
+  background: #f0fff0;
+  border: 1px solid #9acd9a;
+  border-radius: 4px;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.finishCategoryGroupBox legend {
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2d4a2d;
+}
+
+.finishCategoryRadioLabel,
+.finishCategoryCheckLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.finishCategoryNameInput {
+  width: 120px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.finishCategoryMenuActions {
+  display: flex;
+  gap: 8px;
+}
+
+.finishCategoryHint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #555;
+}
+
+.finishCategoryHint.warn {
+  color: #664d03;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.finishCategoryTablePlaceholder {
+  margin: 0;
+  padding: 24px 12px;
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+}

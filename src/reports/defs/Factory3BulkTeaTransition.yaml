@@ -1,0 +1,99 @@
+version: 1
+reportId: Factory3BulkTeaTransition
+title: 第3工場仕上茶移動推移表
+
+filters:
+  - key: item_no
+    label: 商品NO
+    type: text
+    default: ""
+    placeholder: 商品NOを入力
+  - key: item_name
+    label: 商品名
+    type: itemZoom
+    default: ""
+    placeholder: 商品名を入力
+    zoomCodeKey: item_no
+
+grid:
+  rowId:
+    mode: concat
+    fields:
+      - item_no
+      - product_no
+      - transfer_date
+      - transfer_type
+      - result_type
+
+  options:
+    pageSize: 25
+    rowHeight: 32
+    headerHeight: 40
+
+  columns:
+    - field: item_no
+      header: 商品NO
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: item_name
+      header: 商品名
+      minWidth: 200
+      flex: 1.6
+      align: left
+    - field: transfer_date
+      header: 移動日
+      minWidth: 120
+      flex: 1
+      align: left
+      format: ymd
+    - field: product_no
+      header: 製造NO
+      minWidth: 110
+      flex: 1
+      align: center
+    - field: make_year
+      header: 年度
+      minWidth: 80
+      flex: 0.7
+      align: center
+    - field: count
+      header: 回数
+      minWidth: 70
+      flex: 0.6
+      align: center
+    - field: transfer_type
+      header: 移動区分
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: transfer_name
+      header: 移動名
+      minWidth: 90
+      flex: 0.8
+      align: left
+    - field: result_type
+      header: 実績区分
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: result_name
+      header: 実績名
+      minWidth: 90
+      flex: 0.8
+      align: left
+    - field: reason
+      header: 理由
+      minWidth: 120
+      flex: 1
+      align: left
+    - field: transfer_quantity
+      header: 移動量
+      minWidth: 110
+      flex: 1
+      align: right
+    - field: summation_use_quantity
+      header: 在庫推移量
+      minWidth: 110
+      flex: 1
+      align: right

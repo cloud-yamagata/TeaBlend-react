@@ -1,0 +1,72 @@
+/**
+ * 第1工場生産情報メンテナンス固有スタイル
+ * 共通の入力UI・色合いは purchaseTtransferEditModal.css（ptEdit*）を利用
+ */
+
+/** ラベルセルを *ロットNO ボタン化（登録ボタンと同色 DarkGreen） */
+.ptEditForm .ptEditLabelCell.asButton {
+  padding: 0;
+  background: transparent;
+}
+
+.ptEditLotNoLabelButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 24px;
+  margin: 0;
+  padding: 0 4px;
+  border: none;
+  background: #006400;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.ptEditLotNoLabelButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ptEditLotNoLabelButton:hover:not(:disabled) {
+  background: #004d00;
+}
+
+/**
+ * 未入力エラーの赤枠（ロットNO〜格付。圃場は除く）
+ */
+.ptEditForm .ptEditInput.inputError,
+.ptEditForm .ptEditSelect.inputError,
+.ptEditForm .ptEditSelect.preset.inputError,
+.ptEditForm .ptEditYearWrap.inputError,
+.ptEditFormBody .ptEditInput.inputError,
+.ptEditFormBody .ptEditSelect.inputError,
+.ptEditFormBody .ptEditSelect.preset.inputError,
+.ptEditFormHead .ptEditInput.inputError {
+  box-shadow: inset 0 0 0 2px #c62828 !important;
+  background: #fff5f5 !important;
+}
+
+.ptEditForm .ptEditInput.inputError:focus,
+.ptEditForm .ptEditSelect.inputError:focus,
+.ptEditFormBody .ptEditInput.inputError:focus,
+.ptEditFormBody .ptEditSelect.inputError:focus {
+  background: #fff5f5 !important;
+}
+
+/** 品種 ZOOM（overflow:hidden でも赤枠が見えるよう inset box-shadow） */
+.ptEditFormBody .trConstantZoomField.f1rVarietyZoomError {
+  overflow: visible;
+  box-shadow: inset 0 0 0 2px #c62828 !important;
+  outline: 2px solid #c62828;
+  outline-offset: -2px;
+}
+
+.ptEditFormBody .trConstantZoomField.f1rVarietyZoomError .trConstantZoomFieldInput,
+.ptEditFormBody .trConstantZoomFieldInput.f1rVarietyZoomErrorInput {
+  background: #fff5f5 !important;
+}

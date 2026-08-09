@@ -1,0 +1,108 @@
+version: 1
+reportId: UsuallLotUusedAadoptedList
+title: 通常品ロット使用実績
+
+filters:
+  - key: item_no
+    label: 商品NO
+    type: text
+    default: ""
+    placeholder: 商品NOを入力
+  - key: item_name
+    label: 商品名
+    type: itemZoom
+    default: ""
+    placeholder: 商品名を入力
+    zoomCodeKey: item_no
+
+grid:
+  rowId:
+    mode: concat
+    fields:
+      - item_no_part
+      - part_lot_no
+      - product_no
+
+  options:
+    pageSize: 25
+    rowHeight: 32
+    headerHeight: 40
+
+  columns:
+    - field: work_date_part
+      header: 作業日(仕上)
+      minWidth: 120
+      flex: 1
+      align: left
+      format: ymd
+    - field: item_no_part
+      header: 商品NO(仕上)
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: item_name_part
+      header: 商品名(仕上)
+      minWidth: 200
+      flex: 1.6
+      align: left
+    - field: part_lot_no
+      header: 部品ロットNO
+      minWidth: 120
+      flex: 1
+      align: center
+    - field: complete_quantity
+      header: 生産量
+      minWidth: 110
+      flex: 1
+      align: right
+    - field: make_year_part
+      header: 年度(仕上)
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: count_part
+      header: 回数(仕上)
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: work_date_blend
+      header: 作業日(配合)
+      minWidth: 120
+      flex: 1
+      align: left
+      format: ymd
+    - field: item_no_blend
+      header: 商品NO(配合)
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: item_name_blend
+      header: 商品名(配合)
+      minWidth: 200
+      flex: 1.6
+      align: left
+    - field: product_no
+      header: 製造NO
+      minWidth: 110
+      flex: 1
+      align: center
+    - field: make_year_blend
+      header: 年度(配合)
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: count_blend
+      header: 回数(配合)
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: use_quantity
+      header: 使用量
+      minWidth: 110
+      flex: 1
+      align: right
+    - field: remarks
+      header: 備考
+      minWidth: 180
+      flex: 1.4
+      align: left

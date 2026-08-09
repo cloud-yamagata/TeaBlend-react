@@ -1,0 +1,227 @@
+/**
+ * 仕入受入情報一覧（旧 PurchaseReceive MainWindow 配色）
+ */
+
+.purchaseReceivePage .tableWrap {
+  height: calc(100vh - 280px);
+}
+
+.purchaseReceiveToolbarRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+}
+
+.purchaseReceiveToolbarRowMenu {
+  background: #f0fff0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.purchaseReceiveToolbarRowSearch {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 4px 6px;
+  background: var(--teablend-table-body-bg, honeydew);
+}
+
+.purchaseReceiveMakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.purchaseReceiveMakeYearWrap .f2EditMakeYearSpinner {
+  height: 30px;
+}
+
+.purchaseReceiveMakeYearWrap .f2EditMakeYearValue {
+  width: 36px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.purchaseReceiveMakeYearWrap .f2EditMakeYearStep {
+  min-width: 22px;
+  height: 14px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.purchaseReceiveKeywordInput {
+  width: 100px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.purchaseReceiveFilterGroup {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 2px 4px;
+  margin: 0;
+  padding: 2px 8px 2px 6px;
+  min-height: 30px;
+  background: #98fb98;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.purchaseReceiveFilterGroup legend {
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2d4a2d;
+  white-space: nowrap;
+}
+
+.purchaseReceiveFilterGroup label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.purchaseReceiveMenuActions {
+  display: inline-flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.purchaseReceiveHint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.purchaseReceiveHint.warn {
+  color: #b45309;
+}
+
+.purchaseReceivePage .toolbar .title {
+  color: #2f4f2f;
+}
+
+.purchaseReceiveOverlay.modalOverlay {
+  z-index: 1200;
+}
+
+.purchaseReceiveSubModal {
+  width: min(760px, 96vw);
+  max-height: 90vh;
+  overflow: auto;
+  margin: 3vh auto;
+  padding: 12px 16px 16px;
+  background: #fff;
+  border: 1px solid #2f4f2f;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.purchaseReceiveSubHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.purchaseReceiveSubHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #2f4f2f;
+}
+
+.purchaseReceiveSubClose {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #475569;
+}
+
+.purchaseReceiveSubTableWrap {
+  height: min(52vh, 420px);
+}
+
+.purchaseReceiveSubTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.purchaseReceiveSubTable thead th {
+  background: #228b22;
+  color: #fff;
+  padding: 6px 4px;
+  text-align: center;
+  border: 1px solid #fff;
+}
+
+.purchaseReceiveSubTable tbody td {
+  padding: 4px;
+  border: 1px solid #d6dee8;
+  background: #f0fff0;
+}
+
+.purchaseReceiveSubTable tbody tr:nth-child(even) td {
+  background: #fff;
+}
+
+.purchaseReceiveSubTable .num {
+  text-align: right;
+}
+
+.purchaseReceiveSubEmpty {
+  margin: 24px 0;
+  text-align: center;
+  color: #64748b;
+}
+
+.purchaseReceiveSubToolbar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.purchaseReceiveTablePlaceholder {
+  margin: 24px 0;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.purchaseReceiveMantineTableRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: none;
+}
+
+.purchaseReceiveMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.purchaseReceiveTableWrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}

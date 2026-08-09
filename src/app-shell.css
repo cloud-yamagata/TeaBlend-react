@@ -1,0 +1,332 @@
+/**
+ * 【内容及び影響範囲】
+ *   TeaBlend のアプリシェル（左サイドナビ＋メイン領域）と、メニュー編集画面で使う一部クラス。
+ *
+ * 【固有画面・ソース】
+ *   - `.appShell`, `.sideNav*`, `.appMain` … `App.tsx`（全画面のレイアウト）
+ *   - `.menuEditor*`, `.menuActionButton*` … `MenuEditorPage.tsx` / 同ブロック内の card
+ *   - `.topErrorBar` … メニュー YAML 読み込みエラー表示（`App.tsx`）
+ *
+ * 【メンテナンス】
+ *   各機能画面専用の見た目は `MaterialList/styles.css` 等へ分割済み。シェル変更時のみこのファイルを触る。
+ */
+
+.appShell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  background: linear-gradient(180deg, #effcf1 0%, #eff2f7 40%, #eff2f7 100%);
+}
+
+.appShell.menuCollapsed {
+  grid-template-columns: 72px 1fr;
+}
+
+.appMain {
+  min-width: 0;
+}
+
+.topErrorBar {
+  padding: 10px 14px;
+  border-bottom: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sideNav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #d6dee8;
+  background: radial-gradient(1200px 600px at -200px -200px, #c7f9d2 0%, transparent 60%),
+    linear-gradient(180deg, #f4fff6 0%, #ffffff 55%, #ffffff 100%);
+}
+
+.sideNavLoading {
+  padding: 16px;
+  color: #14532d;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.sideNavHeader {
+  padding: 16px 16px 10px;
+  border-bottom: 1px solid #d6dee8;
+}
+
+.sideNavHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.sideNavCollapseToggle {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid #15803d;
+  background: #ffffff;
+  color: #14532d;
+  font-weight: 900;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sideNavCollapseToggle:hover {
+  background: #f0fdf4;
+}
+
+.sideNavCollapseToggleIcon {
+  font-size: 10px;
+}
+
+.sideNavControls {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.sideNavControlButton {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid #15803d;
+  background: #16a34a;
+  color: #fff;
+  font-weight: 900;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sideNavControlButton:hover {
+  background: #15803d;
+}
+
+.sideNavControlButton.ghost {
+  background: #fff;
+  color: #14532d;
+  border-color: #86efac;
+}
+
+.sideNavControlButton.ghost:hover {
+  background: #f0fdf4;
+}
+
+.brandTitle {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #14532d;
+}
+
+.brandSub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #3f6212;
+  font-weight: 700;
+}
+
+.sideNavBody {
+  padding: 10px 10px 14px;
+  overflow: auto;
+}
+
+.sideNavGroup {
+  margin: 8px 6px 12px;
+}
+
+.sideNavGroupToggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sideNavGroupToggle:hover {
+  background: #f1f5f9;
+}
+
+.sideNavGroupToggleIcon {
+  width: 18px;
+  color: #166534;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.sideNavGroupTitleText {
+  font-size: 12px;
+  color: #166534;
+  letter-spacing: 0.04em;
+  font-weight: 900;
+}
+
+.sideNavItems {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sideNavLink {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #1e293b;
+}
+
+.sideNavLink:hover {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.sideNavLink.isActive {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.sideNavLinkLabel {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.sideNavLinkKey {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.sideNavFooter {
+  padding: 12px 12px 14px;
+  border-top: 1px solid #d6dee8;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sideNavFooterMeta {
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  line-height: 1.35;
+  word-break: break-all;
+}
+
+.sideNavFooterLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid #15803d;
+  background: #16a34a;
+  color: #fff;
+  font-weight: 900;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.sideNavFooterLink:hover {
+  background: #15803d;
+}
+
+.sideNavFooterLink.isActive {
+  background: #14532d;
+  border-color: #14532d;
+}
+
+.sideNav.isCollapsed .sideNavHeader {
+  padding: 10px 8px;
+}
+
+.sideNav.isCollapsed .sideNavHeaderRow {
+  justify-content: center;
+}
+
+.sideNav.isCollapsed .sideNavCollapseToggle {
+  width: 100%;
+  justify-content: center;
+  padding: 0;
+}
+
+.card {
+  padding: 14px;
+  border: 1px solid #d6dee8;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.menuEditorActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 12px;
+}
+
+.menuActionButton {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid #15803d;
+  background: #16a34a;
+  color: #fff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.menuActionButton:hover {
+  background: #15803d;
+}
+
+.menuActionButtonDanger {
+  border-color: #b91c1c;
+  background: #dc2626;
+}
+
+.menuActionButtonDanger:hover {
+  background: #b91c1c;
+}
+
+.fileButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fileButton input[type="file"] {
+  display: none;
+}
+
+.menuEditorTextarea {
+  width: 100%;
+  min-height: min(60vh, 720px);
+  resize: vertical;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #c7d0dc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  background: #f8fafc;
+}

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "L2fark3l+Sc=",
+  "success": true,
+  "projectFilePath": "D:\\git\\TeaBlend-react\\tools\\TeaBlendReportHelper\\TeaBlendReportHelper.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

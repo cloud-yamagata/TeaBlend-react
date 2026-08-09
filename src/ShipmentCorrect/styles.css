@@ -1,0 +1,129 @@
+/**
+ * 直送先マスタメンテナンス（商品マスタメンテナンスの検索行＋メニューを踏襲）
+ */
+
+.shipmentCorrectPage .toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.shipmentCorrectHint {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.shipmentCorrectMenuRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 4px 0;
+  background: var(--teablend-table-body-bg, honeydew);
+  border-radius: 8px;
+}
+
+.shipmentCorrectMenuItem {
+  min-width: 64px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #166534;
+  border-radius: 4px;
+  background: #166534;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.shipmentCorrectMenuItem:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.shipmentCorrectMenuItem:not(:disabled):hover {
+  background: #15803d;
+}
+
+.shipmentCorrectSearchRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.shipmentCorrectSearchRow .searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-self: flex-end;
+}
+
+.shipmentCorrectSearchRow .searchFieldLabel {
+  font-size: 12px;
+  color: #334155;
+}
+
+.shipmentCorrectSearchRow .searchFieldLabelSpacer {
+  visibility: hidden;
+}
+
+.shipmentCorrectSearchRow .searchControl {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.shipmentCorrectSearchRow .searchControlShipmentName {
+  width: 300px;
+}
+
+.shipmentCorrectSearchRow .shipmentNameWithSearch {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.shipmentCorrectSearchRow .shipmentNameWithSearchControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shipmentCorrectSearchRow .searchSubmitButton {
+  flex-shrink: 0;
+  height: 32px;
+  min-width: 72px;
+  padding: 0 14px;
+  border: 1px solid #14532d;
+  border-radius: 6px;
+  background: #14532d;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.shipmentCorrectSearchRow .searchSubmitButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.shipmentCorrectPage .status {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.shipmentCorrectPage .status.error {
+  color: #b91c1c;
+}

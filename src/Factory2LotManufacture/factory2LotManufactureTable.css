@@ -1,0 +1,35 @@
+.factory2TableWrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.factory2LotMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: none;
+}
+
+.factory2LotMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.factory2LotMantineTable {
+  font-size: 13px;
+}
+
+.factory2LotMantineTable .mantine-Table-td,
+.factory2LotMantineTable .mantine-Table-th {
+  padding: 2px 6px;
+}
+
+.factory2LotMantineTable .mantineScrollTableTh {
+  min-height: 45px;
+  font-size: 12px;
+  white-space: normal;
+}

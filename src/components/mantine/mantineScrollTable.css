@@ -1,0 +1,99 @@
+/**
+ * Mantine 一覧テーブル共通（お茶屋さんイメージ: データ部は淡い緑）
+ */
+:root {
+  --teablend-table-body-bg: honeydew;
+  --teablend-table-body-hover-bg: #e8f5e9;
+  --teablend-table-selected-bg: #c8dff5;
+  --teablend-table-selected-hover-bg: #b3d4ef;
+}
+
+.mantineScrollTableToolbar {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.mantineScrollTableToolbar .mantine-TextInput-root {
+  max-width: 420px;
+}
+
+.mantineScrollTableScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  background: var(--teablend-table-body-bg);
+}
+
+.mantineScrollTable {
+  background: var(--teablend-table-body-bg);
+}
+
+.mantineScrollTable tbody tr:not(.mantineScrollTableRowSelected),
+.mantineScrollTable tbody tr:not(.mantineScrollTableRowSelected):nth-of-type(odd),
+.mantineScrollTable tbody tr:not(.mantineScrollTableRowSelected):nth-of-type(even) {
+  background-color: var(--teablend-table-body-bg) !important;
+}
+
+.mantineScrollTable tbody tr:not(.mantineScrollTableRowSelected):hover {
+  background-color: var(--teablend-table-body-hover-bg) !important;
+}
+
+.mantineScrollTable .mantineScrollTableTh {
+  background-color: forestgreen;
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mantineScrollTableHeaderMultiline {
+  display: inline-block;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
+}
+
+/* 選択行はホバー解除後も判別できるよう tr / td 双方に適用（tbody 一括背景より詳細度を上げる） */
+.mantineScrollTable tbody tr.mantineScrollTableRowSelected,
+.mantineScrollTable tbody tr.mantineScrollTableRowSelected:nth-of-type(odd),
+.mantineScrollTable tbody tr.mantineScrollTableRowSelected:nth-of-type(even),
+.mantineScrollTable tbody tr.mantineScrollTableRowSelected > td {
+  background-color: var(--teablend-table-selected-bg) !important;
+}
+
+.mantineScrollTable tbody tr.mantineScrollTableRowSelected:hover,
+.mantineScrollTable tbody tr.mantineScrollTableRowSelected:hover > td {
+  background-color: var(--teablend-table-selected-hover-bg) !important;
+}
+
+.mantineScrollTableSelectTh,
+.mantineScrollTableSelectTd {
+  width: 40px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.mantineScrollTableSortBtn {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  text-align: center;
+}
+
+.mantineScrollTableSortBtn:hover {
+  text-decoration: underline;
+}
+
+.mantineScrollTableEmpty {
+  text-align: center;
+  color: #64748b;
+  padding: 24px;
+  background: var(--teablend-table-body-bg);
+}
+
+.mantineScrollTableFooter {
+  padding: 0 4px 4px;
+  background: #fff;
+}

@@ -1,0 +1,151 @@
+/**
+ * 第2工場入出庫実績（旧 StoreTransferFa2 MainWindow 配色）
+ * 共通ボタン・ラベルは Factory2LotManufacture/styles.css を併用
+ */
+
+.storeTransferFa2Page .tableWrap {
+  height: calc(100vh - 300px);
+}
+
+.storeTransferFa2ToolbarRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+}
+
+.storeTransferFa2ToolbarRowMenu {
+  background: #f0fff0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.storeTransferFa2SearchPanel {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+  overflow-x: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.storeTransferFa2LotNameInput {
+  width: 180px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.storeTransferFa2FilterGroup {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  gap: 2px 4px;
+  margin: 0;
+  padding: 2px 8px 2px 6px;
+  min-height: 30px;
+  background: #98fb98;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.storeTransferFa2FilterGroup legend {
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2d4a2d;
+  white-space: nowrap;
+}
+
+.storeTransferFa2FilterGroup label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.storeTransferFa2FilterGroupResult {
+  flex-shrink: 0;
+}
+
+.storeTransferFa2SearchButton {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.storeTransferFa2MenuActions {
+  display: inline-flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.storeTransferFa2Hint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.storeTransferFa2SearchMessage {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #b45309;
+}
+
+.storeTransferFa2Page .toolbar .title {
+  color: #2f4f2f;
+}
+
+.storeTransferFa2MakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 46px;
+}
+
+.storeTransferFa2MakeYearWrap .f2EditMakeYearSpinner {
+  height: 30px;
+  width: 46px;
+}
+
+.storeTransferFa2MakeYearWrap .f2EditMakeYearValue {
+  width: 28px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.storeTransferFa2MakeYearWrap .f2EditMakeYearButtons {
+  width: 18px;
+}
+
+.storeTransferFa2MakeYearWrap .f2EditMakeYearStep {
+  min-width: 18px;
+  width: 18px;
+  height: 14px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.storeTransferFa2SearchPanel .factory2TextInput.date {
+  width: 120px;
+  flex-shrink: 0;
+}

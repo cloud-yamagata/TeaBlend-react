@@ -1,0 +1,54 @@
+/**
+ * 入出庫情報編集モーダル固有スタイル（原料実績 ptEdit* ベース）
+ */
+
+.stf2EditOverlay.ptEditOverlay {
+  z-index: 1300;
+}
+
+.stf2EditPanel.ptEditPanel {
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 24px);
+}
+
+.stf2EditCodeNameRow {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.stf2EditCodeNameRow .stf2EditCode {
+  width: 56px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.stf2EditCodeNameRow .stf2EditName {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.stf2EditReadonlyHighlight.ptEditInput,
+.stf2EditReadonlyHighlight.ptEditTextarea,
+.stf2EditCodeNameRow .ptEditInputDisabled {
+  background: #9acd32 !important;
+}
+
+.ptEditForm .ptEditTextarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 4px 8px;
+  border: 1px solid #4169e1;
+  border-radius: 2px;
+  font-size: 14px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.ptEditForm .ptEditTextarea.inputError,
+.ptEditForm .ptEditInput.inputError,
+.ptEditForm .ptEditSelect.inputError {
+  box-shadow: inset 0 0 0 2px #c62828 !important;
+  background: #fff5f5 !important;
+}

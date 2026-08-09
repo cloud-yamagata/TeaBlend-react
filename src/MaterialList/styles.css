@@ -1,0 +1,300 @@
+/**
+ * 【内容及び影響範囲】
+ *   原料一覧専用スタイル（検索パネル・DataGrid ラッパ等）。`MaterialListPage.tsx` から import。
+ *
+ * 【固有画面】
+ *   `/material-list`（`MaterialListPage.tsx`）
+ */
+
+:root {
+  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  color: #202328;
+  background: #eff2f7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  padding: 24px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+}
+
+.searchInput {
+  width: 320px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #c7d0dc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.status {
+  margin: 8px 0 12px;
+}
+
+.error {
+  color: #c61b1b;
+}
+
+.searchPanel {
+  margin-bottom: 12px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #d6dee8;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.searchPanelToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: #f1f5f9;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  text-align: left;
+}
+
+.searchPanelToggle:hover {
+  background: #e2e8f0;
+}
+
+.searchPanelToggleIcon {
+  font-weight: 400;
+  color: #64748b;
+}
+
+.searchPanelBody {
+  padding: 12px 14px 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.searchFields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 14px;
+}
+
+.searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.searchFieldLabel {
+  font-weight: 500;
+}
+
+.searchControl {
+  height: 34px;
+  min-width: 120px;
+  padding: 0 10px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 14px;
+}
+
+.searchControlWide {
+  min-width: 200px;
+}
+
+.searchFieldItemZoomGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+}
+
+.searchControlZoomField {
+  min-width: 160px;
+}
+
+.searchFieldZoomButtonWrap {
+  padding-bottom: 0;
+}
+
+.searchFieldLabelSpacer {
+  visibility: hidden;
+  min-height: 1em;
+}
+
+.zoomOpenButton {
+  height: 34px;
+  min-width: 72px;
+  padding: 0 12px;
+  border: 1px solid #0f766e;
+  border-radius: 6px;
+  background: #14b8a6;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.zoomOpenButton:hover {
+  background: #0d9488;
+}
+
+.searchActions {
+  display: flex;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+.searchSubmitButton {
+  height: 36px;
+  min-width: 88px;
+  padding: 0 16px;
+  border: 1px solid #15803d;
+  border-radius: 8px;
+  background: #16a34a;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.searchSubmitButton:hover {
+  background: #15803d;
+}
+
+.materialListVerifyBadge {
+  margin: 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f766e;
+  background: #ccfbf1;
+  border: 1px solid #99f6e4;
+  border-radius: 6px;
+}
+
+.tableWrap {
+  height: calc(100vh - 280px);
+  min-height: 240px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d6dee8;
+  overflow: hidden;
+}
+
+.materialListTableWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.materialListTableWrap .mantine-Provider-root,
+.materialListTableWrap > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.materialListMantineTableRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.materialListTablePlaceholder {
+  margin: 0;
+  padding: 24px;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+.inlineDetailButton {
+  height: 26px;
+  min-width: 54px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 45%);
+  padding: 24px;
+}
+
+.modalPanel {
+  width: min(860px, 100%);
+  max-height: calc(100vh - 48px);
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #cfd8e3;
+  box-shadow: 0 20px 50px rgb(15 23 42 / 30%);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 20px;
+}
+
+.modalCloseButton {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid #c7d0dc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.modalCaption {
+  margin: 0;
+  color: #334155;
+  font-size: 14px;
+}
+
+.modalTableWrap {
+  height: min(360px, calc(100vh - 240px));
+}

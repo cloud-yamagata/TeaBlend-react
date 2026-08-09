@@ -1,0 +1,60 @@
+/**
+ * システム定数 ZOOM 入力（製造報告書ロット ZOOM「Z」と同型）
+ */
+.trConstantZoomField {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: 24px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.trConstantZoomFieldInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  min-height: 24px;
+  padding: 0 4px;
+  border: none;
+  border-left: 1px solid royalblue;
+  font-size: 16px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.trConstantZoomFieldInput:focus {
+  outline: none;
+  background: yellow;
+}
+
+.trConstantZoomFieldInput:disabled,
+.trConstantZoomFieldInput:read-only {
+  background: ghostwhite;
+  cursor: default;
+}
+
+.trConstantZoomFieldBtn {
+  flex-shrink: 0;
+  width: 20px;
+  min-width: 20px;
+  padding: 0;
+  border: none;
+  border-left: 1px solid #c8c8c8;
+  background: #006400;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.trConstantZoomFieldBtn:hover:not(:disabled) {
+  background: #004d00;
+}
+
+.trConstantZoomFieldBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  background: #94a3b8;
+}

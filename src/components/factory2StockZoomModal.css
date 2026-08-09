@@ -1,0 +1,141 @@
+/**
+ * 第2工場ロット在庫一覧 ZOOM（vi_factory2_stock）
+ */
+.factory2StockZoomOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 45%);
+  padding: 16px;
+}
+
+.factory2StockZoomPanel {
+  width: min(1280px, calc(100vw - 32px));
+  height: min(720px, calc(100vh - 32px));
+  max-height: calc(100vh - 32px);
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #cfd8e3;
+  box-shadow: 0 20px 50px rgb(15 23 42 / 30%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 16px;
+}
+
+.factory2StockZoomHeader {
+  flex-shrink: 0;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.factory2StockZoomTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.factory2StockZoomHint {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.factory2StockZoomToolbar {
+  flex-shrink: 0;
+}
+
+.factory2StockZoomFilterInput {
+  max-width: 420px;
+}
+
+.factory2StockZoomGridWrap {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: honeydew;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.factory2StockZoomScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.factory2StockZoomTable {
+  background: honeydew;
+}
+
+.factory2StockZoomTable tbody tr,
+.factory2StockZoomTable tbody tr:nth-of-type(odd),
+.factory2StockZoomTable tbody tr:nth-of-type(even) {
+  background-color: honeydew !important;
+}
+
+.factory2StockZoomTable tbody tr:hover {
+  background-color: #e8f5e9 !important;
+}
+
+.factory2StockZoomTable .factory2StockZoomTh {
+  background-color: forestgreen;
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.factory2StockZoomSortBtn {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  text-align: center;
+}
+
+.factory2StockZoomSortBtn:hover {
+  text-decoration: underline;
+}
+
+.factory2StockZoomEmpty {
+  text-align: center;
+  color: #64748b;
+  padding: 24px;
+}
+
+.factory2StockZoomFooter {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.factory2StockZoomFooterInner {
+  width: 100%;
+}
+
+.factory2StockZoomCloseButton {
+  align-self: flex-end;
+  height: 36px;
+  min-width: 88px;
+  padding: 0 16px;
+  border: 1px solid #c7d0dc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.factory2StockZoomCloseButton:hover {
+  background: #f8fafc;
+}

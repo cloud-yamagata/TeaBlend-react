@@ -1,0 +1,120 @@
+/**
+ * 仕入実績情報一覧（旧 PurchaseTtransfer MainWindow 配色）
+ * 共通ボタン・ラベルは Factory2LotManufacture/styles.css を併用
+ */
+
+.purchaseTtransferPage .tableWrap {
+  height: calc(100vh - 280px);
+}
+
+.purchaseTtransferToolbarRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+}
+
+.purchaseTtransferToolbarRowMenu {
+  background: #f0fff0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.purchaseTtransferToolbarRowSearch {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 4px 6px;
+  background: var(--teablend-table-body-bg, honeydew);
+}
+
+.purchaseTtransferYearInput {
+  width: 36px;
+  height: 30px;
+  padding: 0 4px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: right;
+  background: #fff;
+}
+
+.purchaseTtransferMakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.purchaseTtransferMakeYearWrap .f2EditMakeYearSpinner {
+  height: 30px;
+}
+
+.purchaseTtransferMakeYearWrap .f2EditMakeYearValue {
+  width: 36px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.purchaseTtransferMakeYearWrap .f2EditMakeYearStep {
+  min-width: 22px;
+  height: 14px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.purchaseTtransferKeywordInput {
+  width: 100px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.purchaseTtransferFilterGroup {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 2px 4px;
+  margin: 0;
+  padding: 2px 8px 2px 6px;
+  min-height: 30px;
+  background: #98fb98;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.purchaseTtransferFilterGroup legend {
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2d4a2d;
+  white-space: nowrap;
+}
+
+.purchaseTtransferFilterGroup label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.purchaseTtransferMenuActions {
+  display: inline-flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.purchaseTtransferHint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #64748b;
+}

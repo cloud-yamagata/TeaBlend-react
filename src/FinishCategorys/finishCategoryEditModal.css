@@ -1,0 +1,428 @@
+/**
+ * 仕上個別情報登録画面（EditWindow.xaml 650px 相当 + 仕上専用ブロック）
+ */
+.fcEditOverlay {
+  z-index: 1500;
+}
+
+.fcEditPanel {
+  width: min(650px, calc(100vw - 24px));
+  min-width: 620px;
+  max-height: calc(100vh - 24px);
+}
+
+.fcEditInput {
+  height: 20px;
+  padding: 0 4px;
+  border: 1px solid #333;
+  font-size: 12px;
+  text-align: right;
+  background: #fff;
+}
+
+.fcEditInput:disabled {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.fcEditInput:focus {
+  background: #ffffcc;
+  outline: none;
+}
+
+.fcEditSectionBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  min-height: 80px;
+  background: #98fb98;
+  border: 1px solid #333;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.fcEditPickupBlock,
+.fcEditSpBlock {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+
+.fcEditPickupBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  min-height: 100px;
+  flex-shrink: 0;
+  background: #98fb98;
+  border: 1px solid #000;
+  border-right: none;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.25;
+  box-sizing: border-box;
+}
+
+.fcEditPickupGrid {
+  display: grid;
+  grid-template-columns: 100px 100px 50px 50px 50px 50px;
+  grid-template-rows: repeat(5, 20px);
+  width: 400px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.fcEditPickupHead,
+.fcEditPickupValue {
+  display: flex;
+  align-items: center;
+  border: 1px solid #000;
+  margin: -1px 0 0 -1px;
+  box-sizing: border-box;
+  font-size: 12px;
+  min-height: 20px;
+  padding: 0 2px;
+}
+
+.fcEditPickupHead {
+  justify-content: center;
+  background: #e8e8f0;
+  font-size: 11px;
+  text-align: center;
+}
+
+.fcEditPickupValue {
+  background: #fff;
+}
+
+.fcEditPickupValueName,
+.fcEditPickupValueNum {
+  justify-content: flex-end;
+}
+
+.fcEditPickupValueLabel {
+  justify-content: flex-start;
+}
+
+.fcEditPickupGrid .fcEditPickupInput {
+  width: 100%;
+  height: 18px;
+  padding: 0 2px;
+  border: none;
+  background: transparent;
+}
+
+.fcEditPickupGrid .fcEditPickupInput:focus {
+  background: #ffffcc;
+  outline: none;
+}
+
+.fcEditSpBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  min-height: 55px;
+  flex-shrink: 0;
+  background: #98fb98;
+  border: 1px solid #000;
+  border-right: none;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.25;
+  box-sizing: border-box;
+}
+
+.fcEditSp1Grid,
+.fcEditSp2Grid {
+  display: grid;
+  grid-template-columns: repeat(11, 50px);
+  grid-template-rows: 15px 15px 25px;
+  width: 550px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.fcEditSpHead,
+.fcEditSpSubHead,
+.fcEditSpValue,
+.fcEditSpUseCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+  margin: -1px 0 0 -1px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.fcEditSpHead,
+.fcEditSpSubHead {
+  background: #e8e8f0;
+  font-size: 11px;
+}
+
+.fcEditSpHeadSpan2 {
+  grid-row: 1 / 3;
+}
+
+.fcEditSpHead:not(.fcEditSpHeadSpan2) {
+  grid-row: 1;
+}
+
+.fcEditSpSubHead {
+  grid-row: 2;
+  font-size: 10px;
+  line-height: 1.1;
+  padding: 0 1px;
+}
+
+.fcEditSpValue {
+  grid-row: 3;
+  background: #fff;
+  justify-content: flex-end;
+  padding: 0 2px;
+  min-height: 25px;
+}
+
+.fcEditSpUseCell {
+  grid-row: 3;
+  background: #fff;
+  gap: 2px;
+  font-size: 9px;
+  cursor: pointer;
+  min-height: 25px;
+}
+
+.fcEditSp1Grid .fcEditSpInput,
+.fcEditSp2Grid .fcEditSpInput {
+  width: 100%;
+  height: 20px;
+  padding: 0 2px;
+  border: none;
+  background: transparent;
+}
+
+.fcEditSp1Grid .fcEditSpInput:focus,
+.fcEditSp2Grid .fcEditSpInput:focus {
+  background: #ffffcc;
+  outline: none;
+}
+
+.fcEditSp1Grid .fcEditSpInput:disabled,
+.fcEditSp2Grid .fcEditSpInput:disabled {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.fcEditMiniHead {
+  height: 20px;
+  line-height: 20px;
+  font-size: 11px;
+  padding: 0 2px;
+}
+
+.fcEditSubLabel {
+  display: block;
+  font-size: 10px;
+  text-align: center;
+  line-height: 14px;
+}
+
+.fcEditSpUse,
+.fcEditSpField,
+.fcEditSpGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fcEditSpSubRow {
+  display: flex;
+  gap: 2px;
+}
+
+.fcEditSpSubCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.fcEditUseChk {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 4px 0;
+}
+
+.fcEditEtcBlock {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+
+.fcEditDryerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 50px);
+  grid-template-rows: 15px 15px 25px;
+  width: 150px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.fcEditColorGrid {
+  display: grid;
+  grid-template-columns: 50px 35px 35px 40px 40px;
+  grid-template-rows: 15px 20px 20px;
+  width: 200px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.fcEditColorLabel,
+.fcEditColorValue,
+.fcEditCutChkRow,
+.fcEditRemarksValue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+  margin: -1px 0 0 -1px;
+  box-sizing: border-box;
+}
+
+.fcEditColorLabel {
+  background: #e8e8f0;
+  font-size: 11px;
+  text-align: center;
+}
+
+.fcEditColorValue {
+  background: #fff;
+  justify-content: flex-end;
+  padding: 0 2px;
+}
+
+.fcEditColorGrid .fcEditSpHead {
+  grid-row: 1;
+}
+
+.fcEditColorGrid .fcEditSpSubHead {
+  grid-row: 2;
+  min-height: 20px;
+}
+
+.fcEditColorGrid .fcEditSpInput {
+  width: 100%;
+  height: 18px;
+  padding: 0 2px;
+  border: none;
+  background: transparent;
+}
+
+.fcEditColorGrid .fcEditSpInput:focus {
+  background: #ffffcc;
+  outline: none;
+}
+
+.fcEditDryerGrid .fcEditSpHead {
+  grid-row: 1;
+}
+
+.fcEditDryerGrid .fcEditSpInput {
+  width: 100%;
+  height: 20px;
+  padding: 0 2px;
+  border: none;
+  background: transparent;
+}
+
+.fcEditDryerGrid .fcEditSpInput:focus {
+  background: #ffffcc;
+  outline: none;
+}
+
+.fcEditCutGrid .fcEditSpInput {
+  width: 100%;
+  height: 20px;
+  padding: 0 2px;
+  border: none;
+  background: transparent;
+}
+
+.fcEditCutGrid .fcEditSpInput:focus {
+  background: #ffffcc;
+  outline: none;
+}
+
+.fcEditCutGrid {
+  display: grid;
+  grid-template-columns: 100px;
+  grid-template-rows: 15px 15px 25px;
+  width: 100px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.fcEditCutChkRow {
+  grid-row: 1;
+  background: #e8e8f0;
+  gap: 4px;
+  font-size: 10px;
+  padding: 0 2px;
+  min-height: 15px;
+}
+
+.fcEditCutChkRow label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.fcEditRemarksGrid {
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 40px;
+  width: 150px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.fcEditRemarksValue {
+  grid-row: 2;
+  background: #fff;
+  padding: 0 2px;
+  min-height: 40px;
+}
+
+.fcEditRemarksInput {
+  width: 100%;
+  height: 36px;
+  padding: 0 4px;
+  border: none;
+  font-size: 12px;
+  text-align: left;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.fcEditRemarksInput:focus {
+  background: #ffffcc;
+  outline: none;
+}
+
+.fcEditRemarksGrid .fcEditSpHead {
+  grid-row: 1;
+}
+
+.fcEditPanel .f2EditBlock {
+  margin-bottom: 6px;
+}

@@ -1,0 +1,399 @@
+/**
+ * 配合個別情報登録画面（EditWindow.xaml 650px 相当）
+ */
+.bcEditOverlay {
+  z-index: 1500;
+}
+
+.bcEditPanel.modalPanel {
+  background: #fff;
+  gap: 0;
+  border-radius: 2px;
+  padding: 8px 10px 10px;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 20%);
+}
+
+.bcEditPanel {
+  width: min(650px, calc(100vw - 24px));
+  min-width: 620px;
+  max-height: calc(100vh - 24px);
+  padding: 8px 10px 10px;
+  overflow: auto;
+  border-radius: 2px;
+  font-size: 12px;
+  background: #fff;
+}
+
+.bcEditPanel .f2EditBlock {
+  margin-bottom: 6px;
+}
+
+/** 部品名行幅（230+56+50+56+72+150）に3エリアの右端を揃える */
+.bcEditFormRow {
+  width: 614px;
+  max-width: 100%;
+}
+
+.bcEditWindowTitle {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bcEditToolbar {
+  margin-bottom: 6px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: 100%;
+}
+
+.bcEditCloseBtn {
+  margin-left: auto;
+}
+
+.bcEditHeaderTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.bcEditActionBtn {
+  min-width: 50px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  border: 1px solid #333;
+  background: #fff;
+  cursor: default;
+}
+
+.bcEditActionBtn:not(:disabled) {
+  cursor: pointer;
+}
+
+.bcEditActionBtn:disabled {
+  opacity: 0.55;
+}
+
+.bcEditCellLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: 30px;
+  padding: 0 4px;
+  border: 1px solid #000;
+  background: #e8e8f0;
+  text-align: center;
+  font-size: 12px;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.bcEditCellValue {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 30px;
+  padding: 0 4px;
+  border: 1px solid #000;
+  border-left: none;
+  background: #fff;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.f2EditRow > .bcEditCellValue:first-of-type {
+  border-left: 1px solid #000;
+}
+
+.f2EditRow > .bcEditCellLabel + .bcEditCellValue {
+  border-left: none;
+}
+
+.f2EditRow > .bcEditCellLabel:not(:first-child) {
+  border-left: none;
+}
+
+.bcEditAlignRight {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.bcEditAlignLeft {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.bcEditAlignCenter {
+  justify-content: center;
+  text-align: center;
+}
+
+.bcEditReadonly {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bcEditProductNo {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.bcEditProductNoValue {
+  overflow: visible;
+  justify-content: flex-start;
+}
+
+.bcEditProductNoText {
+  white-space: nowrap;
+  overflow: visible;
+  font-variant-numeric: tabular-nums;
+}
+
+.bcEditProductNoSep {
+  padding: 0 2px;
+}
+
+.bcEditRadioWrap {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px 6px;
+  padding: 2px 4px;
+  overflow: hidden;
+}
+
+.bcEditRadioWrapProcess {
+  gap: 4px 4px;
+  font-size: 11px;
+}
+
+.bcEditRadioWrapProcess .bcEditRadio {
+  font-size: 11px;
+}
+
+.bcEditRadio {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 2px;
+  font-size: 12px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.bcEditPartsBlock {
+  margin-top: 0;
+}
+
+.bcEditPartsHeadRow .bcEditPartsHead,
+.bcEditPartsHead {
+  min-height: 20px;
+  height: 20px;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: visible;
+  padding: 0 2px;
+}
+
+.bcEditPartsDataRow .bcEditCellValue {
+  min-height: 20px;
+  height: 20px;
+}
+
+.bcEditCheckRow {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0;
+  margin-top: 0;
+}
+
+.bcEditCheckRow .f2EditCheckPanel + .f2EditCheckPanel {
+  border-left: none;
+}
+
+.bcEditEnvRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0;
+  margin-top: 0;
+}
+
+.bcEditEnvTemp {
+  display: flex;
+}
+
+.bcEditEnvTempLabel {
+  flex-direction: column;
+  justify-content: space-around;
+  min-height: 50px;
+  height: 50px;
+  padding: 2px 4px;
+}
+
+.bcEditEnvTempValue {
+  flex-direction: column;
+  justify-content: center;
+  min-height: 50px;
+  height: 50px;
+  gap: 2px;
+}
+
+.bcEditEnvLine {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.bcEditTimeBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.bcEditTimeBlock .bcEditCellLabel,
+.bcEditTimeBlock .bcEditCellValue {
+  min-height: 25px;
+  height: 25px;
+}
+
+.bcEditTimeValue {
+  justify-content: center;
+  padding: 0 4px;
+  overflow: visible;
+}
+
+.bcEditTimeBlockWide .bcEditCellValue {
+  width: 148px;
+}
+
+.bcEditTimePair,
+.bcEditTimeRange {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.bcEditTimeDigit {
+  display: inline-block;
+  min-width: 1.4em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bcEditTimeDigitNarrow {
+  min-width: 1.2em;
+}
+
+.bcEditTimeColon {
+  flex-shrink: 0;
+  padding: 0 1px;
+  line-height: 1;
+}
+
+.bcEditTimeTilde {
+  flex-shrink: 0;
+  padding: 0 2px;
+  font-size: 12px;
+}
+
+.bcEditSensualRow {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0;
+}
+
+.bcEditSensualBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  min-height: 60px;
+  border: 1px solid #000;
+  background: palegreen;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.bcEditSensualGrid {
+  flex: 1;
+  min-width: 0;
+}
+
+.bcEditSensualHeadRow,
+.bcEditSensualDataRow,
+.bcEditSensualSpacerRow {
+  display: flex;
+}
+
+.bcEditSensualHead {
+  min-height: 20px;
+  height: 20px;
+  white-space: nowrap;
+}
+
+.bcEditSensualDataRow .bcEditCellValue {
+  min-height: 20px;
+  height: 20px;
+}
+
+.bcEditSensualSheet {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.bcEditSensualInputCell {
+  padding: 0;
+}
+
+.bcEditSensualInput {
+  width: 100%;
+  height: 20px;
+  border: none;
+  padding: 0 4px;
+  text-align: right;
+  font-size: 12px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.bcEditSensualInput:focus {
+  outline: none;
+  background: #ffff99;
+}
+
+.bcEditSensualSpacerRow {
+  height: 20px;
+}
+
+.bcEditSensualSpacer {
+  height: 20px;
+  border: 1px solid #000;
+  border-top: none;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.bcEditSensualSpacer + .bcEditSensualSpacer {
+  border-left: none;
+}
+
+.bcEditSensualDataRow .bcEditCellValue + .bcEditCellValue {
+  border-left: none;
+}
+
+.bcEditSensualHeadRow .bcEditCellLabel + .bcEditCellLabel {
+  border-left: none;
+}

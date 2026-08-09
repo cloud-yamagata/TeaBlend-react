@@ -1,0 +1,18 @@
+.pkgLotRegistMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: 1px solid #000;
+}
+
+.pkgLotRegistMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.pkgLotRegistMantineTable .mantineScrollTableTh {
+  min-height: 45px;
+}

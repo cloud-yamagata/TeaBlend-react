@@ -1,0 +1,246 @@
+/**
+ * 仕上品仕入登録画面スタイル（パッケージロット登録の検索行＋一覧レイアウトを踏襲）
+ */
+
+.materialPurchasePage .toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.materialPurchaseHint {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.materialPurchaseMenuRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.materialPurchaseMenuItem {
+  min-width: 64px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #166534;
+  border-radius: 4px;
+  background: #166534;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.materialPurchaseMenuItem:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.materialPurchaseMenuItem:not(:disabled):hover {
+  background: #15803d;
+}
+
+/** 検索条件（パッケージロット登録の searchRow 相当） */
+.materialPurchaseSearchRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.materialPurchaseSearchRow .searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.materialPurchaseSearchRow .searchFieldLabel {
+  font-size: 12px;
+  color: #334155;
+}
+
+.materialPurchaseSearchRow .searchFieldLabelSpacer {
+  visibility: hidden;
+}
+
+.materialPurchaseSearchRow .searchControl {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.materialPurchaseSearchYearField {
+  flex-shrink: 0;
+}
+
+.materialPurchaseMakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 32px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.materialPurchaseMakeYearWrap .f2EditMakeYearSpinner {
+  height: 30px;
+}
+
+.materialPurchaseMakeYearWrap .f2EditMakeYearValue {
+  width: 36px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.materialPurchaseMakeYearWrap .f2EditMakeYearStep {
+  min-width: 22px;
+  height: 14px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.materialPurchaseSearchDateField {
+  flex-shrink: 0;
+}
+
+.materialPurchaseSearchDateField .searchControl {
+  min-width: 140px;
+}
+
+.materialPurchaseSearchSupplierField {
+  flex-shrink: 0;
+}
+
+.materialPurchaseSearchSupplierField .searchControlSupplier {
+  min-width: 160px;
+  width: 180px;
+}
+
+.materialPurchaseSearchRow .materialPurchaseSupplierZoomGroup {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.materialPurchaseSearchRow .materialPurchaseSupplierZoomGroup .searchControlSupplier {
+  min-width: 160px;
+  width: 180px;
+}
+
+.materialPurchaseSearchRow .searchControlReadonly {
+  background: #f8fafc;
+  color: #334155;
+  cursor: default;
+}
+
+.materialPurchaseSearchRow .materialPurchaseItemZoomGroup {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.materialPurchaseSearchRow .searchControlItemNo {
+  min-width: 90px;
+  width: 90px;
+}
+
+.materialPurchaseSearchRow .materialPurchaseItemZoomGroup .searchField:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.materialPurchaseSearchRow .searchControlItemName {
+  width: 100%;
+  min-width: 120px;
+}
+
+.materialPurchaseSearchRow .zoomOpenButton {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #166534;
+  border-radius: 6px;
+  background: #ecfdf5;
+  color: #166534;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.materialPurchaseSearchRow .searchActions {
+  display: flex;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.materialPurchaseSearchRow .searchSubmitButton {
+  height: 32px;
+  min-width: 72px;
+  padding: 0 14px;
+  border: 1px solid #14532d;
+  border-radius: 6px;
+  background: #14532d;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.materialPurchaseSearchRow .searchSubmitButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.status {
+  margin: 8px 0 12px;
+}
+
+.error {
+  color: #c61b1b;
+}
+
+.materialPurchasePage .tableWrap {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 240px);
+  min-height: 280px;
+}
+
+.materialPurchaseMantineTableRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: 1px solid #000;
+}
+
+.materialPurchaseMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.materialPurchaseMantineTable thead th {
+  background: #228b22 !important;
+  color: #fff !important;
+}

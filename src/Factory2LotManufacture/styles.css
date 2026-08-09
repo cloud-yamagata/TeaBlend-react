@@ -1,0 +1,275 @@
+/**
+ * 第二工場ロット製造登録（旧 CroudeTea MainWindow 配色・ツールバー）
+ * 共通レイアウトは MonthlyPlan/styles.css を併用
+ */
+
+.factory2LotPage .tableWrap {
+  height: calc(100vh - 300px);
+}
+
+.factory2ToolbarRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  background: #fff;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+}
+
+.factory2ToolbarRowMenu {
+  background: var(--teablend-table-body-bg, honeydew);
+  flex-wrap: nowrap;
+  gap: 4px 6px;
+}
+
+.factory2PlanNoGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.factory2PlanNoInput {
+  width: 72px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: right;
+  background: #fff;
+}
+
+/** 1段目：工程ラジオと登録ボタンの間を通称名欄で埋める */
+.factory2ToolbarRowMenu .factory2ItemNameZoomGroupMenu {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.factory2ToolbarRowMenu .factory2ItemNameReadonly {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.factory2LotMakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.factory2LotMakeYearWrap .f2EditMakeYearSpinner {
+  height: 30px;
+}
+
+.factory2LotMakeYearWrap .f2EditMakeYearValue {
+  width: 36px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.factory2LotMakeYearWrap .f2EditMakeYearStep {
+  min-width: 22px;
+  height: 14px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.factory2GroupBox {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 4px 10px;
+  min-height: 30px;
+  background: #f0fff0;
+  border: 1px solid #9acd9a;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.factory2GroupBox legend {
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2d4a2d;
+}
+
+.factory2RadioLabel,
+.factory2CheckLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.factory2FieldLabel {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  min-height: 30px;
+  background: #9acd32;
+  border: 1px solid #2f4f2f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.factory2DarkButton {
+  height: 30px;
+  min-width: 50px;
+  padding: 0 10px;
+  border: 1px solid #0d3d0d;
+  border-radius: 4px;
+  background: #006400;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.factory2DarkButton:hover:not(:disabled) {
+  background: #004d00;
+}
+
+.factory2DarkButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.factory2DarkButton.wide {
+  min-width: 80px;
+}
+
+.factory2TextInput {
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.factory2TextInput.date {
+  width: 140px;
+}
+
+.factory2TextInput.name {
+  width: 230px;
+}
+
+.factory2ItemNameBox {
+  display: inline-flex;
+  align-items: center;
+  min-width: 300px;
+  height: 30px;
+  padding: 0 10px;
+  background: #f0fff0;
+  border: 1px solid #2f4f2f;
+  font-size: 14px;
+  color: #334155;
+}
+
+.factory2MenuActions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.factory2Hint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/** 2段目・検索条件（折り返し抑制・余白を詰める） */
+.factory2ToolbarRowSearch {
+  flex-wrap: nowrap;
+  gap: 4px 6px;
+  padding: 4px 6px;
+  background: var(--teablend-table-body-bg, honeydew);
+}
+
+.factory2ToolbarRowSearch .factory2GroupBox {
+  gap: 2px 5px;
+  padding: 2px 5px;
+  min-height: 28px;
+}
+
+.factory2ToolbarRowSearch .factory2GroupBox legend {
+  padding: 0 2px;
+}
+
+.factory2ToolbarRowSearch .factory2CheckLabel {
+  gap: 2px;
+}
+
+.factory2ToolbarRowSearch .factory2FieldLabelCompact {
+  padding: 0 5px;
+  min-height: 28px;
+}
+
+.factory2ToolbarRowSearch .factory2DateCompact {
+  width: 128px;
+}
+
+/** 通称名（読取専用）＋仕上茶 ZOOM */
+.factory2ItemNameZoomGroup {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.factory2ItemNameReadonly {
+  width: 280px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  background: #f8faf8;
+  font-size: 14px;
+  color: #334155;
+  cursor: default;
+}
+
+/** 2段目：仕上茶〜検索の間をテキスト欄で埋める */
+.factory2ToolbarRowSearch .factory2ItemNameZoomGroupFill,
+.factory2ItemNameZoomGroupFill {
+  flex: 1 1 0;
+  min-width: 0;
+  gap: 4px;
+}
+
+.factory2ToolbarRowSearch .factory2ItemNameReadonly {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  padding: 0 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.factory2ToolbarRowSearch .factory2ZoomOpenButton {
+  flex-shrink: 0;
+  height: 30px;
+  min-width: 52px;
+  padding: 0 6px;
+  font-size: 13px;
+}
+
+.factory2ToolbarRowSearch .factory2MenuActions {
+  margin-left: 0;
+  flex-shrink: 0;
+}
+
+.factory2ItemNameReadonly::placeholder {
+  color: #64748b;
+  font-size: 13px;
+}

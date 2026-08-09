@@ -1,0 +1,63 @@
+.monthlyPlanListMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.monthlyPlanListMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.monthlyPlanListMantineTable .mantineScrollTableTh {
+  min-height: 40px;
+  white-space: normal;
+}
+
+.monthlyPlanPartMantineRoot,
+.monthlyPlanPartMantineRootNoFooter {
+  height: 100%;
+  min-height: 200px;
+}
+
+.monthlyPlanPartMantineRootNoFooter .mantineScrollTableFooter {
+  display: none;
+}
+
+.monthlyPlanPartMantineScroll {
+  min-height: 180px;
+  max-height: min(420px, calc(100vh - 230px));
+}
+
+.editorPartsGridWrap .monthlyPlanPartMantineScroll {
+  max-height: 260px;
+}
+
+.editorPartsGridWrap .monthlyPlanPartMantineRootFull .mantineScrollTableTh {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.monthlyPlanPartDeleteIcon {
+  margin: 0 auto;
+}
+
+.tableWrap .monthlyPlanListMantineRoot {
+  border: none;
+}
+
+.modalTableWrap .monthlyPlanPartMantineRoot {
+  height: min(420px, calc(100vh - 230px));
+}
+
+.monthlyPlanPartMantineRootFull .monthlyPlanPartMantineScroll {
+  max-height: min(480px, calc(100vh - 200px));
+}
+
+.monthlyPlanPartMantineRootFull .mantineScrollTableTh {
+  font-size: 12px;
+  white-space: nowrap;
+}

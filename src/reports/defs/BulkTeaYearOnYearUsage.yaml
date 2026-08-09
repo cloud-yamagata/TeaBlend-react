@@ -1,0 +1,100 @@
+version: 1
+reportId: BulkTeaYearOnYearUsage
+title: 月別仕上茶前年対比使用量
+
+filters:
+  - key: item_no
+    label: 商品NO
+    type: text
+    default: ""
+    placeholder: 商品NOを入力
+  - key: item_name
+    label: 商品名
+    type: itemZoom
+    default: ""
+    placeholder: 商品名を入力
+    zoomCodeKey: item_no
+
+grid:
+  rowId:
+    mode: concat
+    fields:
+      - year
+      - item_name
+
+  options:
+    pageSize: 25
+    rowHeight: 32
+    headerHeight: 40
+
+  columns:
+    - field: year
+      header: 年度区分
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: item_name
+      header: 商品名
+      minWidth: 200
+      flex: 1.6
+      align: left
+    - field: month_04
+      header: 4月
+      minWidth: 110
+      flex: 1
+      align: right
+    - field: month_05
+      header: 5月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_06
+      header: 6月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_07
+      header: 7月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_08
+      header: 8月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_09
+      header: 9月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_10
+      header: 10月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_11
+      header: 11月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_12
+      header: 12月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_01
+      header: 1月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_02
+      header: 2月
+      minWidth: 90
+      flex: 1
+      align: right
+    - field: month_03
+      header: 3月
+      minWidth: 90
+      flex: 1
+      align: right

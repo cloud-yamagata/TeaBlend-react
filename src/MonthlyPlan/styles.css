@@ -1,0 +1,407 @@
+/**
+ * 【内容及び影響範囲】
+ *   月次計画画面＋レポート画面が import する共有スタイル（`.page`, `.searchPanel`, `.tableWrap` 等）。
+ *
+ * 【固有画面】
+ *   - `MonthlyPlanPage.tsx`
+ *   - `reports/ReportPage.tsx`（検索パネル見た目を流用）
+ */
+
+:root {
+  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  color: #202328;
+  background: #eff2f7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  padding: 24px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+}
+
+.searchPanel {
+  margin-bottom: 12px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #d6dee8;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.searchPanelToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: #f1f5f9;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  text-align: left;
+}
+
+.searchPanelToggle:hover {
+  background: #e2e8f0;
+}
+
+.searchPanelToggleIcon {
+  font-weight: 400;
+  color: #64748b;
+}
+
+.searchPanelBody {
+  padding: 12px 14px 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.searchFields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 14px;
+}
+
+.searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.searchFieldLabel {
+  font-weight: 500;
+}
+
+.searchControl {
+  height: 34px;
+  min-width: 120px;
+  padding: 0 10px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 14px;
+}
+
+.searchControlWide {
+  min-width: 220px;
+}
+
+.searchFieldItemZoomGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+}
+
+.searchControlItemName {
+  min-width: 180px;
+}
+
+.searchFieldZoomButtonWrap {
+  padding-bottom: 0;
+}
+
+.searchFieldLabelSpacer {
+  visibility: hidden;
+  min-height: 1em;
+}
+
+.zoomOpenButton {
+  height: 34px;
+  min-width: 72px;
+  padding: 0 12px;
+  border: 1px solid #0f766e;
+  border-radius: 6px;
+  background: #14b8a6;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.zoomOpenButton:hover {
+  background: #0d9488;
+}
+
+.searchActions {
+  display: flex;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+.searchSubmitButton {
+  height: 36px;
+  min-width: 88px;
+  padding: 0 16px;
+  border: 1px solid #15803d;
+  border-radius: 8px;
+  background: #16a34a;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.searchSubmitButton:hover {
+  background: #15803d;
+}
+
+.status {
+  margin: 8px 0 12px;
+}
+
+.error {
+  color: #c61b1b;
+}
+
+.tableWrap {
+  height: calc(100vh - 320px);
+  min-height: 240px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d6dee8;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.listToolbar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #d6dee8;
+  background: #f8fafc;
+}
+
+.actionButton {
+  height: 32px;
+  min-width: 72px;
+  padding: 0 12px;
+  border: 1px solid #c7d0dc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.actionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.actionButton.delete {
+  border-color: #ef4444;
+  color: #b91c1c;
+}
+
+.inlineDetailButton {
+  height: 26px;
+  min-width: 54px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.tableWrap .monthlyPlanListMantineRoot {
+  flex: 1;
+  min-height: 0;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 45%);
+  padding: 24px;
+}
+
+.modalPanel {
+  width: min(960px, 100%);
+  max-height: calc(100vh - 48px);
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #cfd8e3;
+  box-shadow: 0 20px 50px rgb(15 23 42 / 30%);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalPanelPartsDetail {
+  width: min(1200px, 100%);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 20px;
+}
+
+.modalCloseButton {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid #c7d0dc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.modalCaption {
+  margin: 0;
+  color: #334155;
+  font-size: 14px;
+}
+
+.modalTableWrap {
+  height: min(420px, calc(100vh - 230px));
+}
+
+.editorPanel {
+  width: min(1240px, 100%);
+}
+
+.editorFormGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px 12px;
+}
+
+.editorField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.editorField input,
+.editorField select {
+  height: 34px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  padding: 0 10px;
+  background: #fff;
+}
+
+.editorField input.inputError,
+.editorField select.inputError,
+.editorPartsInput.inputError {
+  border-color: #dc2626;
+  background: #fff1f2;
+}
+
+.fieldErrorText {
+  margin: 0;
+  color: #dc2626;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.editorFieldWide {
+  grid-column: span 2;
+}
+
+.editorPartsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.editorPartsHeader h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.editorPartsInputGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px 10px;
+  align-items: end;
+}
+
+.editorPartsInputField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #334155;
+}
+
+.editorPartsInputFieldWide {
+  grid-column: span 2;
+}
+
+.editorPartsAddCell {
+  justify-content: flex-end;
+  padding-bottom: 2px;
+}
+
+.editorPartsInput {
+  height: 34px;
+  width: 100%;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  padding: 0 10px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.editorPartsInputField select.editorPartsInput {
+  padding-right: 6px;
+}
+
+.partsErrorText {
+  margin-top: -4px;
+}
+
+.editorPartsGridWrap {
+  height: 280px;
+}
+
+.editorFooter {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+
+.editorErrorSummary {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 600;
+}

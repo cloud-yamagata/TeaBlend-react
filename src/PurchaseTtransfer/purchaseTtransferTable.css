@@ -1,0 +1,65 @@
+.purchaseTtransferTableWrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.purchaseTtransferMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: none;
+}
+
+.purchaseTtransferMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.purchaseTtransferMantineTable {
+  font-size: 13px;
+}
+
+.purchaseTtransferMantineTable .mantine-Table-td,
+.purchaseTtransferMantineTable .mantine-Table-th {
+  padding: 1px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.purchaseTtransferMantineTable .mantineScrollTableTh {
+  min-height: 45px;
+  font-size: 11px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.purchaseTtransferMantineTable .mantineScrollTableTh .mantineScrollTableSortBtn {
+  white-space: normal;
+}
+
+.purchaseTtransferReadOnlyCheckbox {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  vertical-align: middle;
+  pointer-events: none;
+}
+
+.purchaseTtransferBulkUpdateCheckbox {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.purchaseTtransferBulkUpdateCheckbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
