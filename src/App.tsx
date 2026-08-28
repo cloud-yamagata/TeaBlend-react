@@ -26,6 +26,7 @@ import MaterialPurchasePage from "./MaterialPurchase/MaterialPurchasePage";
 import ItemCorrectPage from "./ItemCorrect/ItemCorrectPage";
 import SalesPlanItemCorrectPage from "./SalesPlanItemCorrect/SalesPlanItemCorrectPage";
 import MonthlySalesPlanCorrectPage from "./MonthlySalesPlanCorrect/MonthlySalesPlanCorrectPage";
+import SalesPlanExcelImportPage from "./SalesPlanExcelImport/SalesPlanExcelImportPage";
 import ShipmentCorrectPage from "./ShipmentCorrect/ShipmentCorrectPage";
 import ItemBomCorrectPage from "./ItemBomCorrect/ItemBomCorrectPage";
 import MonthlyPlanPage from "./MonthlyPlan/MonthlyPlanPage";
@@ -329,6 +330,9 @@ export default function App() {
     }
     if (screenKey === "MonthlySalesPlanCorrect") {
       return <MonthlySalesPlanCorrectPage />;
+    }
+    if (screenKey === "SalesPlanExcelImport") {
+      return <SalesPlanExcelImportPage />;
     }
     if (screenKey === "ShipmentCorrect") {
       return <ShipmentCorrectPage />;

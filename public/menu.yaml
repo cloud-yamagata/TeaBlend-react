@@ -30,6 +30,8 @@ groups:
         screenKey: SalesPlanItemCorrect
       - label: 月次販売計画
         screenKey: MonthlySalesPlanCorrect
+      - label: 販売計画Excel取込
+        screenKey: SalesPlanExcelImport
       - label: 直送先マスタメンテナンス
         screenKey: ShipmentCorrect
       - label: 商品原料対照表メンテナンス
