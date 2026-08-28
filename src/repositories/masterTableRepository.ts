@@ -121,6 +121,10 @@ export const GENERIC_MASTER_TABLE_SPECS = [
   },
   { id: "tr_item_bom", buildUrl: () => `${getMaterialApiBaseUrl()}/tr_item_bom/` },
   { id: "tr_item_group", buildUrl: () => `${getMaterialApiBaseUrl()}/tr_item_group/` },
+  {
+    id: "tr_sales_plan_item",
+    buildUrl: () => `${getMaterialApiBaseUrl()}/tr_sales_plan_item/`
+  },
   { id: "tr_purchase", buildUrl: () => `${getMaterialApiBaseUrl()}/tr_purchase/` },
   { id: "tr_resale", buildUrl: () => `${getMaterialApiBaseUrl()}/tr_resale/` },
   { id: "tr_store", buildUrl: () => `${getMaterialApiBaseUrl()}/tr_store/` },

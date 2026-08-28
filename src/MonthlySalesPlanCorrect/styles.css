@@ -1,0 +1,91 @@
+/**
+ * 月次販売計画（販売計画商品マスタの検索行＋メニューを踏襲）
+ */
+
+.monthlySalesPlanCorrectPage .toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.monthlySalesPlanCorrectHint {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.monthlySalesPlanCorrectMenuRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border-radius: 8px;
+}
+
+.monthlySalesPlanCorrectYearMonth {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-right: 8px;
+}
+
+.monthlySalesPlanCorrectRefYearMonth {
+  margin-left: 12px;
+}
+
+.monthlySalesPlanCorrectYearMonthInput:disabled {
+  opacity: 0.55;
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+.monthlySalesPlanCorrectYearMonthLabel {
+  font-size: 12px;
+  color: #334155;
+}
+
+.monthlySalesPlanCorrectYearMonthInput {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.monthlySalesPlanCorrectMenuItem {
+  min-width: 64px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #166534;
+  border-radius: 4px;
+  background: #166534;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.monthlySalesPlanCorrectMenuItem:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.monthlySalesPlanCorrectMenuItem:not(:disabled):hover {
+  background: #15803d;
+}
+
+.monthlySalesPlanCorrectPage .status {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.monthlySalesPlanCorrectPage .status.error {
+  color: #b91c1c;
+}

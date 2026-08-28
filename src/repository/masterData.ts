@@ -250,6 +250,36 @@ export const itemBomCorrectMasterErrorAtom = atom((get) => {
   return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
 });
 
+const SALES_PLAN_ITEM_CORRECT_SCREEN_FAILURE_IDS = new Set<string>([
+  "tr_sales_plan_item",
+  "tr_item",
+  "tr_item_group"
+]);
+
+/** 販売計画商品マスタメンテナンスで見せるマスタエラー */
+export const salesPlanItemCorrectMasterErrorAtom = atom((get) => {
+  const list = get(masterDataFailuresAtom).filter((f) =>
+    SALES_PLAN_ITEM_CORRECT_SCREEN_FAILURE_IDS.has(f.id)
+  );
+  if (list.length === 0) return null;
+  return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
+});
+
+const MONTHLY_SALES_PLAN_CORRECT_SCREEN_FAILURE_IDS = new Set<string>([
+  "tr_sales_plan_item",
+  "tr_item",
+  "tr_item_bom"
+]);
+
+/** 月次販売計画で見せるマスタエラー */
+export const monthlySalesPlanCorrectMasterErrorAtom = atom((get) => {
+  const list = get(masterDataFailuresAtom).filter((f) =>
+    MONTHLY_SALES_PLAN_CORRECT_SCREEN_FAILURE_IDS.has(f.id)
+  );
+  if (list.length === 0) return null;
+  return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
+});
+
 let bootstrapInflight: Promise<void> | null = null;
 
 export const bootstrapMasterDataAtom = atom(null, async (_get, set) => {

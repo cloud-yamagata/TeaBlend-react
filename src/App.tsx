@@ -24,6 +24,8 @@ import { bootstrapMasterDataAtom } from "./repository/masterData";
 import MaterialListPage from "./MaterialList/MaterialListPage";
 import MaterialPurchasePage from "./MaterialPurchase/MaterialPurchasePage";
 import ItemCorrectPage from "./ItemCorrect/ItemCorrectPage";
+import SalesPlanItemCorrectPage from "./SalesPlanItemCorrect/SalesPlanItemCorrectPage";
+import MonthlySalesPlanCorrectPage from "./MonthlySalesPlanCorrect/MonthlySalesPlanCorrectPage";
 import ShipmentCorrectPage from "./ShipmentCorrect/ShipmentCorrectPage";
 import ItemBomCorrectPage from "./ItemBomCorrect/ItemBomCorrectPage";
 import MonthlyPlanPage from "./MonthlyPlan/MonthlyPlanPage";
@@ -321,6 +323,12 @@ export default function App() {
     }
     if (screenKey === "ItemCorrect") {
       return <ItemCorrectPage />;
+    }
+    if (screenKey === "SalesPlanItemCorrect") {
+      return <SalesPlanItemCorrectPage />;
+    }
+    if (screenKey === "MonthlySalesPlanCorrect") {
+      return <MonthlySalesPlanCorrectPage />;
     }
     if (screenKey === "ShipmentCorrect") {
       return <ShipmentCorrectPage />;

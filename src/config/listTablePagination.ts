@@ -52,7 +52,11 @@ export const listTablePagination = {
   /** 直送先マスタメンテナンス */
   shipmentCorrect: LIST_TABLE_PAGE_SIZE,
   /** 商品原料対照表メンテナンス */
-  itemBomCorrect: LIST_TABLE_PAGE_SIZE
+  itemBomCorrect: LIST_TABLE_PAGE_SIZE,
+  /** 販売計画商品マスタメンテナンス */
+  salesPlanItemCorrect: LIST_TABLE_PAGE_SIZE,
+  /** 月次販売計画 */
+  monthlySalesPlanCorrect: LIST_TABLE_PAGE_SIZE
 } as const satisfies Record<string, ListTablePaginationMode>;
 
 export type ListTableScreenId = keyof typeof listTablePagination;

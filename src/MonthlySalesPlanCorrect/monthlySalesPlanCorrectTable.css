@@ -1,0 +1,96 @@
+.monthlySalesPlanCorrectMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: none;
+}
+
+.monthlySalesPlanCorrectMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.monthlySalesPlanCorrectMantineTable {
+  font-size: 13px;
+}
+
+.monthlySalesPlanCorrectMantineTable .mantine-Table-td,
+.monthlySalesPlanCorrectMantineTable .mantine-Table-th {
+  padding: 1px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monthlySalesPlanCorrectMantineTable .mantineScrollTableTh {
+  min-height: 45px;
+  font-size: 11px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  background-color: #228b22;
+}
+
+.monthlySalesPlanCorrectMantineTable .mantineScrollTableTh .mantineScrollTableSortBtn {
+  white-space: normal;
+}
+
+.monthlySalesPlanCorrectListTitle {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #14532d;
+}
+
+.monthlySalesPlanCorrectPage .tableWrap {
+  height: calc(100vh - 228px);
+  min-height: 280px;
+}
+
+.monthlySalesPlanCorrectSalesInput {
+  width: 100%;
+  max-width: 88px;
+  height: 26px;
+  padding: 0 6px;
+  border: 1px solid #c7d0dc;
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: right;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.monthlySalesPlanCorrectSalesInput:disabled {
+  opacity: 0.6;
+  background: #f1f5f9;
+}
+
+.monthlySalesPlanCorrectNoteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.monthlySalesPlanCorrectNoteBtn.hasNote {
+  color: #166534;
+}
+
+.monthlySalesPlanCorrectNoteBtn:hover:not(:disabled) {
+  background: #ecfdf3;
+}
+
+.monthlySalesPlanCorrectNoteBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

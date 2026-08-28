@@ -74,3 +74,4 @@ D:\git\TeaBlend-react\tools\TeaBlendReportHelper\obj\Debug\net8.0-windows\refint
 D:\git\TeaBlend-react\tools\TeaBlendReportHelper\obj\Debug\net8.0-windows\TeaBlendReportHelper.pdb
 D:\git\TeaBlend-react\tools\TeaBlendReportHelper\obj\Debug\net8.0-windows\TeaBlendReportHelper.genruntimeconfig.cache
 D:\git\TeaBlend-react\tools\TeaBlendReportHelper\obj\Debug\net8.0-windows\ref\TeaBlendReportHelper.dll
+D:\git\TeaBlend-react\tools\TeaBlendReportHelper\obj\Debug\net8.0-windows\TeaBlendReportHelper.sourcelink.json

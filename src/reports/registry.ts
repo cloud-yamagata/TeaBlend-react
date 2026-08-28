@@ -18,6 +18,7 @@ import factory3BulkTeaTransitionYaml from "./defs/Factory3BulkTeaTransition.yaml
 import usuallLotUsedAdoptedListYaml from "./defs/UsuallLotUusedAadoptedList.yaml?raw";
 import bulkTeaYearOnYearUsageYaml from "./defs/BulkTeaYearOnYearUsage.yaml?raw";
 import bulkTeaYearOnYearProductionYaml from "./defs/BulkTeaYearOnYearProduction.yaml?raw";
+import monthlySalesPlanYaml from "./defs/MonthlySalesPlan.yaml?raw";
 
 type Align = "left" | "center" | "right";
 
@@ -36,7 +37,9 @@ export type ReportColumnDef = {
   minWidth?: number;
   flex?: number;
   align?: Align;
-  format?: "ymd";
+  format?: "ymd" | "weather";
+  /** format=weather のとき、摘要があれば判定セルを強調しクリックで表示する */
+  remarksField?: string;
 };
 
 export type ReportGridDef = {
@@ -45,11 +48,22 @@ export type ReportGridDef = {
   columns: ReportColumnDef[];
 };
 
+export type ReportExtractDef = {
+  key: string;
+  label: string;
+  type: "text" | "yearMonth" | "weather";
+  field?: string;
+  yearField?: string;
+  monthField?: string;
+  default?: string;
+};
+
 export type ReportDef = {
   version: number;
   reportId: string;
   title: string;
   filters: ReportFilterDef[];
+  extract: ReportExtractDef[];
   grid: ReportGridDef;
 };
 
@@ -82,8 +96,24 @@ const decodeColumn = (raw: unknown): ReportColumnDef | null => {
   const alignRaw = raw.align == null ? undefined : asString(raw.align) ?? undefined;
   const align: Align | undefined = alignRaw === "left" || alignRaw === "center" || alignRaw === "right" ? alignRaw : undefined;
   const formatRaw = raw.format == null ? undefined : asString(raw.format) ?? undefined;
-  const format: "ymd" | undefined = formatRaw === "ymd" ? "ymd" : undefined;
-  return { field, header, minWidth: minWidth ?? undefined, flex: flex ?? undefined, align, format };
+  const format: "ymd" | "weather" | undefined =
+    formatRaw === "ymd" || formatRaw === "weather" ? formatRaw : undefined;
+  const remarksField = raw.remarksField == null ? undefined : asString(raw.remarksField) ?? undefined;
+  return { field, header, minWidth: minWidth ?? undefined, flex: flex ?? undefined, align, format, remarksField };
+};
+
+const decodeExtract = (raw: unknown): ReportExtractDef | null => {
+  if (!isRecord(raw)) return null;
+  const key = asString(raw.key);
+  const label = asString(raw.label);
+  const type = asString(raw.type);
+  if (!key || !label) return null;
+  if (type !== "text" && type !== "yearMonth" && type !== "weather") return null;
+  const field = raw.field == null ? undefined : asString(raw.field) ?? undefined;
+  const yearField = raw.yearField == null ? undefined : asString(raw.yearField) ?? undefined;
+  const monthField = raw.monthField == null ? undefined : asString(raw.monthField) ?? undefined;
+  const def = raw.default == null ? undefined : asString(raw.default) ?? undefined;
+  return { key, label, type, field, yearField, monthField, default: def };
 };
 
 const decodeReport = (yamlText: string): ReportDef => {
@@ -93,10 +123,14 @@ const decodeReport = (yamlText: string): ReportDef => {
   const reportId = asString(raw.reportId);
   const title = asString(raw.title);
   const filtersRaw = raw.filters;
+  const extractRaw = raw.extract;
   const gridRaw = raw.grid;
   if (!Number.isFinite(version)) throw new Error("レポート定義YAMLのversionが不正です。");
   if (!reportId || !title) throw new Error("レポート定義YAMLにreportId/titleがありません。");
   const filters = Array.isArray(filtersRaw) ? filtersRaw.map(decodeFilter).filter((v): v is ReportFilterDef => Boolean(v)) : [];
+  const extract = Array.isArray(extractRaw)
+    ? extractRaw.map(decodeExtract).filter((v): v is ReportExtractDef => Boolean(v))
+    : [];
   if (!isRecord(gridRaw)) throw new Error("レポート定義YAMLにgridがありません。");
   const rowIdRaw = gridRaw.rowId;
   const columnsRaw = gridRaw.columns;
@@ -120,6 +154,7 @@ const decodeReport = (yamlText: string): ReportDef => {
     reportId,
     title,
     filters,
+    extract,
     grid: { rowId: { mode: "concat", fields: rowIdFields }, options, columns }
   };
 };
@@ -131,7 +166,8 @@ const defs: ReportDef[] = [
   decodeReport(factory3BulkTeaTransitionYaml),
   decodeReport(usuallLotUsedAdoptedListYaml),
   decodeReport(bulkTeaYearOnYearUsageYaml),
-  decodeReport(bulkTeaYearOnYearProductionYaml)
+  decodeReport(bulkTeaYearOnYearProductionYaml),
+  decodeReport(monthlySalesPlanYaml)
 ];
 const defById = new Map(defs.map((d) => [d.reportId, d]));
 

@@ -11,10 +11,17 @@
 import { useMemo, useState } from "react";
 import { getReportDef } from "./registry";
 import ReportFilters, { buildDefaultFilterValues, type ReportFilterValues } from "./components/ReportFilters";
+import ReportExtractPanel from "./components/ReportExtractPanel";
 import ReportGrid from "./components/ReportGrid";
 import ReportToolbar from "./components/ReportToolbar";
+import {
+  applyReportExtract,
+  buildDefaultExtractValues,
+  type ReportExtractValues
+} from "./applyReportExtract";
 import { downloadReportExcel, runReport } from "./reportApi";
 import "../MonthlyPlan/styles.css";
+import "./components/reportGrid.css";
 
 type Props = {
   reportId: string;
@@ -27,7 +34,8 @@ const ITEM_FILTER_REPORT_IDS = new Set<string>([
   "Factory3BulkTeaTransition",
   "UsuallLotUusedAadoptedList",
   "BulkTeaYearOnYearUsage",
-  "BulkTeaYearOnYearProduction"
+  "BulkTeaYearOnYearProduction",
+  "MonthlySalesPlan"
 ]);
 
 export default function ReportPage({ reportId }: Props) {
@@ -39,6 +47,10 @@ export default function ReportPage({ reportId }: Props) {
   const [filters, setFilters] = useState<ReportFilterValues>(() => {
     const d = getReportDef(reportId);
     return d ? buildDefaultFilterValues(d.filters) : {};
+  });
+  const [extractValues, setExtractValues] = useState<ReportExtractValues>(() => {
+    const d = getReportDef(reportId);
+    return d ? buildDefaultExtractValues(d.extract) : {};
   });
 
   if (!def) {
@@ -72,6 +84,18 @@ export default function ReportPage({ reportId }: Props) {
 
     return params;
   }, [def.reportId, filters]);
+
+  const displayedRows = useMemo(
+    () => applyReportExtract(rows, def.extract, extractValues),
+    [rows, def.extract, extractValues]
+  );
+
+  const extractOnlyLayout = def.reportId === "MonthlySalesPlan";
+
+  const gridEmptyMessage =
+    rows.length > 0 && displayedRows.length === 0
+      ? "抽出条件に一致するデータがありません"
+      : "表示するデータがありません。条件を指定して実行してください。";
 
   const handleRun = async () => {
     setLoading(true);
@@ -127,9 +151,26 @@ export default function ReportPage({ reportId }: Props) {
       {loading && <p className="status">処理中...</p>}
       {error && <p className="status error">{error}</p>}
 
-      <ReportFilters filters={def.filters} values={filters} onChange={setFilters} onSubmit={() => void handleRun()} disabled={loading} />
-      <ReportToolbar onExcel={() => void handleExcel()} disabled={loading} />
-      <ReportGrid def={def} rows={rows} />
+      {!extractOnlyLayout ? (
+        <ReportFilters filters={def.filters} values={filters} onChange={setFilters} onSubmit={() => void handleRun()} disabled={loading} />
+      ) : null}
+      {!extractOnlyLayout ? <ReportToolbar onExcel={() => void handleExcel()} disabled={loading} /> : null}
+      {def.extract.length > 0 ? (
+        <ReportExtractPanel
+          extract={def.extract}
+          values={extractValues}
+          onChange={setExtractValues}
+          onClear={() => setExtractValues(buildDefaultExtractValues(def.extract))}
+          fetchedCount={rows.length}
+          shownCount={displayedRows.length}
+          fieldsDisabled={loading || rows.length === 0}
+          actionsDisabled={loading}
+          collapsible={extractOnlyLayout}
+          onRun={extractOnlyLayout ? () => void handleRun() : undefined}
+          onExcel={extractOnlyLayout ? () => void handleExcel() : undefined}
+        />
+      ) : null}
+      <ReportGrid def={def} rows={displayedRows} emptyMessage={gridEmptyMessage} />
     </main>
   );
 }

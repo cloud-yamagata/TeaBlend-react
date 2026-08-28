@@ -1,0 +1,85 @@
+version: 1
+reportId: MonthlySalesPlan
+title: 月次販売計画実績一覧表
+
+extract:
+  - key: item_name
+    label: 商品名
+    type: text
+    field: item_name
+  - key: from_ym
+    label: 指定年月以降
+    type: yearMonth
+    yearField: year
+    monthField: month
+  - key: complete
+    label: 判定
+    type: weather
+    field: complete
+
+grid:
+  rowId:
+    mode: concat
+    fields:
+      - year
+      - month
+      - item_no
+
+  options:
+    pageSize: 25
+    rowHeight: 32
+    headerHeight: 40
+
+  columns:
+    - field: year
+      header: 年
+      minWidth: 80
+      flex: 0.7
+      align: center
+    - field: month
+      header: 月
+      minWidth: 60
+      flex: 0.5
+      align: center
+    - field: item_no
+      header: 商品NO
+      minWidth: 90
+      flex: 0.8
+      align: center
+    - field: item_name
+      header: 商品名
+      minWidth: 200
+      flex: 1.6
+      align: left
+    - field: product
+      header: 製造
+      minWidth: 110
+      flex: 1.0
+      align: right
+    - field: consume
+      header: 消費
+      minWidth: 110
+      flex: 1.0
+      align: right
+    - field: stoc_change
+      header: 在庫増減
+      minWidth: 110
+      flex: 1.0
+      align: right
+    - field: closing_stock
+      header: 月末在庫
+      minWidth: 110
+      flex: 1.0
+      align: right
+    - field: need_size
+      header: 必要量
+      minWidth: 110
+      flex: 1.0
+      align: right
+    - field: complete
+      header: 判定
+      minWidth: 100
+      flex: 0.8
+      align: center
+      format: weather
+      remarksField: remarks

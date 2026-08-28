@@ -16,6 +16,7 @@
 
 import type { GenericMasterTableId } from "../repositories/masterTableRepository";
 import {
+  asBoolOrNull,
   asFiniteNumber,
   asFiniteNumberOrNull,
   asInt,
@@ -911,6 +912,24 @@ export class TrItemGroup {
   }
 }
 
+export type TrSalesPlanItemData = {
+  item_no: number;
+  display_order: number | null;
+  display: boolean | null;
+  remarks: string | null;
+};
+export class TrSalesPlanItem {
+  private constructor(readonly data: TrSalesPlanItemData) {}
+  static parse(r: Record<string, unknown>): TrSalesPlanItem {
+    return new TrSalesPlanItem({
+      item_no: asInt(r.item_no),
+      display_order: asIntOrNull(r.display_order),
+      display: asBoolOrNull(r.display),
+      remarks: asStrOrNull(r.remarks)
+    });
+  }
+}
+
 export type TrPurchaseData = {
   purchase_no: number;
   purchase_name: string;
@@ -1033,6 +1052,7 @@ export type MasterEntityCache = {
   tr_direct_shipment: TrDirectShipment[];
   tr_item_bom: TrItemBom[];
   tr_item_group: TrItemGroup[];
+  tr_sales_plan_item: TrSalesPlanItem[];
   tr_purchase: TrPurchase[];
   tr_resale: TrResale[];
   tr_store: TrStore[];
@@ -1076,6 +1096,7 @@ export function emptyMasterEntityCache(): MasterEntityCache {
     tr_direct_shipment: [],
     tr_item_bom: [],
     tr_item_group: [],
+    tr_sales_plan_item: [],
     tr_purchase: [],
     tr_resale: [],
     tr_store: [],
@@ -1121,6 +1142,7 @@ const PARSERS: {
   tr_direct_shipment: (rows) => rows.map((r) => TrDirectShipment.parse(r)),
   tr_item_bom: (rows) => rows.map((r) => TrItemBom.parse(r)),
   tr_item_group: (rows) => rows.map((r) => TrItemGroup.parse(r)),
+  tr_sales_plan_item: (rows) => rows.map((r) => TrSalesPlanItem.parse(r)),
   tr_purchase: (rows) => rows.map((r) => TrPurchase.parse(r)),
   tr_resale: (rows) => rows.map((r) => TrResale.parse(r)),
   tr_store: (rows) => rows.map((r) => TrStore.parse(r)),

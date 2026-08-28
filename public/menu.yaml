@@ -26,6 +26,10 @@ groups:
         screenKey: StoreTransfer
       - label: 商品マスタメンテナンス
         screenKey: ItemCorrect
+      - label: 販売計画商品マスタメンテナンス
+        screenKey: SalesPlanItemCorrect
+      - label: 月次販売計画
+        screenKey: MonthlySalesPlanCorrect
       - label: 直送先マスタメンテナンス
         screenKey: ShipmentCorrect
       - label: 商品原料対照表メンテナンス
@@ -90,5 +94,7 @@ groups:
         screenKey: BulkTeaYearOnYearUsage
       - label: 月別仕上茶前年対比生産量
         screenKey: BulkTeaYearOnYearProduction
+      - label: 月次販売計画実績一覧表
+        screenKey: MonthlySalesPlan
       - label: ロット構造一覧
         screenKey: LotStructureList
