@@ -1,0 +1,54 @@
+.blendLotListMantineRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.blendLotListMantineScroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.blendLotListMantineTable .mantineScrollTableTh {
+  min-height: 40px;
+  white-space: normal;
+}
+
+.blendLotPartMantineRoot,
+.blendLotPartMantineRootNoFooter {
+  height: 100%;
+  min-height: 200px;
+}
+
+.blendLotPartMantineRootNoFooter .mantineScrollTableFooter {
+  display: none;
+}
+
+.blendLotPartMantineScroll {
+  min-height: 180px;
+  max-height: min(420px, calc(100vh - 230px));
+}
+
+.editorPartsGridWrap .blendLotPartMantineScroll {
+  max-height: 260px;
+}
+
+.editorPartsGridWrap .blendLotPartMantineRoot .mantineScrollTableTh {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.blendLotPartDeleteIcon {
+  margin: 0 auto;
+}
+
+.tableWrap .blendLotListMantineRoot {
+  border: none;
+}
+
+.modalTableWrap .blendLotPartMantineRoot {
+  height: min(420px, calc(100vh - 230px));
+}

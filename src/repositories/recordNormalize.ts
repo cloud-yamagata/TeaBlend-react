@@ -1,6 +1,6 @@
 /**
  * 【処理概要】
- *   `te_material` / `te_monthly_plan` / `tr_item` の API 行を、画面用の camelCase 型へ正規化。
+ *   `te_material` / `te_monthly_plan` / `tr_item` / `te_blend_lot` の API 行を、画面用の camelCase 型へ正規化。
  *
  * 【パラメータ仕様】
  *   各 `normalize*` は `Record<string, unknown>` を受け、PascalCase / snake の両方のキーを許容
@@ -8,6 +8,7 @@
  * 【メンテナンス】
  *   FastAPI が `response_model` で alias する場合でも、ここで吸収する。
  */
+import type { TeBlendLot } from "../BlendLot/types";
 import type { TeMaterial } from "../MaterialList/types";
 import type { TeMonthlyPlan, TrItem } from "../MonthlyPlan/types";
 
@@ -16,7 +17,14 @@ export const asStringOrNull = (value: unknown): string | null => {
 };
 
 export const asNumberOrNull = (value: unknown): number | null => {
-  return typeof value === "number" && Number.isFinite(value) ? value : null;
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+  if (typeof value === "string" && value.trim() !== "") {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
 };
 
 const asLotPartInfo = (value: unknown): unknown => value ?? null;
@@ -73,6 +81,18 @@ export function normalizeItem(row: Record<string, unknown>): TrItem {
     packageSize: asNumberOrNull(row.packageSize ?? row.package_size ?? row.PackageSize),
     displayOrder: asNumberOrNull(row.displayOrder ?? row.display_order ?? row.DisplayOrder),
     display: asStringOrNull(row.display ?? row.Display),
+    remarks: asStringOrNull(row.remarks ?? row.Remarks)
+  };
+}
+
+export function normalizeBlendLot(row: Record<string, unknown>): TeBlendLot {
+  return {
+    productNo: asNumberOrNull(row.productNo ?? row.product_no ?? row.ProductNo),
+    workDate: asStringOrNull(row.workDate ?? row.work_date ?? row.WorkDate),
+    itemNo: asNumberOrNull(row.itemNo ?? row.item_no ?? row.ItemNo),
+    itemName: asStringOrNull(row.itemName ?? row.item_name ?? row.ItemName),
+    unitWeight: asNumberOrNull(row.unitWeight ?? row.unit_weight ?? row.UnitWeight),
+    lotPartInfo: asLotPartInfo(row.lotPartInfo ?? row.lot_part_info ?? row.LotPartInfo),
     remarks: asStringOrNull(row.remarks ?? row.Remarks)
   };
 }

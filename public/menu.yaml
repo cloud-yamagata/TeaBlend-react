@@ -4,7 +4,8 @@ groups:
   - title: 生産登録
     items:
       - label: ブレンドロット登録(第三工場)
-        screenKey: LotRegist
+        screenKey: BlendLot
+        path: /blend-lot
       - label: パッケージロット登録
         screenKey: PackageReport
       - label: 仕上品在庫調整

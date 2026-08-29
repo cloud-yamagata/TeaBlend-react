@@ -1,16 +1,17 @@
 /**
  * 【処理概要】
- *   アプリ起動時にマスタを一括取得し、型付き4表＋汎用マスタを Jotai atom に格納する。
+ *   アプリ起動時にマスタを一括取得し、型付き表＋汎用マスタを Jotai atom に格納する。
  *
  * 【パラメータ仕様】
  *   - `bootstrapMasterDataAtom` … write のみ。同時呼び出しは直列化（`bootstrapInflight`）
- *   - 画面別エラーは `materialListMasterErrorAtom` / `monthlyPlanMasterErrorAtom` が抽出
+ *   - 画面別エラーは `materialListMasterErrorAtom` / `monthlyPlanMasterErrorAtom` 等が抽出
  *
  * 【メンテナンス】
  *   - 汎用マスタの一覧は `repositories/masterTableRepository.ts` と FastAPI `main.py` の両方と一致させる
  *   - 並列数は `GENERIC_MASTER_FETCH_CONCURRENCY`（既定8）。遅い環境では下げる
  */
 import { atom } from "jotai";
+import type { TeBlendLot } from "../BlendLot/types";
 import type { TeMaterial, TrConstant } from "../MaterialList/types";
 import type { TeMonthlyPlan, TrItem } from "../MonthlyPlan/types";
 import {
@@ -26,6 +27,7 @@ import {
   GENERIC_MASTER_TABLE_SPECS,
   TYPED_MASTER_LABELS
 } from "../repositories/masterTableRepository";
+import { fetchBlendLots } from "../repositories/blendLotRepository";
 import { fetchItems, fetchMonthlyPlans } from "../repositories/monthlyPlanRepository";
 
 /** 同一ホストへの同時 fetch を抑え、接続窮乏・タイムアウトによる Failed to fetch を避ける */
@@ -49,6 +51,7 @@ export const masterMaterialsAtom = atom<TeMaterial[]>([]);
 export const masterTrConstantsAtom = atom<TrConstant[]>([]);
 export const masterMonthlyPlansAtom = atom<TeMonthlyPlan[]>([]);
 export const masterTrItemsAtom = atom<TrItem[]>([]);
+export const masterBlendLotsAtom = atom<TeBlendLot[]>([]);
 
 /** パース済みマスタ（テーブルごとにエンティティ配列）。画面は masterQueries 等で参照し、派生 Atom にバインドする */
 export const masterEntityCacheAtom = atom<MasterEntityCache>(emptyMasterEntityCache());
@@ -80,6 +83,15 @@ const MONTHLY_PLAN_SCREEN_FAILURE_IDS = new Set<string>(["te_monthly_plan", "tr_
 /** 月次計画で見せるマスタエラー（te_material は別画面用のためここでは出さない） */
 export const monthlyPlanMasterErrorAtom = atom((get) => {
   const list = get(masterDataFailuresAtom).filter((f) => MONTHLY_PLAN_SCREEN_FAILURE_IDS.has(f.id));
+  if (list.length === 0) return null;
+  return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
+});
+
+const BLEND_LOT_SCREEN_FAILURE_IDS = new Set<string>(["te_blend_lot", "tr_item"]);
+
+/** ブレンドロット登録で見せるマスタエラー */
+export const blendLotMasterErrorAtom = atom((get) => {
+  const list = get(masterDataFailuresAtom).filter((f) => BLEND_LOT_SCREEN_FAILURE_IDS.has(f.id));
   if (list.length === 0) return null;
   return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
 });
@@ -293,12 +305,13 @@ export const bootstrapMasterDataAtom = atom(null, async (_get, set) => {
     set(masterDataFailuresAtom, []);
 
     try {
-      // 型付き4表を先に取得（接続枠を確保）。続く generic は件数が多いためバッチで取得する。
+      // 型付き表を先に取得（接続枠を確保）。続く generic は件数が多いためバッチで取得する。
       const typedSettled = await Promise.allSettled([
         fetchMaterials(),
         fetchAllTrConstants(),
         fetchMonthlyPlans(),
-        fetchItems()
+        fetchItems(),
+        fetchBlendLots()
       ]);
 
       const genericSettled = await allSettledInBatches(
@@ -377,6 +390,17 @@ export const bootstrapMasterDataAtom = atom(null, async (_get, set) => {
           id: TYPED_MASTER_LABELS[3],
           message:
             typedSettled[3].reason instanceof Error ? typedSettled[3].reason.message : String(typedSettled[3].reason)
+        });
+      }
+
+      if (typedSettled[4].status === "fulfilled") {
+        set(masterBlendLotsAtom, typedSettled[4].value);
+      } else {
+        set(masterBlendLotsAtom, []);
+        failures.push({
+          id: TYPED_MASTER_LABELS[4],
+          message:
+            typedSettled[4].reason instanceof Error ? typedSettled[4].reason.message : String(typedSettled[4].reason)
         });
       }
 

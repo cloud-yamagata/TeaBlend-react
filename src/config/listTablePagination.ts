@@ -23,6 +23,10 @@ export const listTablePagination = {
   monthlyPlan: LIST_TABLE_PAGE_SIZE,
   /** 月次計画 … 使用部品（モーダル・編集） */
   monthlyPlanParts: false,
+  /** ブレンドロット … メイン一覧 */
+  blendLot: LIST_TABLE_PAGE_SIZE,
+  /** ブレンドロット … 部品（モーダル・編集） */
+  blendLotParts: false,
   /** 各種レポート（ReportGrid） */
   reportGrid: LIST_TABLE_PAGE_SIZE,
   /** パッケージロット登録 … 製造報告書一覧 */

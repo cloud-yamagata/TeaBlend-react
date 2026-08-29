@@ -31,6 +31,7 @@ import ShipmentCorrectPage from "./ShipmentCorrect/ShipmentCorrectPage";
 import ItemBomCorrectPage from "./ItemBomCorrect/ItemBomCorrectPage";
 import TrConstantCorrectPage from "./TrConstantCorrect/TrConstantCorrectPage";
 import MonthlyPlanPage from "./MonthlyPlan/MonthlyPlanPage";
+import BlendLotPage from "./BlendLot/BlendLotPage";
 import Factory2LotManufacturePage from "./Factory2LotManufacture/Factory2LotManufacturePage";
 import PackageLotRegistPage from "./PackageReport/PackageLotRegistPage";
 import PurchaseTtransferPage from "./PurchaseTtransfer/PurchaseTtransferPage";
@@ -296,6 +297,9 @@ export default function App() {
     if (screenKey === "CroudeTea") {
       return <Factory2LotManufacturePage />;
     }
+    if (screenKey === "BlendLot" || screenKey === "LotRegist") {
+      return <BlendLotPage />;
+    }
     if (screenKey === "PackageReport") {
       return <PackageLotRegistPage />;
     }
@@ -385,6 +389,7 @@ export default function App() {
             <Route path="/material-purchase" element={<MaterialPurchasePage />} />
             <Route path="/purchase-resale-list" element={<PurchaseResaleListPage />} />
             <Route path="/monthly-plan" element={<MonthlyPlanPage />} />
+            <Route path="/blend-lot" element={<BlendLotPage />} />
             <Route path="/factory2-lot-manufacture" element={<Factory2LotManufacturePage />} />
             <Route path="/blend-categorys" element={<BlendCategorysPage />} />
             <Route path="/finish-categorys" element={<FinishCategorysPage />} />

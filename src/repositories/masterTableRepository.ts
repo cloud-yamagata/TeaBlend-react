@@ -4,7 +4,7 @@
  *
  * 【パラメータ仕様】
  *   - `GENERIC_MASTER_TABLE_SPECS` … 各要素 `{ id, buildUrl }`。`id` は `domain/masterTableEntityModels` のキーと一致必須
- *   - `TYPED_MASTER_LABELS` … bootstrap 時のエラー表示ラベル（型付き4表）
+ *   - `TYPED_MASTER_LABELS` … bootstrap 時のエラー表示ラベル（型付きマスタ）
  *
  * 【メンテナンス】
  *   FastAPI で router がコメントアウトされている URL は 404 になる。不要ならここからも削除しキャッシュ／取得負荷を下げる。
@@ -133,5 +133,11 @@ export const GENERIC_MASTER_TABLE_SPECS = [
 
 export type GenericMasterTableId = (typeof GENERIC_MASTER_TABLE_SPECS)[number]["id"];
 
-/** 型付きマスタ4件（エラー表示・ログ用ラベル） */
-export const TYPED_MASTER_LABELS = ["te_material", "tr_constant", "te_monthly_plan", "tr_item"] as const;
+/** 型付きマスタ（エラー表示・ログ用ラベル） */
+export const TYPED_MASTER_LABELS = [
+  "te_material",
+  "tr_constant",
+  "te_monthly_plan",
+  "tr_item",
+  "te_blend_lot"
+] as const;
