@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TeaBlendReportHelper")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93f6a2c24126f45ab1d70e22fc83c9a4697172a0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1472e86e7bcb2a7e512b80d8b9c173c9c6d1755")]
 [assembly: System.Reflection.AssemblyProductAttribute("TeaBlendReportHelper")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TeaBlendReportHelper")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
