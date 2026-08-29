@@ -29,6 +29,7 @@ import MonthlySalesPlanCorrectPage from "./MonthlySalesPlanCorrect/MonthlySalesP
 import SalesPlanExcelImportPage from "./SalesPlanExcelImport/SalesPlanExcelImportPage";
 import ShipmentCorrectPage from "./ShipmentCorrect/ShipmentCorrectPage";
 import ItemBomCorrectPage from "./ItemBomCorrect/ItemBomCorrectPage";
+import TrConstantCorrectPage from "./TrConstantCorrect/TrConstantCorrectPage";
 import MonthlyPlanPage from "./MonthlyPlan/MonthlyPlanPage";
 import Factory2LotManufacturePage from "./Factory2LotManufacture/Factory2LotManufacturePage";
 import PackageLotRegistPage from "./PackageReport/PackageLotRegistPage";
@@ -339,6 +340,9 @@ export default function App() {
     }
     if (screenKey === "ItemBomCorrect") {
       return <ItemBomCorrectPage />;
+    }
+    if (screenKey === "TrConstantCorrect") {
+      return <TrConstantCorrectPage />;
     }
     if (screenKey === "Factory1Rresult") {
       return <Factory1RresultPage />;

@@ -36,6 +36,8 @@ groups:
         screenKey: ShipmentCorrect
       - label: 商品原料対照表メンテナンス
         screenKey: ItemBomCorrect
+      - label: システム定数メンテナンス
+        screenKey: TrConstantCorrect
   - title: 第２工場生産登録
     items:
       - label: 第二工場ロット製造登録

@@ -165,6 +165,7 @@ export default function ReportPage({ reportId }: Props) {
           shownCount={displayedRows.length}
           fieldsDisabled={loading || rows.length === 0}
           actionsDisabled={loading}
+          excelDisabled={loading || rows.length === 0}
           collapsible={extractOnlyLayout}
           onRun={extractOnlyLayout ? () => void handleRun() : undefined}
           onExcel={extractOnlyLayout ? () => void handleExcel() : undefined}

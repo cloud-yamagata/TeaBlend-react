@@ -15,6 +15,7 @@ type Props = {
   shownCount: number;
   fieldsDisabled?: boolean;
   actionsDisabled?: boolean;
+  excelDisabled?: boolean;
   collapsible?: boolean;
   onRun?: () => void;
   onExcel?: () => void;
@@ -29,10 +30,12 @@ export default function ReportExtractPanel({
   shownCount,
   fieldsDisabled,
   actionsDisabled,
+  excelDisabled,
   collapsible = false,
   onRun,
   onExcel
 }: Props) {
+  const excelButtonDisabled = excelDisabled ?? actionsDisabled;
   const [panelOpen, setPanelOpen] = useState(true);
 
   if (extract.length === 0) return null;
@@ -120,7 +123,7 @@ export default function ReportExtractPanel({
                 </button>
               ) : null}
               {onExcel ? (
-                <button className="actionButton" type="button" onClick={onExcel} disabled={actionsDisabled}>
+                <button className="actionButton" type="button" onClick={onExcel} disabled={excelButtonDisabled}>
                   Excel出力
                 </button>
               ) : null}

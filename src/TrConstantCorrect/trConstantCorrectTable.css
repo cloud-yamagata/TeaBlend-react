@@ -1,0 +1,7 @@
+.trConstantCorrectMantineRoot {
+  width: 100%;
+}
+
+.trConstantCorrectMantineScroll {
+  max-height: calc(100vh - 360px);
+}

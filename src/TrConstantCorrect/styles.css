@@ -1,0 +1,150 @@
+/**
+ * システム定数メンテナンス（ItemBomCorrect のメニュー＋入力行を踏襲）
+ */
+
+.trConstantCorrectPage .toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.trConstantCorrectHint {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.trConstantCorrectFieldRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 12px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.trConstantCorrectFieldRow .searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trConstantCorrectFieldRow .searchFieldLabel {
+  font-size: 12px;
+  color: #334155;
+}
+
+.trConstantCorrectFieldSelect {
+  min-width: 280px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.trConstantCorrectMenuRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 4px 0;
+  background: var(--teablend-table-body-bg, honeydew);
+  border-radius: 8px;
+}
+
+.trConstantCorrectMenuItem {
+  min-width: 64px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #166534;
+  border-radius: 4px;
+  background: #166534;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.trConstantCorrectMenuItem:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.trConstantCorrectMenuItem:not(:disabled):hover {
+  background: #15803d;
+}
+
+.trConstantCorrectInputRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 10px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.trConstantCorrectInputRow .searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trConstantCorrectInputRow .searchFieldLabel {
+  font-size: 12px;
+  color: #334155;
+}
+
+.trConstantCorrectInputRow .searchControl {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.trConstantCorrectValueInput {
+  width: 120px;
+}
+
+.trConstantCorrectNameInput {
+  width: 280px;
+  min-width: 160px;
+}
+
+.trConstantCorrectOrderInput {
+  width: 80px;
+}
+
+.trConstantCorrectDisplayCheck {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  font-size: 14px;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.trConstantCorrectClearButton {
+  height: 32px;
+}
+
+.trConstantCorrectPage .status {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.trConstantCorrectPage .status.error {
+  color: #b91c1c;
+}
