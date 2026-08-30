@@ -88,6 +88,8 @@ export function normalizeItem(row: Record<string, unknown>): TrItem {
 export function normalizeBlendLot(row: Record<string, unknown>): TeBlendLot {
   return {
     productNo: asNumberOrNull(row.productNo ?? row.product_no ?? row.ProductNo),
+    lotStatus: asStringOrNull(row.lotStatus ?? row.lot_status ?? row.LotStatus),
+    organicClass: asStringOrNull(row.organicClass ?? row.organic_class ?? row.OrganicClass),
     workDate: asStringOrNull(row.workDate ?? row.work_date ?? row.WorkDate),
     itemNo: asNumberOrNull(row.itemNo ?? row.item_no ?? row.ItemNo),
     itemName: asStringOrNull(row.itemName ?? row.item_name ?? row.ItemName),

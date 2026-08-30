@@ -1,0 +1,103 @@
+/**
+ * ブレンドロット登録ページ用スタイル（パッケージロット登録に準拠）
+ */
+@import "../MonthlyPlan/styles.css";
+@import "../Factory2LotManufacture/styles.css";
+
+.blendLotPage .tableWrap {
+  height: calc(100vh - 220px);
+  min-height: 280px;
+}
+
+.blendLotMenuRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+  padding: 4px 0;
+  background: var(--teablend-table-body-bg, honeydew);
+  border-bottom: 1px solid #d6dee8;
+}
+
+.blendLotMenuItem {
+  min-width: 50px;
+  height: 30px;
+  padding: 0 12px;
+  font-size: 14px;
+  border: 1px solid #333;
+  background: #f0f0f0;
+  cursor: pointer;
+}
+
+.blendLotMenuItem:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.blendLotMenuItem.delete:not(:disabled) {
+  color: #b91c1c;
+}
+
+.blendLotHint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.blendLotHint.error,
+.blendLotPage .error {
+  color: #b91c1c;
+}
+
+.blendLotSearchRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: var(--teablend-table-body-bg, honeydew);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.blendLotSearchRow .blendLotSearchGroupBox {
+  flex-shrink: 0;
+  align-self: center;
+  margin: 0;
+}
+
+.blendLotSearchDateField {
+  flex-shrink: 0;
+}
+
+.blendLotSearchDateField .searchControl {
+  min-width: 140px;
+}
+
+.blendLotSearchRow .searchFieldItemZoomGroup {
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.blendLotSearchRow .searchControlItemNo {
+  min-width: 90px;
+  width: 90px;
+}
+
+.blendLotSearchRow .searchFieldItemZoomGroup .searchField:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.blendLotSearchRow .searchControlItemName {
+  width: 100%;
+  min-width: 120px;
+}
+
+.blendLotSearchRow .searchActions {
+  flex-shrink: 0;
+  margin-left: 0;
+}

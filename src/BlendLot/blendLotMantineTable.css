@@ -36,13 +36,34 @@
   max-height: 260px;
 }
 
-.editorPartsGridWrap .blendLotPartMantineRoot .mantineScrollTableTh {
+.blendLotPartMantineRoot .mantineScrollTableTh {
   font-size: 12px;
+  white-space: nowrap;
+}
+
+.blendLotPartMantineTable tbody td:nth-child(3),
+.blendLotPartMantineTable tbody td:nth-child(4),
+.blendLotPartMantineTable tbody td:nth-child(5) {
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .blendLotPartDeleteIcon {
   margin: 0 auto;
+}
+
+.editorPartsAddCell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.editorPartsZoomButtons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .tableWrap .blendLotListMantineRoot {

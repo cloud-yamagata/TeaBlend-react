@@ -219,6 +219,8 @@ export function parseViFactory2StockRows(rows: Record<string, unknown>[]): ViFac
 export type ViFactory3StocData = {
   item_no: number;
   item_name: string | null;
+  organic_class: string | null;
+  item_group_no: number | null;
   product_no: number;
   stoc_quantity: number | null;
 };
@@ -234,6 +236,8 @@ export class ViFactory3Stoc {
     return new ViFactory3Stoc({
       item_no: asInt(r.item_no),
       item_name: asStrOrNull(r.item_name),
+      organic_class: asStrOrNull(r.organic_class),
+      item_group_no: asIntOrNull(r.item_group_no),
       product_no: asInt(r.product_no),
       stoc_quantity: asFiniteNumberOrNull(r.stoc_quantity)
     });

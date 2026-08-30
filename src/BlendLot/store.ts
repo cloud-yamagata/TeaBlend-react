@@ -1,14 +1,17 @@
 /**
- * ブレンドロットの検索条件・一覧派生、CRUD 用 write atom（loading / error 同期）。
+ * ブレンドロットの CRUD 用 write atom（loading / error 同期）。
  */
 import { atom } from "jotai";
-import { matchesContains, normalizeDateToYmd } from "../lib/searchNormalize";
-import { masterBlendLotsAtom } from "../repository/masterData";
+import { masterBlendLotsAtom, masterEntityCacheAtom } from "../repository/masterData";
 import {
+  confirmBlendLotStock as confirmBlendLotStockRepo,
   createBlendLot as createBlendLotRepo,
   deleteBlendLots as deleteBlendLotsRepo,
   updateBlendLot as updateBlendLotRepo
 } from "../repositories/blendLotRepository";
+import { applyBlendLotCacheConfirmStock } from "./applyBlendLotCacheConfirmStock";
+import { collectBlendLotConfirmStockApiBody } from "./collectBlendLotConfirmStock";
+import { PACKAGE_LOT_STATUS_CONFIRMED } from "../PackageReport/packageLotDisplay";
 import type { TeBlendLot } from "./types";
 
 export const blendLotListAtom = masterBlendLotsAtom;
@@ -26,20 +29,6 @@ const upsertBlendLot = (source: TeBlendLot[], nextLot: TeBlendLot): TeBlendLot[]
   return [nextLot, ...source];
 };
 
-export type BlendLotSearchFilters = {
-  workDate: string;
-  itemNo: string;
-  itemName: string;
-};
-
-export const blendLotSearchDefaultFilters = (): BlendLotSearchFilters => ({
-  workDate: "",
-  itemNo: "",
-  itemName: ""
-});
-
-export const blendLotSearchAppliedFiltersAtom = atom<BlendLotSearchFilters>(blendLotSearchDefaultFilters());
-export const blendLotSearchExecutedAtom = atom(false);
 export const loadingAtom = atom(false);
 const errorMessageValueAtom = atom<string | null>(null);
 export const errorMessageAtom = atom(
@@ -48,48 +37,6 @@ export const errorMessageAtom = atom(
     set(errorMessageValueAtom as never, nextMessage as never);
   }
 );
-
-const isBlendLotFiltersAllEmpty = (f: BlendLotSearchFilters): boolean => {
-  return f.workDate.trim() === "" && f.itemNo.trim() === "" && f.itemName.trim() === "";
-};
-
-const matchesBlendLotFilters = (row: TeBlendLot, f: BlendLotSearchFilters): boolean => {
-  if (f.workDate.trim() !== "") {
-    const rowYmd = normalizeDateToYmd(row.workDate);
-    if (rowYmd !== f.workDate.trim()) {
-      return false;
-    }
-  }
-
-  if (f.itemNo.trim() !== "") {
-    if (!matchesContains(String(row.itemNo ?? ""), f.itemNo)) {
-      return false;
-    }
-  }
-
-  if (f.itemName.trim() !== "") {
-    if (!matchesContains(String(row.itemName ?? ""), f.itemName)) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
-export const filteredBlendLotListAtom = atom((get) => {
-  if (!get(blendLotSearchExecutedAtom)) {
-    return [];
-  }
-
-  const source = get(blendLotListAtom);
-  const f = get(blendLotSearchAppliedFiltersAtom);
-
-  if (isBlendLotFiltersAllEmpty(f)) {
-    return source;
-  }
-
-  return source.filter((row) => matchesBlendLotFilters(row, f));
-});
 
 export const deleteBlendLotsAtom = atom(null, async (_get, set, targets: TeBlendLot[]) => {
   if (targets.length === 0) {
@@ -142,6 +89,31 @@ export const updateBlendLotAtom = atom(null, async (_get, set, payload: Record<s
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     set(errorMessageAtom, `更新処理に失敗しました: ${message}`);
+    return null;
+  } finally {
+    set(loadingAtom, false);
+  }
+});
+
+export const confirmBlendLotStockAtom = atom(null, async (get, set, lot: TeBlendLot) => {
+  set(loadingAtom, true);
+  set(errorMessageAtom, null);
+
+  try {
+    const apiBody = collectBlendLotConfirmStockApiBody(lot);
+    const apiResult = await confirmBlendLotStockRepo(apiBody);
+    const cache = get(masterEntityCacheAtom);
+    set(masterEntityCacheAtom, applyBlendLotCacheConfirmStock(cache, lot, apiResult.transfer_nos));
+
+    const confirmedLot: TeBlendLot = {
+      ...lot,
+      lotStatus: PACKAGE_LOT_STATUS_CONFIRMED
+    };
+    set(blendLotListAtom, (prev) => upsertBlendLot(prev, confirmedLot));
+    return confirmedLot;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    set(errorMessageAtom, `在庫確定処理に失敗しました: ${message}`);
     return null;
   } finally {
     set(loadingAtom, false);

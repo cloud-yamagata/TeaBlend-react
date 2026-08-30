@@ -60,3 +60,38 @@ export async function updateBlendLot(payload: Record<string, unknown>): Promise<
   const raw = (await response.json()) as Record<string, unknown>;
   return normalizeBlendLot(raw);
 }
+
+export type BlendLotConfirmStockApiResult = {
+  ok: boolean;
+  product_no: number;
+  transfer_nos: number[];
+  lot_status: string;
+};
+
+export async function confirmBlendLotStock(
+  body: { product_no: number }
+): Promise<BlendLotConfirmStockApiResult> {
+  const url = `${getMonthlyApiBaseUrl()}/te_blend_lot/confirm_stock`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(text || `API request failed: ${response.status}`);
+  }
+  const data = (await response.json()) as BlendLotConfirmStockApiResult;
+  if (
+    data.ok !== true ||
+    !Number.isFinite(data.product_no) ||
+    !Array.isArray(data.transfer_nos) ||
+    data.transfer_nos.length < 1 ||
+    data.transfer_nos.some((no) => !Number.isFinite(no))
+  ) {
+    throw new Error("API returned unsuccessful status");
+  }
+  return data;
+}
