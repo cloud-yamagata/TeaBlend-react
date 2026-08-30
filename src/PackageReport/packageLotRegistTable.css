@@ -4,7 +4,7 @@
   flex: 1;
   min-height: 0;
   height: 100%;
-  border: 1px solid #000;
+  border: none;
 }
 
 .pkgLotRegistMantineScroll {
@@ -13,6 +13,28 @@
   height: 100%;
 }
 
+.pkgLotRegistMantineTable {
+  font-size: 13px;
+}
+
+.pkgLotRegistMantineTable .mantine-Table-td,
+.pkgLotRegistMantineTable .mantine-Table-th {
+  padding: 1px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .pkgLotRegistMantineTable .mantineScrollTableTh {
   min-height: 45px;
+  font-size: 11px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  background-color: forestgreen;
+  color: #fff;
+}
+
+.pkgLotRegistMantineTable .mantineScrollTableTh .mantineScrollTableSortBtn {
+  white-space: normal;
 }

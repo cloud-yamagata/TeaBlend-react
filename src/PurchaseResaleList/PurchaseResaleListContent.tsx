@@ -27,7 +27,7 @@ import {
   isPurchaseResaleListSearchEnabled
 } from "./purchaseResaleListSearch";
 import type { PurchaseResaleListAppliedSearch, PurchaseResaleListRow } from "./types";
-import { PURCHASE_RESALE_LIST_MAX_ROWS, defaultPurchaseResaleListTeaLifeFilter } from "./types";
+import { defaultPurchaseResaleListTeaLifeFilter } from "./types";
 
 const purchaseResaleListRowsAtom = atom((get) => buildPurchaseResaleList(get(masterEntityCacheAtom)));
 
@@ -48,6 +48,7 @@ const resolveInitialYear = (contextRow?: PurchaseTtransferRow | null): string =>
 };
 
 const defaultDraft = (contextRow?: PurchaseTtransferRow | null): PurchaseResaleListSearchDraft => ({
+  yearFilterEnabled: true,
   year: resolveInitialYear(contextRow),
   transfer: "",
   teaLifeFilter: defaultPurchaseResaleListTeaLifeFilter(),
@@ -55,11 +56,8 @@ const defaultDraft = (contextRow?: PurchaseTtransferRow | null): PurchaseResaleL
   limitToContext: contextRow != null
 });
 
-const applySearchMessage = (totalCount: number, truncated: boolean): string | null => {
+const applySearchMessage = (totalCount: number): string | null => {
   if (totalCount === 0) return "対象データがありません";
-  if (truncated) {
-    return `対象データ：${totalCount.toLocaleString("ja-JP")}件。${PURCHASE_RESALE_LIST_MAX_ROWS}件以内になるよう、条件を絞ってください`;
-  }
   return null;
 };
 
@@ -87,11 +85,8 @@ export function PurchaseResaleListContent({
 
   const runSearch = useCallback(
     (nextDraft: PurchaseResaleListSearchDraft) => {
-      const year = normalizeMakeYearFromForm(nextDraft.year);
-      if (!year) return;
-
       const criteria: PurchaseResaleListAppliedSearch = {
-        year,
+        year: nextDraft.yearFilterEnabled ? normalizeMakeYearFromForm(nextDraft.year) : null,
         transfer: nextDraft.transfer.trim(),
         teaLifeFilter: { ...nextDraft.teaLifeFilter },
         purchaseDate: nextDraft.purchaseDate.trim(),
@@ -102,7 +97,7 @@ export function PurchaseResaleListContent({
       const result = filterPurchaseResaleListRows(allRows, criteria);
       setAppliedCriteria(criteria);
       setSelectedRowId(null);
-      setSearchMessage(applySearchMessage(result.totalCount, result.truncated));
+      setSearchMessage(applySearchMessage(result.totalCount));
     },
     [allRows, contextBidNo, contextPurchase]
   );
@@ -123,7 +118,7 @@ export function PurchaseResaleListContent({
 
   const filterResult = useMemo(() => {
     if (!appliedCriteria) {
-      return { rows: [], totalCount: 0, truncated: false };
+      return { rows: [], totalCount: 0 };
     }
     return filterPurchaseResaleListRows(allRows, appliedCriteria);
   }, [allRows, appliedCriteria]);
@@ -134,15 +129,20 @@ export function PurchaseResaleListContent({
   }, [allRows, appliedCriteria]);
 
   const searchExecuted = appliedCriteria != null;
-  const searchEnabled = isPurchaseResaleListSearchEnabled(draft.year);
+  const searchEnabled = isPurchaseResaleListSearchEnabled({
+    yearFilterEnabled: draft.yearFilterEnabled,
+    year: draft.year,
+    transfer: draft.transfer,
+    purchaseDate: draft.purchaseDate,
+    teaLifeFilter: draft.teaLifeFilter,
+    limitToContext: draft.limitToContext && contextPurchase != null && contextBidNo != null
+  });
   const excelDisabled = !searchExecuted || exportRows.length === 0 || loading;
   const excelTitle = !searchExecuted
     ? "検索実行後に Excel 出力できます"
     : exportRows.length === 0
       ? "出力対象データがありません"
-      : filterResult.truncated
-        ? `検索結果 ${exportRows.length.toLocaleString("ja-JP")} 件を出力（画面は先頭 ${filterResult.rows.length} 件）`
-        : `検索結果 ${exportRows.length.toLocaleString("ja-JP")} 件を Excel 出力`;
+      : `検索結果 ${exportRows.length.toLocaleString("ja-JP")} 件を Excel 出力`;
 
   const handleSearch = useCallback(() => {
     runSearch(draft);
@@ -184,7 +184,9 @@ export function PurchaseResaleListContent({
                 filterResult.totalCount !== filterResult.rows.length
                   ? `（該当 ${filterResult.totalCount.toLocaleString("ja-JP")} 件）`
                   : ""
-              }（マスタ ${allRows.length.toLocaleString("ja-JP")} 件）`
+              }（マスタ ${allRows.length.toLocaleString("ja-JP")} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}

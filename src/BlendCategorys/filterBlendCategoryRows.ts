@@ -11,6 +11,7 @@ import { organicCodesFromCheck } from "./blendCategorySearchCriteria";
 import type {
   BlendCategoryAppliedSearchCriteria,
   BlendCategoryLotStatusRadio,
+  BlendCategoryOrganicCheck,
   BlendCategoryRow
 } from "./types";
 
@@ -25,7 +26,7 @@ const matchesBlendCategoryRow = (
   row: BlendCategoryRow,
   criteria: BlendCategoryAppliedSearchCriteria
 ): boolean => {
-  if (!matchesPurchaseTeaYear(row.makeYear, criteria.year)) return false;
+  if (criteria.year != null && !matchesPurchaseTeaYear(row.makeYear, criteria.year)) return false;
 
   const statusCode = statusCodeFromRadio(criteria.lotStatusRadio);
   if (statusCode && !normalizeLotStatusCode(row.lotStatusCode).includes(statusCode)) {
@@ -49,7 +50,31 @@ const matchesBlendCategoryRow = (
   return true;
 };
 
-export const isBlendCategorySearchEnabled = (year: string): boolean => year.trim().length > 0;
+export const isBlendCategorySearchEnabled = ({
+  yearFilterEnabled,
+  year,
+  lotStatusRadio,
+  workDate,
+  lotNameQuery,
+  organicCheck
+}: {
+  yearFilterEnabled: boolean;
+  year: string;
+  lotStatusRadio: BlendCategoryLotStatusRadio;
+  workDate: string;
+  lotNameQuery: string;
+  organicCheck: BlendCategoryOrganicCheck;
+}): boolean => {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    lotStatusRadio !== "all" ||
+    workDate.trim() !== "" ||
+    lotNameQuery.trim() !== "" ||
+    anyInGroup(organicCheck)
+  );
+};
 
 export type BlendCategoryFilterResult = {
   rows: BlendCategoryRow[];
@@ -60,9 +85,6 @@ export function filterBlendCategoryRows(
   allRows: BlendCategoryRow[],
   criteria: BlendCategoryAppliedSearchCriteria
 ): BlendCategoryFilterResult {
-  if (!criteria.year.trim()) {
-    return { rows: [], totalCount: 0 };
-  }
   const rows = allRows.filter((row) => matchesBlendCategoryRow(row, criteria));
   return { rows, totalCount: rows.length };
 }

@@ -8,6 +8,7 @@ import { organicCodesFromCheck } from "./firepanCategorySearchCriteria";
 import type {
   FirepanCategoryAppliedSearchCriteria,
   FirepanCategoryLotStatusRadio,
+  FirepanCategoryOrganicCheck,
   FirepanCategoryRow
 } from "./types";
 
@@ -22,7 +23,7 @@ const matchesFirepanCategoryRow = (
   row: FirepanCategoryRow,
   criteria: FirepanCategoryAppliedSearchCriteria
 ): boolean => {
-  if (!matchesPurchaseTeaYear(row.makeYear, criteria.year)) return false;
+  if (criteria.year != null && !matchesPurchaseTeaYear(row.makeYear, criteria.year)) return false;
 
   const statusCode = statusCodeFromRadio(criteria.lotStatusRadio);
   if (statusCode && !normalizeLotStatusCode(row.lotStatusCode).includes(statusCode)) {
@@ -46,7 +47,31 @@ const matchesFirepanCategoryRow = (
   return true;
 };
 
-export const isFirepanCategorySearchEnabled = (year: string): boolean => year.trim().length > 0;
+export const isFirepanCategorySearchEnabled = ({
+  yearFilterEnabled,
+  year,
+  lotStatusRadio,
+  workDate,
+  lotNameQuery,
+  organicCheck
+}: {
+  yearFilterEnabled: boolean;
+  year: string;
+  lotStatusRadio: FirepanCategoryLotStatusRadio;
+  workDate: string;
+  lotNameQuery: string;
+  organicCheck: FirepanCategoryOrganicCheck;
+}): boolean => {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    lotStatusRadio !== "all" ||
+    workDate.trim() !== "" ||
+    lotNameQuery.trim() !== "" ||
+    anyInGroup(organicCheck)
+  );
+};
 
 export type FirepanCategoryFilterResult = {
   rows: FirepanCategoryRow[];
@@ -57,9 +82,6 @@ export function filterFirepanCategoryRows(
   allRows: FirepanCategoryRow[],
   criteria: FirepanCategoryAppliedSearchCriteria
 ): FirepanCategoryFilterResult {
-  if (!criteria.year.trim()) {
-    return { rows: [], totalCount: 0 };
-  }
   const rows = allRows.filter((row) => matchesFirepanCategoryRow(row, criteria));
   return { rows, totalCount: rows.length };
 }

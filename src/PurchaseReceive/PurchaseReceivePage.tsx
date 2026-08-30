@@ -19,7 +19,6 @@ import {
   isPurchaseReceiveSearchEnabled
 } from "./purchaseReceiveSearchCriteria";
 import type { PurchaseReceiveAppliedSearchCriteria, PurchaseReceiveRow, PurchaseReceiveStatusFilter } from "./types";
-import { PURCHASE_RECEIVE_MAX_ROWS } from "./types";
 import "../MonthlyPlan/styles.css";
 import "../Factory2LotManufacture/styles.css";
 import "./styles.css";
@@ -47,6 +46,7 @@ export default function PurchaseReceivePage() {
   const masterError = useAtomValue(purchaseTtransferMasterErrorAtom);
   const allRows = useAtomValue(purchaseReceiveRowsAtom);
 
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
   const [year, setYear] = useState(getDefaultMakeYear);
   const [keyword1, setKeyword1] = useState("");
   const [keyword2, setKeyword2] = useState("");
@@ -60,13 +60,21 @@ export default function PurchaseReceivePage() {
 
   const filterResult = useMemo(() => {
     if (!appliedCriteria) {
-      return { rows: [], totalCount: 0, truncated: false };
+      return { rows: [], totalCount: 0 };
     }
     return filterPurchaseReceiveRows(allRows, appliedCriteria);
   }, [allRows, appliedCriteria]);
 
   const searchExecuted = appliedCriteria != null;
-  const searchEnabled = isPurchaseReceiveSearchEnabled(year);
+  const searchEnabled = isPurchaseReceiveSearchEnabled({
+    yearFilterEnabled,
+    year,
+    keyword1,
+    keyword2,
+    keyword3,
+    purchaseDate,
+    statusFilter
+  });
   const hasSelection = selectedRowId != null;
 
   const selectedRow = useMemo(
@@ -80,7 +88,7 @@ export default function PurchaseReceivePage() {
     if (!searchEnabled) return;
 
     const criteria: PurchaseReceiveAppliedSearchCriteria = {
-      year: normalizeMakeYearFromForm(year),
+      year: yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
       keywords: resolveKeywords(keyword1, keyword2, keyword3),
       purchaseDate: purchaseDate.trim() || null,
       statusFilter: { ...statusFilter }
@@ -89,13 +97,7 @@ export default function PurchaseReceivePage() {
     const result = filterPurchaseReceiveRows(allRows, criteria);
     setAppliedCriteria(criteria);
     setSelectedRowId(null);
-    setSearchMessage(
-      result.totalCount === 0
-        ? "対象データがありません"
-        : result.truncated
-          ? `対象データ：${result.totalCount.toLocaleString("ja-JP")}件。${PURCHASE_RECEIVE_MAX_ROWS}件以内になるよう、条件を絞ってください`
-          : null
-    );
+    setSearchMessage(result.totalCount === 0 ? "対象データがありません" : null);
   };
 
   const handleRowSelect = useCallback((row: PurchaseReceiveRow) => {
@@ -122,7 +124,9 @@ export default function PurchaseReceivePage() {
                 filterResult.totalCount !== filterResult.rows.length
                   ? `（該当 ${filterResult.totalCount.toLocaleString("ja-JP")} 件）`
                   : ""
-              }（マスタ ${allRows.length.toLocaleString("ja-JP")} 件）`
+              }（マスタ ${allRows.length.toLocaleString("ja-JP")} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
@@ -160,10 +164,23 @@ export default function PurchaseReceivePage() {
       </section>
 
       <section className="purchaseReceiveToolbarRow purchaseReceiveToolbarRowSearch" aria-label="検索条件">
-        <span className="factory2FieldLabel factory2FieldLabelCompact">年度</span>
-        <div className="purchaseReceiveMakeYearWrap">
-          <Factory2MakeYearSpinner value={year} onChange={setYear} />
-        </div>
+        <fieldset className="purchaseReceiveFilterGroup purchaseReceiveSearchYearGroup">
+          <legend>年度</legend>
+          <label>
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`purchaseReceiveMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
+            <Factory2MakeYearSpinner value={year} onChange={setYear} />
+          </div>
+        </fieldset>
 
         <span className="factory2FieldLabel factory2FieldLabelCompact">キーワード</span>
         <input
@@ -241,7 +258,11 @@ export default function PurchaseReceivePage() {
           className="factory2DarkButton"
           disabled={!searchEnabled || loading}
           onClick={handleSearch}
-          title={searchEnabled ? "検索条件で一覧を表示" : "年度を指定してください"}
+          title={
+            searchEnabled
+              ? "検索条件で一覧を表示"
+              : "年度チェックを入れるか、キーワード・仕入日・残量状況のいずれかを指定してください"
+          }
         >
           検索
         </button>

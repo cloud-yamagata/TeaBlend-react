@@ -66,6 +66,7 @@ export default function StoreTransferFa2Page() {
   const masterError = useAtomValue(storeTransferFa2MasterErrorAtom);
   const allRows = useAtomValue(storeTransferFa2RowsAtom);
 
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
   const [year, setYear] = useState(getDefaultMakeYear);
   const [lotName, setLotName] = useState("");
   const [transferDate, setTransferDate] = useState("");
@@ -88,7 +89,15 @@ export default function StoreTransferFa2Page() {
   }, [allRows, appliedCriteria]);
 
   const searchExecuted = appliedCriteria != null;
-  const searchEnabled = isStoreTransferFa2SearchEnabled(year);
+  const searchEnabled = isStoreTransferFa2SearchEnabled({
+    yearFilterEnabled,
+    year,
+    lotName,
+    transferDate,
+    processFilter,
+    transferTypeFilter,
+    resultTypeFilter
+  });
   const hasSelection = selectedRowId != null;
 
   const selectedRow = useMemo(
@@ -102,7 +111,7 @@ export default function StoreTransferFa2Page() {
     if (!searchEnabled) return;
 
     const criteria = buildStoreTransferFa2SearchCriteria(
-      normalizeMakeYearFromForm(year),
+      yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
       lotName,
       transferDate,
       processFilter,
@@ -149,7 +158,9 @@ export default function StoreTransferFa2Page() {
       {!loading && !masterError ? (
         <p className="storeTransferFa2Hint">
           {searchExecuted
-            ? `一覧 ${filterResult.rows.length} 件（マスタ ${allRows.length} 件）`
+            ? `一覧 ${filterResult.rows.length} 件（マスタ ${allRows.length} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
@@ -219,10 +230,23 @@ export default function StoreTransferFa2Page() {
       </section>
 
       <section className="storeTransferFa2SearchPanel" aria-label="検索条件">
-        <span className="factory2FieldLabel factory2FieldLabelCompact">年度</span>
-        <div className="storeTransferFa2MakeYearWrap">
-          <Factory2MakeYearSpinner value={year} onChange={setYear} />
-        </div>
+        <fieldset className="storeTransferFa2FilterGroup storeTransferFa2SearchYearGroup">
+          <legend>年度</legend>
+          <label>
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`storeTransferFa2MakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
+            <Factory2MakeYearSpinner value={year} onChange={setYear} />
+          </div>
+        </fieldset>
 
         <span className="factory2FieldLabel factory2FieldLabelCompact">ロット名</span>
         <input
@@ -345,7 +369,11 @@ export default function StoreTransferFa2Page() {
           className="factory2DarkButton storeTransferFa2SearchButton"
           disabled={!searchEnabled || loading}
           onClick={handleSearch}
-          title={searchEnabled ? "検索条件で一覧を表示" : "年度を指定してください"}
+          title={
+            searchEnabled
+              ? "検索条件で一覧を表示"
+              : "年度チェックを入れるか、ロット名・移動日・工程・区分のいずれかを指定してください"
+          }
         >
           検索
         </button>

@@ -8,7 +8,6 @@ import type {
   PurchaseReceiveRow,
   PurchaseReceiveStatusFilter
 } from "./types";
-import { PURCHASE_RECEIVE_MAX_ROWS } from "./types";
 
 const keywordHaystack = (row: PurchaseReceiveRow): string =>
   `${row.purchase}${row.producer}${row.target}${row.targetPlan}`;
@@ -25,19 +24,45 @@ const selectedStatusCodes = (filter: PurchaseReceiveStatusFilter): Set<string> |
   return new Set(checked.map((item) => item.code));
 };
 
-export const isPurchaseReceiveSearchEnabled = (year: string): boolean => year.trim().length > 0;
+export const isPurchaseReceiveSearchEnabled = ({
+  yearFilterEnabled,
+  year,
+  keyword1,
+  keyword2,
+  keyword3,
+  purchaseDate,
+  statusFilter
+}: {
+  yearFilterEnabled: boolean;
+  year: string;
+  keyword1: string;
+  keyword2: string;
+  keyword3: string;
+  purchaseDate: string;
+  statusFilter: PurchaseReceiveStatusFilter;
+}): boolean => {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    keyword1.trim() !== "" ||
+    keyword2.trim() !== "" ||
+    keyword3.trim() !== "" ||
+    purchaseDate.trim() !== "" ||
+    anyInGroup(statusFilter)
+  );
+};
 
 export type PurchaseReceiveFilterResult = {
   rows: PurchaseReceiveRow[];
   totalCount: number;
-  truncated: boolean;
 };
 
 const matchesPurchaseReceiveRow = (
   row: PurchaseReceiveRow,
   criteria: PurchaseReceiveAppliedSearchCriteria
 ): boolean => {
-  if (!matchesPurchaseTeaYear(row.year, criteria.year)) return false;
+  if (criteria.year != null && !matchesPurchaseTeaYear(row.year, criteria.year)) return false;
 
   for (const keyword of criteria.keywords) {
     if (!matchesContains(keywordHaystack(row), keyword)) return false;
@@ -59,7 +84,6 @@ export function filterPurchaseReceiveRowsAll(
   allRows: PurchaseReceiveRow[],
   criteria: PurchaseReceiveAppliedSearchCriteria
 ): PurchaseReceiveRow[] {
-  if (!criteria.year.trim()) return [];
   return allRows.filter((row) => matchesPurchaseReceiveRow(row, criteria));
 }
 
@@ -68,8 +92,5 @@ export function filterPurchaseReceiveRows(
   criteria: PurchaseReceiveAppliedSearchCriteria
 ): PurchaseReceiveFilterResult {
   const matched = filterPurchaseReceiveRowsAll(allRows, criteria);
-  const totalCount = matched.length;
-  const truncated = totalCount > PURCHASE_RECEIVE_MAX_ROWS;
-  const rows = truncated ? matched.slice(0, PURCHASE_RECEIVE_MAX_ROWS) : matched;
-  return { rows, totalCount, truncated };
+  return { rows: matched, totalCount: matched.length };
 }

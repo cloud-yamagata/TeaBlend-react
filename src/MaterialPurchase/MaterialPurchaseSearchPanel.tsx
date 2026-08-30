@@ -1,16 +1,14 @@
 /**
  * 仕上品仕入の検索条件パネル
- * - 年度: 仕入実績情報一覧と同じ Factory2MakeYearSpinner
+ * - 年度: fieldset + チェック + Factory2MakeYearSpinner
  * - 商品No／商品名: ZOOM 選択のみ（手入力不可）
  * - 仕入先: tr_constant const_field=purchase3 の ZOOM 選択のみ
- * - 検索ボタンは年度必須（その他未指定時は当該年度の全件）
  */
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { Factory2MakeYearSpinner } from "../Factory2LotManufacture/Factory2MakeYearSpinner";
-import { normalizeMakeYearFromForm } from "../Factory2LotManufacture/factory2MakeYear";
-import {
-  isMaterialPurchaseSearchEnabled
-} from "./buildMaterialPurchaseList";
+import { getDefaultMakeYear, normalizeMakeYearFromForm } from "../Factory2LotManufacture/factory2MakeYear";
+import { isMaterialPurchaseSearchEnabled } from "./buildMaterialPurchaseList";
 import { materialPurchaseSearchDraftAtom, type MaterialPurchaseSearchFilters } from "./store";
 import "../Factory2LotManufacture/factory2LotEditModal.css";
 
@@ -26,26 +24,42 @@ export function MaterialPurchaseSearchPanel({
   onOpenSupplierZoom
 }: Props) {
   const [draft, setDraft] = useAtom(materialPurchaseSearchDraftAtom);
-  const searchEnabled = isMaterialPurchaseSearchEnabled(draft);
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
+  const yearValue = draft.year ?? getDefaultMakeYear();
+  const searchEnabled = isMaterialPurchaseSearchEnabled(
+    { ...draft, year: yearValue },
+    yearFilterEnabled
+  );
 
   const handleSearch = () => {
     onSearch({
       ...draft,
-      year: normalizeMakeYearFromForm(draft.year)
+      year: yearFilterEnabled ? normalizeMakeYearFromForm(yearValue) : null
     });
   };
 
   return (
     <section className="materialPurchaseSearchRow" aria-label="検索条件">
-      <label className="searchField materialPurchaseSearchYearField">
-        <span className="searchFieldLabel">年度</span>
-        <div className="materialPurchaseMakeYearWrap">
+      <fieldset className="materialPurchaseFilterGroup materialPurchaseSearchYearGroup">
+        <legend>年度</legend>
+        <label>
+          <input
+            type="checkbox"
+            checked={yearFilterEnabled}
+            onChange={(e) => setYearFilterEnabled(e.target.checked)}
+            aria-label="年度で絞り込む"
+          />
+        </label>
+        <div
+          className={`materialPurchaseMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+          aria-disabled={!yearFilterEnabled}
+        >
           <Factory2MakeYearSpinner
-            value={draft.year}
+            value={yearValue}
             onChange={(year) => setDraft((p) => ({ ...p, year }))}
           />
         </div>
-      </label>
+      </fieldset>
 
       <div className="searchFieldItemZoomGroup materialPurchaseItemZoomGroup">
         <label className="searchField">
@@ -121,7 +135,11 @@ export function MaterialPurchaseSearchPanel({
           type="button"
           disabled={!searchEnabled}
           onClick={handleSearch}
-          title={searchEnabled ? "検索条件で一覧を表示" : "年度を指定してください"}
+          title={
+            searchEnabled
+              ? "検索条件で一覧を表示"
+              : "年度チェックを入れるか、商品・仕入日・仕入先のいずれかを指定してください"
+          }
         >
           検索
         </button>

@@ -30,8 +30,9 @@ export type PackageLotOrganicCheck = {
   general: boolean;
 };
 
-/** 検索ボタン押下時に確定する条件 */
+/** 検索ボタン押下時に確定する条件（year が null のとき年度絞込なし） */
 export type PackageLotAppliedSearchCriteria = {
+  year: string | null;
   lotStatusCheck: PackageLotStatusCheck;
   organicCheck: PackageLotOrganicCheck;
   workDate: string | null;

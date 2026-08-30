@@ -43,7 +43,7 @@ export type Factory1RresultStatusFilter = {
 
 /** 検索ボタン押下時に確定する条件 */
 export type Factory1RresultAppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   keywords: string[];
   workDate: string | null;
   statusFilter: Factory1RresultStatusFilter;
@@ -51,4 +51,3 @@ export type Factory1RresultAppliedSearchCriteria = {
   materialUsableOnly: boolean;
 };
 
-export const FACTORY1_RRESULT_MAX_ROWS = 500;

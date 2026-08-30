@@ -29,7 +29,7 @@ export type FinishCategoryOrganicCheck = {
 
 /** 検索ボタン押下時に確定する条件（全項目を AND 結合） */
 export type FinishCategoryAppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   lotStatusRadio: FinishCategoryLotStatusRadio;
   workDate: string | null;
   lotNameQuery: string;

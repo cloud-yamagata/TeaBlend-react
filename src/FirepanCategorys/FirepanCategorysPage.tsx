@@ -47,6 +47,7 @@ export default function FirepanCategorysPage() {
   const [organicCheck, setOrganicCheck] = useAtom(firepanCategorySearchOrganicCheckAtom);
   const [appliedCriteria, setAppliedCriteria] = useAtom(firepanCategorySearchAppliedCriteriaAtom);
 
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
   const [searchMessage, setSearchMessage] = useState<string | null>(null);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<ReturnType<typeof buildFirepanCategoryEditForm> | null>(
@@ -63,14 +64,21 @@ export default function FirepanCategorysPage() {
   }, [allRows, appliedCriteria]);
 
   const searchExecuted = appliedCriteria != null;
-  const searchEnabled = isFirepanCategorySearchEnabled(year);
+  const searchEnabled = isFirepanCategorySearchEnabled({
+    yearFilterEnabled,
+    year,
+    lotStatusRadio,
+    workDate,
+    lotNameQuery,
+    organicCheck
+  });
   const hasSelection = selectedRowId != null;
 
   const handleSearch = () => {
     if (!searchEnabled) return;
 
     const criteria: FirepanCategoryAppliedSearchCriteria = {
-      year: normalizeMakeYearFromForm(year),
+      year: yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
       lotStatusRadio,
       workDate: workDate.trim() || null,
       lotNameQuery: lotNameQuery.trim(),
@@ -109,7 +117,9 @@ export default function FirepanCategorysPage() {
       {!loading && !masterError ? (
         <p className="firepanCategoryHint">
           {searchExecuted
-            ? `一覧 ${filterResult.rows.length.toLocaleString("ja-JP")} 件（マスタ ${allRows.length.toLocaleString("ja-JP")} 件）`
+            ? `一覧 ${filterResult.rows.length.toLocaleString("ja-JP")} 件（マスタ ${allRows.length.toLocaleString("ja-JP")} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
@@ -130,12 +140,23 @@ export default function FirepanCategorysPage() {
       </section>
 
       <section className="firepanCategoryToolbarRow firepanCategoryToolbarRowSearch" aria-label="検索条件">
-        <div className="firepanCategorySearchField">
-          <span className="factory2FieldLabel factory2FieldLabelCompact">年度</span>
-          <div className="firepanCategoryMakeYearWrap">
+        <fieldset className="firepanCategoryGroupBox firepanCategorySearchYearGroup">
+          <legend>年度</legend>
+          <label>
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`firepanCategoryMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
             <Factory2MakeYearSpinner value={year} onChange={setYear} />
           </div>
-        </div>
+        </fieldset>
 
         <fieldset className="firepanCategoryGroupBox">
           <legend>状態</legend>
@@ -231,7 +252,11 @@ export default function FirepanCategorysPage() {
           className="factory2DarkButton"
           disabled={!searchEnabled || loading}
           onClick={handleSearch}
-          title={searchEnabled ? "検索条件で一覧を表示" : "年度を指定してください"}
+          title={
+            searchEnabled
+              ? "検索条件で一覧を表示"
+              : "年度チェックを入れるか、状態・製造日・名称・有機のいずれかを指定してください"
+          }
         >
           検索
         </button>

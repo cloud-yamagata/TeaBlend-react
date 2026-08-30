@@ -8,7 +8,6 @@ import type {
   MaterialRresultOrganicFilter,
   MaterialRresultRow
 } from "./types";
-import { MATERIAL_RRESULT_MAX_ROWS } from "./types";
 
 const selectedOrganicCodes = (filter: MaterialRresultOrganicFilter): Set<string> | null => {
   const items = [
@@ -22,19 +21,45 @@ const selectedOrganicCodes = (filter: MaterialRresultOrganicFilter): Set<string>
   return new Set(checked.map((item) => item.code));
 };
 
-export const isMaterialRresultSearchEnabled = (year: string): boolean => year.trim().length > 0;
+export const isMaterialRresultSearchEnabled = ({
+  yearFilterEnabled,
+  year,
+  keyword1,
+  keyword2,
+  keyword3,
+  purchaseDate,
+  organicFilter
+}: {
+  yearFilterEnabled: boolean;
+  year: string;
+  keyword1: string;
+  keyword2: string;
+  keyword3: string;
+  purchaseDate: string;
+  organicFilter: MaterialRresultOrganicFilter;
+}): boolean => {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    keyword1.trim() !== "" ||
+    keyword2.trim() !== "" ||
+    keyword3.trim() !== "" ||
+    purchaseDate.trim() !== "" ||
+    anyInGroup(organicFilter)
+  );
+};
 
 export type MaterialRresultFilterResult = {
   rows: MaterialRresultRow[];
   totalCount: number;
-  truncated: boolean;
 };
 
 const matchesRow = (
   row: MaterialRresultRow,
   criteria: MaterialRresultAppliedSearchCriteria
 ): boolean => {
-  if (!matchesMakeYear(row.year, criteria.year)) return false;
+  if (criteria.year != null && !matchesMakeYear(row.year, criteria.year)) return false;
 
   if (criteria.materialUsableOnly && !row.isMaterialSelectable) return false;
 
@@ -60,11 +85,8 @@ export function filterMaterialRresultRows(
   criteria: MaterialRresultAppliedSearchCriteria
 ): MaterialRresultFilterResult {
   const matched = rows.filter((row) => matchesRow(row, criteria));
-  const totalCount = matched.length;
-  const truncated = totalCount > MATERIAL_RRESULT_MAX_ROWS;
   return {
-    rows: truncated ? matched.slice(0, MATERIAL_RRESULT_MAX_ROWS) : matched,
-    totalCount,
-    truncated
+    rows: matched,
+    totalCount: matched.length
   };
 }

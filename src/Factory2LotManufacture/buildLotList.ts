@@ -98,7 +98,7 @@ export function filterFactory2LotRows(
   const workDate = criteria.workDate?.trim() || null;
 
   return rows.filter((row) => {
-    if (!matchesMakeYear(row.makeYear, criteria.year)) {
+    if (criteria.year != null && !matchesMakeYear(row.makeYear, criteria.year)) {
       return false;
     }
 

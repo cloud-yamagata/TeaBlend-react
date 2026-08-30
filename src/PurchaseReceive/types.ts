@@ -52,10 +52,9 @@ export type PurchaseReceiveStatusFilter = {
 };
 
 export type PurchaseReceiveAppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   keywords: readonly string[];
   purchaseDate: string | null;
   statusFilter: PurchaseReceiveStatusFilter;
 };
 
-export const PURCHASE_RECEIVE_MAX_ROWS = 500;

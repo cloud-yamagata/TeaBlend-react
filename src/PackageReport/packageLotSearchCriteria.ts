@@ -21,14 +21,32 @@ export function packageLotOrganicCodesFromCheck(checks: PackageLotOrganicCheck):
   ]);
 }
 
-/** 検索ボタン活性: 状態・有機のいずれかON、製造日、商品No、商品名のいずれか */
-export function isPackageLotSearchEnabled(
-  lotStatusCheck: PackageLotStatusCheck,
-  organicCheck: PackageLotOrganicCheck,
-  workDate: string,
-  itemNo: string,
-  productName: string
-): boolean {
+type PackageLotSearchEnabledArgs = {
+  yearFilterEnabled: boolean;
+  year: string;
+  lotStatusCheck: PackageLotStatusCheck;
+  organicCheck: PackageLotOrganicCheck;
+  workDate: string;
+  itemNo: string;
+  productName: string;
+};
+
+/**
+ * 検索ボタン活性
+ * - 年度チェック ON: 年度あり、または他条件あり
+ * - 年度チェック OFF: 他条件なしでも可（全年度）
+ */
+export function isPackageLotSearchEnabled({
+  yearFilterEnabled,
+  year,
+  lotStatusCheck,
+  organicCheck,
+  workDate,
+  itemNo,
+  productName
+}: PackageLotSearchEnabledArgs): boolean {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
   const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
   return (
     anyInGroup(lotStatusCheck) ||

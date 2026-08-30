@@ -27,7 +27,7 @@ export type FirepanCategoryOrganicCheck = {
 };
 
 export type FirepanCategoryAppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   lotStatusRadio: FirepanCategoryLotStatusRadio;
   workDate: string | null;
   lotNameQuery: string;

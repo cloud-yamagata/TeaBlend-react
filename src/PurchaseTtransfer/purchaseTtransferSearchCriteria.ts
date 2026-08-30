@@ -62,9 +62,33 @@ const matchesTargetFilter = (row: PurchaseTtransferRow, filter: PurchaseTtransfe
   return false;
 };
 
-/** 検索ボタン活性（年度は必須・当年下2桁が初期値） */
-export function isPurchaseTtransferSearchEnabled(year: string): boolean {
-  return year.trim().length > 0;
+type PurchaseTtransferSearchEnabledArgs = {
+  yearFilterEnabled: boolean;
+  year: string;
+  purchaseDate: string;
+  statusFilter: PurchaseTtransferStatusFilter;
+  materialFilter: PurchaseTtransferMaterialFilter;
+  targetFilter: PurchaseTtransferTargetFilter;
+};
+
+/** 検索ボタン活性（年度チェック OFF 時は全年度可） */
+export function isPurchaseTtransferSearchEnabled({
+  yearFilterEnabled,
+  year,
+  purchaseDate,
+  statusFilter,
+  materialFilter,
+  targetFilter
+}: PurchaseTtransferSearchEnabledArgs): boolean {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    purchaseDate.trim() !== "" ||
+    anyInGroup(statusFilter) ||
+    anyInGroup(materialFilter) ||
+    anyInGroup(targetFilter)
+  );
 }
 
 export function filterPurchaseTtransferRows(
@@ -75,7 +99,7 @@ export function filterPurchaseTtransferRows(
   const purchaseDate = criteria.purchaseDate?.trim() || null;
 
   return rows.filter((row) => {
-    if (!matchesPurchaseTeaYear(row.year, criteria.year)) return false;
+    if (criteria.year != null && !matchesPurchaseTeaYear(row.year, criteria.year)) return false;
 
     if (purchaseDate && !sameCalendarDate(row.purchaseDate, purchaseDate)) {
       return false;

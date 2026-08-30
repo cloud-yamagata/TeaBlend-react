@@ -59,9 +59,9 @@ export type PurchaseTtransferTargetFilter = {
   nashi: boolean;
 };
 
-/** 検索ボタン押下時に確定する条件 */
+/** 検索ボタン押下時に確定する条件（year が null のとき年度絞込なし） */
 export type PurchaseTtransferAppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   purchaseDate: string | null;
   statusFilter: PurchaseTtransferStatusFilter;
   materialFilter: PurchaseTtransferMaterialFilter;

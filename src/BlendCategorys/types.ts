@@ -31,7 +31,7 @@ export type BlendCategoryOrganicCheck = {
 
 /** 検索ボタン押下時に確定する条件（全項目を AND 結合） */
 export type BlendCategoryAppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   lotStatusRadio: BlendCategoryLotStatusRadio;
   workDate: string | null;
   lotNameQuery: string;

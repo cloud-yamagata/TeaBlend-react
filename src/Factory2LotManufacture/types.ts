@@ -45,7 +45,7 @@ export type Factory2OrganicCheck = {
 
 /** 検索ボタン押下時に確定する2段目の条件 */
 export type Factory2AppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   lotStatusCheck: Factory2LotStatusCheck;
   processCheck: Factory2ProcessCheck;
   organicCheck: Factory2OrganicCheck;

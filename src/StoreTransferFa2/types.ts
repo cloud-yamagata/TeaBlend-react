@@ -47,9 +47,9 @@ export type StoreTransferFa2ResultTypeFilter = {
   "8": boolean;
 };
 
-/** 検索適用後の条件（年度は必須） */
+/** 検索適用後の条件（year が null のとき年度絞込なし） */
 export type StoreTransferFa2AppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   keywords: string[];
   transferDate: string | null;
   processTypes: string[];

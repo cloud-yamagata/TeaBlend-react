@@ -11,6 +11,7 @@ import { organicCodesFromCheck } from "./finishCategorySearchCriteria";
 import type {
   FinishCategoryAppliedSearchCriteria,
   FinishCategoryLotStatusRadio,
+  FinishCategoryOrganicCheck,
   FinishCategoryRow
 } from "./types";
 
@@ -25,7 +26,7 @@ const matchesFinishCategoryRow = (
   row: FinishCategoryRow,
   criteria: FinishCategoryAppliedSearchCriteria
 ): boolean => {
-  if (!matchesPurchaseTeaYear(row.makeYear, criteria.year)) return false;
+  if (criteria.year != null && !matchesPurchaseTeaYear(row.makeYear, criteria.year)) return false;
 
   const statusCode = statusCodeFromRadio(criteria.lotStatusRadio);
   if (statusCode && !normalizeLotStatusCode(row.lotStatusCode).includes(statusCode)) {
@@ -49,7 +50,31 @@ const matchesFinishCategoryRow = (
   return true;
 };
 
-export const isFinishCategorySearchEnabled = (year: string): boolean => year.trim().length > 0;
+export const isFinishCategorySearchEnabled = ({
+  yearFilterEnabled,
+  year,
+  lotStatusRadio,
+  workDate,
+  lotNameQuery,
+  organicCheck
+}: {
+  yearFilterEnabled: boolean;
+  year: string;
+  lotStatusRadio: FinishCategoryLotStatusRadio;
+  workDate: string;
+  lotNameQuery: string;
+  organicCheck: FinishCategoryOrganicCheck;
+}): boolean => {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    lotStatusRadio !== "all" ||
+    workDate.trim() !== "" ||
+    lotNameQuery.trim() !== "" ||
+    anyInGroup(organicCheck)
+  );
+};
 
 export type FinishCategoryFilterResult = {
   rows: FinishCategoryRow[];
@@ -60,9 +85,6 @@ export function filterFinishCategoryRows(
   allRows: FinishCategoryRow[],
   criteria: FinishCategoryAppliedSearchCriteria
 ): FinishCategoryFilterResult {
-  if (!criteria.year.trim()) {
-    return { rows: [], totalCount: 0 };
-  }
   const rows = allRows.filter((row) => matchesFinishCategoryRow(row, criteria));
   return { rows, totalCount: rows.length };
 }

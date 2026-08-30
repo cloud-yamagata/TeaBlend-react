@@ -8,6 +8,8 @@ import {
   type TrItemZoomFilterParams
 } from "../components/TrItemMasterZoomModal";
 import { MantineZoomProvider } from "../mantine/MantineZoomProvider";
+import { Factory2MakeYearSpinner } from "../Factory2LotManufacture/Factory2MakeYearSpinner";
+import { getDefaultMakeYear, normalizeMakeYearFromForm } from "../Factory2LotManufacture/factory2MakeYear";
 import {
   masterDataLoadingAtom,
   masterEntityCacheAtom,
@@ -22,10 +24,8 @@ import { createEmptyPackageLotEditForm } from "./createEmptyPackageLotEditForm";
 import { PackageLotEditModal } from "./PackageLotEditModal";
 import { isPackageLotStatusConfirmed } from "./packageLotDisplay";
 import { PackageLotRegistTable } from "./PackageLotRegistTable";
-import { PackageProductNameZoomField } from "./PackageProductNameZoomField";
 import type { PackageLotAppliedSearchCriteria, PackageLotRegistRow } from "./types";
 import type { PackageLotEditFormData, PackageLotEditMode } from "./packageLotEditTypes";
-import "../Factory2LotManufacture/styles.css";
 import "./packageLotRegist.css";
 
 const defaultLotStatusCheck = () => ({
@@ -48,6 +48,8 @@ export default function PackageLotRegistPage() {
   const masterError = useAtomValue(packageLotMasterErrorAtom);
 
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
+  const [year, setYear] = useState(getDefaultMakeYear);
   const [productDate, setProductDate] = useState("");
   const [searchItemNo, setSearchItemNo] = useState("");
   const [searchProductName, setSearchProductName] = useState("");
@@ -76,18 +78,21 @@ export default function PackageLotRegistPage() {
 
   const searchExecuted = appliedCriteria != null;
 
-  const searchEnabled = isPackageLotSearchEnabled(
+  const searchEnabled = isPackageLotSearchEnabled({
+    yearFilterEnabled,
+    year,
     lotStatusCheck,
     organicCheck,
-    productDate,
-    searchItemNo,
-    searchProductName
-  );
+    workDate: productDate,
+    itemNo: searchItemNo,
+    productName: searchProductName
+  });
 
   const handleSearch = () => {
     if (!searchEnabled) return;
     const itemNo = searchItemNo.trim() ? Number(searchItemNo.trim()) : null;
     setAppliedCriteria({
+      year: yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
       lotStatusCheck: { ...lotStatusCheck },
       organicCheck: { ...organicCheck },
       workDate: productDate.trim() || null,
@@ -148,48 +153,70 @@ export default function PackageLotRegistPage() {
       {!loading && !masterError ? (
         <p className="packageLotHint">
           {searchExecuted
-            ? `一覧 ${rows.length} 件（マスタ ${allRows.length} 件）`
+            ? `一覧 ${rows.length} 件（マスタ ${allRows.length} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
 
-      <nav className="packageLotMenuRow" aria-label="登録メニュー">
-        <button
-          type="button"
-          className="packageLotMenuItem"
-          onClick={openCreateModal}
-          title="製造報告書を新規登録"
-        >
-          登録
-        </button>
-        <button
-          type="button"
-          className="packageLotMenuItem"
-          disabled={!canOpenUpdate}
-          onClick={openUpdateModal}
-          title={
-            !hasSelection
-              ? "行を1件選択してください"
-              : selectedRowIsConfirmed
-                ? "確定済みのロットは表示のみ可能です"
-                : "選択行を変更モードで開く"
-          }
-        >
-          変更
-        </button>
-        <button
-          type="button"
-          className="packageLotMenuItem"
-          disabled={!canOpenView}
-          onClick={openViewModal}
-          title={canOpenView ? "選択行を表示モードで開く" : "行を1件選択してください"}
-        >
-          表示
-        </button>
-      </nav>
+      <section className="packageLotToolbarRow packageLotToolbarRowMenu" aria-label="登録メニュー">
+        <div className="packageLotMenuActions">
+          <button
+            type="button"
+            className="factory2DarkButton"
+            onClick={openCreateModal}
+            title="製造報告書を新規登録"
+          >
+            登録
+          </button>
+          <button
+            type="button"
+            className="factory2DarkButton"
+            disabled={!canOpenUpdate}
+            onClick={openUpdateModal}
+            title={
+              !hasSelection
+                ? "行を1件選択してください"
+                : selectedRowIsConfirmed
+                  ? "確定済みのロットは表示のみ可能です"
+                  : "選択行を変更モードで開く"
+            }
+          >
+            変更
+          </button>
+          <button
+            type="button"
+            className="factory2DarkButton"
+            disabled={!canOpenView}
+            onClick={openViewModal}
+            title={canOpenView ? "選択行を表示モードで開く" : "行を1件選択してください"}
+          >
+            表示
+          </button>
+        </div>
+      </section>
 
-      <section className="packageLotSearchRow" aria-label="検索条件">
-        <fieldset className="factory2GroupBox packageLotSearchGroupBox">
+      <section className="packageLotSearchPanel" aria-label="検索条件">
+        <fieldset className="packageLotSearchGroupBox packageLotSearchYearGroup">
+          <legend>年度</legend>
+          <label className="factory2CheckLabel">
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`packageLotMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
+            <Factory2MakeYearSpinner value={year} onChange={setYear} />
+          </div>
+        </fieldset>
+
+        <fieldset className="packageLotSearchGroupBox">
           <legend>状態</legend>
           <label className="factory2CheckLabel">
             <input
@@ -224,7 +251,7 @@ export default function PackageLotRegistPage() {
             確定
           </label>
         </fieldset>
-        <fieldset className="factory2GroupBox packageLotSearchGroupBox">
+        <fieldset className="packageLotSearchGroupBox">
           <legend>有機</legend>
           <label className="factory2CheckLabel">
             <input
@@ -251,40 +278,52 @@ export default function PackageLotRegistPage() {
             一般茶
           </label>
         </fieldset>
-        <label className="searchField packageLotSearchDateField">
-          <span className="searchFieldLabel">製造日</span>
-          <input
-            className="searchControl"
-            type="date"
-            value={productDate}
-            onChange={(e) => setProductDate(e.target.value)}
-          />
-        </label>
-        <PackageProductNameZoomField
-          itemNo={searchItemNo}
-          productName={searchProductName}
-          onItemNoChange={setSearchItemNo}
-          onProductNameChange={setSearchProductName}
-          onOpenZoom={() => setItemZoomOpen(true)}
+        <span className="factory2FieldLabel factory2FieldLabelCompact">製造日</span>
+        <input
+          className="factory2TextInput date factory2DateCompact"
+          type="date"
+          value={productDate}
+          onChange={(e) => setProductDate(e.target.value)}
+          aria-label="製造日"
         />
-        <div className="searchActions">
-          <button
-            type="button"
-            className="searchSubmitButton"
-            disabled={!searchEnabled}
-            onClick={handleSearch}
-            title={
-              searchEnabled
-                ? "検索条件で一覧を表示"
-                : "状態・有機のいずれかにチェック、製造日、商品No、または商品名を指定してください"
-            }
-          >
-            検索
-          </button>
-        </div>
+        <span className="factory2FieldLabel factory2FieldLabelCompact">商品No</span>
+        <input
+          className="packageLotSearchItemNoInput"
+          type="text"
+          inputMode="numeric"
+          value={searchItemNo}
+          onChange={(e) => setSearchItemNo(e.target.value)}
+          autoComplete="off"
+          aria-label="商品No"
+        />
+        <span className="factory2FieldLabel factory2FieldLabelCompact">商品名</span>
+        <input
+          className="packageLotSearchItemNameInput"
+          type="text"
+          value={searchProductName}
+          onChange={(e) => setSearchProductName(e.target.value)}
+          autoComplete="off"
+          aria-label="商品名"
+        />
+        <button type="button" className="factory2DarkButton" onClick={() => setItemZoomOpen(true)}>
+          商品名
+        </button>
+        <button
+          type="button"
+          className="factory2DarkButton packageLotSearchButton"
+          disabled={!searchEnabled}
+          onClick={handleSearch}
+          title={
+            searchEnabled
+              ? "検索条件で一覧を表示"
+              : "年度チェックを入れるか、状態・有機・製造日・商品のいずれかを指定してください"
+          }
+        >
+          検索
+        </button>
       </section>
 
-      <section className="tableWrap">
+      <section className="tableWrap packageLotTableWrap">
         <MantineZoomProvider>
           <PackageLotRegistTable
             rows={rows}

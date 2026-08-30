@@ -53,7 +53,7 @@ export const defaultPurchaseResaleListTeaLifeFilter = (): PurchaseResaleListTeaL
 
 /** 検索適用済み条件 */
 export type PurchaseResaleListAppliedSearch = {
-  year: string;
+  year: string | null;
   transfer: string;
   teaLifeFilter: PurchaseResaleListTeaLifeFilter;
   purchaseDate: string;
@@ -62,4 +62,3 @@ export type PurchaseResaleListAppliedSearch = {
   contextBidNo: string | null;
 };
 
-export const PURCHASE_RESALE_LIST_MAX_ROWS = 500;

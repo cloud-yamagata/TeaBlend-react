@@ -1,8 +1,16 @@
+import { matchesPurchaseTeaYear } from "../PurchaseTtransfer/purchaseTtransferSearchCriteria";
 import {
   packageLotOrganicCodesFromCheck,
   packageLotStatusCodesFromCheck
 } from "./packageLotSearchCriteria";
 import type { PackageLotAppliedSearchCriteria, PackageLotRegistRow } from "./types";
+
+const matchesPackageLotWorkDateYear = (workDate: string | null, filterYearText: string): boolean => {
+  if (!workDate) return false;
+  const m = workDate.match(/^(\d{4})/);
+  if (!m) return false;
+  return matchesPurchaseTeaYear(Number(m[1]), filterYearText);
+};
 
 const normalizeOrganicCode = (code: string): string => code.trim().toUpperCase();
 
@@ -27,6 +35,10 @@ export function filterPackageLotRows(
   const nameQ = criteria.productNameQuery.trim().toLowerCase();
 
   return allRows.filter((row) => {
+    if (criteria.year != null && !matchesPackageLotWorkDateYear(row.workDate, criteria.year)) {
+      return false;
+    }
+
     if (statusCodes && !statusCodes.has(row.lotStatusCode.trim())) {
       return false;
     }

@@ -2,6 +2,7 @@
  * 原料実績情報一覧（旧 MaterialRresult MainWindow 配色）
  * 第1工場生産実績情報一覧（factory1Rresult*）に合わせる
  */
+@import "../Factory2LotManufacture/factory2LotEditModal.css";
 
 .materialRresultPage .tableWrap {
   height: calc(100vh - 260px);
@@ -45,27 +46,86 @@
   white-space: nowrap;
 }
 
-.materialRresultMakeYearWrap {
+.materialRresultFilterGroup {
   display: inline-flex;
   align-items: center;
+  align-self: stretch;
+  flex-wrap: nowrap;
   flex-shrink: 0;
-}
-
-.materialRresultMakeYearWrap .f2EditMakeYearSpinner {
-  height: 30px;
-}
-
-.materialRresultMakeYearWrap .f2EditMakeYearValue {
-  width: 36px;
-  height: 30px;
+  gap: 2px 4px;
+  margin: 0;
+  padding: 2px 8px 2px 6px;
+  box-sizing: border-box;
+  background: #98fb98;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
   font-size: 14px;
 }
 
-.materialRresultMakeYearWrap .f2EditMakeYearStep {
-  min-width: 22px;
-  height: 14px;
+.materialRresultFilterGroup legend {
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2d4a2d;
+  white-space: nowrap;
+}
+
+.materialRresultFilterGroup label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.materialRresultMakeYearWrap.isDisabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.materialRresultSearchYearGroup {
+  gap: 4px 6px;
+}
+
+.materialRresultSearchYearGroup .materialRresultMakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 22px;
+}
+
+.materialRresultSearchYearGroup .materialRresultMakeYearWrap .f2EditMakeYearSpinner {
+  height: 22px;
+  width: 42px;
+  min-height: 0;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.materialRresultSearchYearGroup .materialRresultMakeYearWrap .f2EditMakeYearValue {
+  width: 26px;
+  height: 22px;
+  min-height: 0;
   padding: 0;
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.materialRresultSearchYearGroup .materialRresultMakeYearWrap .f2EditMakeYearButtons {
+  width: 16px;
+  border-left-color: #2f4f2f;
+}
+
+.materialRresultSearchYearGroup .materialRresultMakeYearWrap .f2EditMakeYearStep {
+  min-width: 16px;
+  width: 16px;
+  height: 11px;
+  flex: none;
+  padding: 0;
+  font-size: 8px;
   line-height: 1;
 }
 

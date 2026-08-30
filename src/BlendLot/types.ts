@@ -42,8 +42,9 @@ export type BlendLotOrganicCheck = {
   general: boolean;
 };
 
-/** 検索ボタン押下時に確定する条件 */
+/** 検索ボタン押下時に確定する条件（year が null のとき年度絞込なし） */
 export type BlendLotAppliedSearchCriteria = {
+  year: string | null;
   lotStatusCheck: BlendLotStatusCheck;
   organicCheck: BlendLotOrganicCheck;
   workDate: string | null;

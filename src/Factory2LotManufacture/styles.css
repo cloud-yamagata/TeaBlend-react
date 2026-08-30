@@ -2,6 +2,7 @@
  * 第二工場ロット製造登録（旧 CroudeTea MainWindow 配色・ツールバー）
  * 共通レイアウトは MonthlyPlan/styles.css を併用
  */
+@import "./factory2LotEditModal.css";
 
 .factory2LotPage .tableWrap {
   height: calc(100vh - 300px);
@@ -64,21 +65,51 @@
   flex-shrink: 0;
 }
 
-.factory2LotMakeYearWrap .f2EditMakeYearSpinner {
-  height: 30px;
+.factory2LotMakeYearWrap.isDisabled {
+  opacity: 0.45;
+  pointer-events: none;
 }
 
-.factory2LotMakeYearWrap .f2EditMakeYearValue {
-  width: 36px;
-  height: 30px;
-  font-size: 14px;
+.factory2SearchYearGroup {
+  gap: 4px 6px;
 }
 
-.factory2LotMakeYearWrap .f2EditMakeYearStep {
-  min-width: 22px;
-  height: 14px;
+.factory2SearchYearGroup .factory2LotMakeYearWrap {
+  width: 42px;
+  height: 22px;
+}
+
+.factory2SearchYearGroup .factory2LotMakeYearWrap .f2EditMakeYearSpinner {
+  height: 22px;
+  width: 42px;
+  min-height: 0;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.factory2SearchYearGroup .factory2LotMakeYearWrap .f2EditMakeYearValue {
+  width: 26px;
+  height: 22px;
+  min-height: 0;
   padding: 0;
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.factory2SearchYearGroup .factory2LotMakeYearWrap .f2EditMakeYearButtons {
+  width: 16px;
+  border-left-color: #2f4f2f;
+}
+
+.factory2SearchYearGroup .factory2LotMakeYearWrap .f2EditMakeYearStep {
+  min-width: 16px;
+  width: 16px;
+  height: 11px;
+  flex: none;
+  padding: 0;
+  font-size: 8px;
   line-height: 1;
 }
 
@@ -196,6 +227,7 @@
 }
 
 .factory2ToolbarRowSearch .factory2GroupBox {
+  align-self: stretch;
   gap: 2px 5px;
   padding: 2px 5px;
   min-height: 28px;

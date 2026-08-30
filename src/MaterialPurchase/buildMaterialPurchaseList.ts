@@ -53,9 +53,19 @@ export function buildMaterialPurchaseList(cache: MasterEntityCache): MaterialPur
   return rows;
 }
 
-/** 検索ボタン活性（年度は必須・当年下2桁が初期値） */
-export function isMaterialPurchaseSearchEnabled(filters: MaterialPurchaseSearchFilters): boolean {
-  return filters.year.trim().length > 0;
+/** 検索ボタン活性（年度チェック OFF 時は全年度可） */
+export function isMaterialPurchaseSearchEnabled(
+  filters: MaterialPurchaseSearchFilters,
+  yearFilterEnabled: boolean
+): boolean {
+  if (!yearFilterEnabled) return true;
+  if ((filters.year ?? "").trim().length > 0) return true;
+  return (
+    filters.itemNo.trim() !== "" ||
+    filters.itemName.trim() !== "" ||
+    filters.purchaseDate.trim() !== "" ||
+    filters.supplier.trim() !== ""
+  );
 }
 
 /**
@@ -78,7 +88,9 @@ export function filterMaterialPurchaseRows(
   const supplierQ = filters.supplier.trim().toLowerCase();
 
   return rows.filter((row) => {
-    if (!matchesMakeYear(purchaseDateCalendarYear(row.purchaseDate), filters.year)) return false;
+    if (filters.year != null && !matchesMakeYear(purchaseDateCalendarYear(row.purchaseDate), filters.year)) {
+      return false;
+    }
     if (hasItemNo && row.itemNo !== itemNo) return false;
     if (nameQ && !row.itemName.toLowerCase().includes(nameQ)) return false;
     if (purchaseDate && !sameCalendarDate(row.purchaseDate, purchaseDate)) return false;

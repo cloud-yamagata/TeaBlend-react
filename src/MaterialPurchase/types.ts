@@ -14,7 +14,7 @@ export type MaterialPurchaseRow = {
 
 export type MaterialPurchaseSearchFilters = {
   /** 年度（当年下2桁〜00。仕入日の暦年と照合） */
-  year: string;
+  year: string | null;
   /** 商品No（入力テキスト。未指定は空） */
   itemNo: string;
   /** 商品名（部分一致） */

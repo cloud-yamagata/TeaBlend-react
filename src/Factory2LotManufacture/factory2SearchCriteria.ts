@@ -48,7 +48,32 @@ export function organicCodesFromCheck(checks: Factory2OrganicCheck): Set<string>
   ]);
 }
 
-/** 検索ボタン活性（年度は必須・当年下2桁が初期値） */
-export function isFactory2SearchEnabled(year: string): boolean {
-  return year.trim().length > 0;
+/** 検索ボタン活性（年度チェック OFF 時は全年度可） */
+export function isFactory2SearchEnabled({
+  yearFilterEnabled,
+  year,
+  lotStatusCheck,
+  processCheck,
+  organicCheck,
+  workDate,
+  itemName
+}: {
+  yearFilterEnabled: boolean;
+  year: string;
+  lotStatusCheck: Factory2LotStatusCheck;
+  processCheck: Factory2ProcessCheck;
+  organicCheck: Factory2OrganicCheck;
+  workDate: string;
+  itemName: string;
+}): boolean {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    anyInGroup(lotStatusCheck) ||
+    anyInGroup(processCheck) ||
+    anyInGroup(organicCheck) ||
+    workDate.trim() !== "" ||
+    itemName.trim() !== ""
+  );
 }

@@ -31,3 +31,39 @@ export const defaultBlendLotOrganicCheck = (): BlendLotOrganicCheck => ({
   pesticideFree: false,
   general: false
 });
+
+type BlendLotSearchEnabledArgs = {
+  yearFilterEnabled: boolean;
+  year: string;
+  lotStatusCheck: BlendLotStatusCheck;
+  organicCheck: BlendLotOrganicCheck;
+  workDate: string;
+  itemNo: string;
+  itemName: string;
+};
+
+/**
+ * 検索ボタン活性
+ * - 年度チェック ON: 年度あり、または他条件あり
+ * - 年度チェック OFF: 他条件なしでも可（全年度）
+ */
+export function isBlendLotSearchEnabled({
+  yearFilterEnabled,
+  year,
+  lotStatusCheck,
+  organicCheck,
+  workDate,
+  itemNo,
+  itemName
+}: BlendLotSearchEnabledArgs): boolean {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    anyInGroup(lotStatusCheck) ||
+    anyInGroup(organicCheck) ||
+    workDate.trim() !== "" ||
+    itemNo.trim() !== "" ||
+    itemName.trim() !== ""
+  );
+}

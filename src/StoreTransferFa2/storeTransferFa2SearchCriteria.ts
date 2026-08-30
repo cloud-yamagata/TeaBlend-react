@@ -56,7 +56,7 @@ const resolveResultTypes = (filter: StoreTransferFa2ResultTypeFilter): string[] 
 };
 
 export function buildStoreTransferFa2SearchCriteria(
-  year: string,
+  year: string | null,
   lotName: string,
   transferDate: string,
   processFilter: StoreTransferFa2ProcessFilter,
@@ -74,9 +74,40 @@ export function buildStoreTransferFa2SearchCriteria(
   };
 }
 
-/** 検索ボタン活性（年度は必須） */
-export function isStoreTransferFa2SearchEnabled(year: string): boolean {
-  return year.trim().length > 0;
+type StoreTransferFa2SearchEnabledArgs = {
+  yearFilterEnabled: boolean;
+  year: string;
+  lotName: string;
+  transferDate: string;
+  processFilter: StoreTransferFa2ProcessFilter;
+  transferTypeFilter: StoreTransferFa2TransferTypeFilter;
+  resultTypeFilter: StoreTransferFa2ResultTypeFilter;
+};
+
+/**
+ * 検索ボタン活性
+ * - 年度チェック ON: 年度あり、または他条件あり
+ * - 年度チェック OFF: 他条件なしでも可（全年度）
+ */
+export function isStoreTransferFa2SearchEnabled({
+  yearFilterEnabled,
+  year,
+  lotName,
+  transferDate,
+  processFilter,
+  transferTypeFilter,
+  resultTypeFilter
+}: StoreTransferFa2SearchEnabledArgs): boolean {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    lotName.trim() !== "" ||
+    transferDate.trim() !== "" ||
+    anyInGroup(processFilter) ||
+    anyInGroup(transferTypeFilter) ||
+    anyInGroup(resultTypeFilter)
+  );
 }
 
 const toFilterResult = (matched: StoreTransferFa2Row[]): StoreTransferFa2FilterResult => ({
@@ -92,7 +123,10 @@ export function filterStoreTransferFa2Rows(
   const transferSet = new Set(criteria.transferTypes);
   const resultSet = new Set(criteria.resultTypes);
 
-  let matched = rows.filter((row) => matchesTransferDateYear(row.transferDate, criteria.year));
+  let matched =
+    criteria.year == null
+      ? [...rows]
+      : rows.filter((row) => matchesTransferDateYear(row.transferDate, criteria.year!));
 
   if (criteria.keywords.length > 0) {
     matched = matched.filter((row) => matchesLotNameKeywords(row.lotName, criteria.keywords));

@@ -1,94 +1,186 @@
 /**
- * パッケージロット登録（PackageReport MainWindow.xaml 配色）
+ * パッケージロット登録ページ用スタイル（入出庫情報メンテナンスに準拠）
  */
 @import "../MonthlyPlan/styles.css";
+@import "../Factory2LotManufacture/styles.css";
+@import "../Factory2LotManufacture/factory2LotEditModal.css";
 
 .packageLotPage .tableWrap {
-  height: calc(100vh - 220px);
-  min-height: 280px;
+  height: calc(100vh - 300px);
 }
 
-.packageLotMenuRow {
+.packageLotTableWrap {
   display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.packageLotToolbarRow {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+}
+
+.packageLotToolbarRowMenu {
+  background: #f0fff0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.packageLotMenuActions {
+  display: inline-flex;
   gap: 4px;
-  margin-bottom: 6px;
-  padding: 4px 0;
+  flex-shrink: 0;
+}
+
+.packageLotSearchPanel {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+  padding: 4px 6px;
   background: var(--teablend-table-body-bg, honeydew);
-  border-bottom: 1px solid #d6dee8;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+  overflow-x: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.packageLotMenuItem {
-  min-width: 50px;
-  height: 30px;
-  padding: 0 12px;
+.packageLotSearchPanel .packageLotSearchGroupBox {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  gap: 2px 4px;
+  margin: 0;
+  padding: 2px 8px 2px 6px;
+  box-sizing: border-box;
+  background: #98fb98;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
   font-size: 14px;
-  border: 1px solid #333;
-  background: #f0f0f0;
-  cursor: pointer;
 }
 
-.packageLotMenuItem:disabled {
-  opacity: 0.55;
-  cursor: default;
+.packageLotSearchPanel .packageLotSearchGroupBox legend {
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2d4a2d;
+  white-space: nowrap;
+}
+
+.packageLotSearchPanel .packageLotSearchGroupBox label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.packageLotSearchYearGroup {
+  gap: 4px 6px;
+}
+
+.packageLotSearchYearGroup .packageLotMakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 22px;
+}
+
+.packageLotMakeYearWrap.isDisabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.packageLotSearchYearGroup .packageLotMakeYearWrap .f2EditMakeYearSpinner {
+  height: 22px;
+  width: 42px;
+  min-height: 0;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.packageLotSearchYearGroup .packageLotMakeYearWrap .f2EditMakeYearValue {
+  width: 26px;
+  height: 22px;
+  min-height: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.packageLotSearchYearGroup .packageLotMakeYearWrap .f2EditMakeYearButtons {
+  width: 16px;
+  border-left-color: #2f4f2f;
+}
+
+.packageLotSearchYearGroup .packageLotMakeYearWrap .f2EditMakeYearStep {
+  min-width: 16px;
+  width: 16px;
+  height: 11px;
+  flex: none;
+  padding: 0;
+  font-size: 8px;
+  line-height: 1;
+}
+
+.packageLotSearchPanel .factory2TextInput.date {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.packageLotSearchItemNoInput {
+  width: 72px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.packageLotSearchItemNameInput {
+  width: 180px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.packageLotSearchButton {
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .packageLotHint {
   margin: 0 0 8px;
   font-size: 13px;
-  color: #475569;
+  color: #64748b;
 }
 
-/** 検索条件（第3工場仕上茶移動推移表の searchPanel に近い 1 行レイアウト） */
-.packageLotSearchRow {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-end;
-  gap: 10px 12px;
-  margin-bottom: 8px;
-  padding: 8px 12px;
-  background: var(--teablend-table-body-bg, honeydew);
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  overflow-x: auto;
+.packageLotHint.error,
+.packageLotPage .error {
+  color: #b91c1c;
 }
 
-.packageLotSearchRow .packageLotSearchGroupBox {
-  flex-shrink: 0;
-  align-self: center;
-  margin: 0;
-}
-
-.packageLotSearchDateField {
-  flex-shrink: 0;
-}
-
-.packageLotSearchDateField .searchControl {
-  min-width: 140px;
-}
-
-.packageLotSearchRow .packageLotItemZoomGroup {
-  flex: 1 1 auto;
-  min-width: 0;
-  flex-wrap: nowrap;
-}
-
-.packageLotSearchRow .searchControlItemNo {
-  min-width: 90px;
-  width: 90px;
-}
-
-.packageLotSearchRow .packageLotItemZoomGroup .searchField:nth-child(2) {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.packageLotSearchRow .packageLotItemZoomGroup .searchControlItemName {
-  width: 100%;
-  min-width: 120px;
-}
-
-.packageLotSearchRow .searchActions {
-  flex-shrink: 0;
-  margin-left: 0;
+.packageLotPage .toolbar .title {
+  color: #2f4f2f;
 }

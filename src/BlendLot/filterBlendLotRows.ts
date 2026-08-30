@@ -1,8 +1,16 @@
+import { matchesPurchaseTeaYear } from "../PurchaseTtransfer/purchaseTtransferSearchCriteria";
 import {
   blendLotOrganicCodesFromCheck,
   blendLotStatusCodesFromCheck
 } from "./blendLotSearchCriteria";
 import type { BlendLotAppliedSearchCriteria, BlendLotListRow } from "./types";
+
+const matchesBlendLotWorkDateYear = (workDate: string | null, filterYearText: string): boolean => {
+  if (!workDate) return false;
+  const m = workDate.match(/^(\d{4})/);
+  if (!m) return false;
+  return matchesPurchaseTeaYear(Number(m[1]), filterYearText);
+};
 
 const normalizeOrganicCode = (code: string): string => code.trim().toUpperCase();
 
@@ -27,6 +35,10 @@ export function filterBlendLotRows(
   const nameQ = criteria.itemNameQuery.trim().toLowerCase();
 
   return allRows.filter((row) => {
+    if (criteria.year != null && !matchesBlendLotWorkDateYear(row.workDate, criteria.year)) {
+      return false;
+    }
+
     if (statusCodes && !statusCodes.has(row.lotStatusCode.trim())) {
       return false;
     }

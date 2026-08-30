@@ -81,6 +81,7 @@ export default function Factory2LotManufacturePage() {
   const [lotStatusCheck, setLotStatusCheck] = useAtom(factory2LotSearchLotStatusAtom);
   const [processCheck, setProcessCheck] = useAtom(factory2LotSearchProcessCheckAtom);
   const [organicCheck, setOrganicCheck] = useAtom(factory2LotSearchOrganicCheckAtom);
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
 
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
 
@@ -93,12 +94,20 @@ export default function Factory2LotManufacturePage() {
 
   const searchExecuted = appliedCriteria != null;
 
-  const searchEnabled = isFactory2SearchEnabled(year);
+  const searchEnabled = isFactory2SearchEnabled({
+    yearFilterEnabled,
+    year,
+    lotStatusCheck,
+    processCheck,
+    organicCheck,
+    workDate: productDate,
+    itemName: selectedItemName
+  });
 
   const handleSearch = () => {
     if (!searchEnabled) return;
     setAppliedCriteria({
-      year: normalizeMakeYearFromForm(year),
+      year: yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
       lotStatusCheck: { ...lotStatusCheck },
       processCheck: { ...processCheck },
       organicCheck: { ...organicCheck },
@@ -200,7 +209,9 @@ export default function Factory2LotManufacturePage() {
       {!loading && !masterError ? (
         <p className="factory2Hint">
           {searchExecuted
-            ? `一覧 ${rows.length} 件（マスタ ${allRows.length} 件）`
+            ? `一覧 ${rows.length} 件（マスタ ${allRows.length} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
@@ -304,10 +315,23 @@ export default function Factory2LotManufacturePage() {
       </section>
 
       <section className="factory2ToolbarRow factory2ToolbarRowSearch" aria-label="検索条件">
-        <span className="factory2FieldLabel factory2FieldLabelCompact">年度</span>
-        <div className="factory2LotMakeYearWrap">
-          <Factory2MakeYearSpinner value={year} onChange={setYear} />
-        </div>
+        <fieldset className="factory2GroupBox factory2SearchYearGroup">
+          <legend>年度</legend>
+          <label className="factory2CheckLabel">
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`factory2LotMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
+            <Factory2MakeYearSpinner value={year} onChange={setYear} />
+          </div>
+        </fieldset>
 
         <fieldset className="factory2GroupBox">
           <legend>状態</legend>
@@ -397,7 +421,7 @@ export default function Factory2LotManufacturePage() {
             title={
               searchEnabled
                 ? "検索条件で一覧を表示"
-                : "年度を指定してください"
+                : "年度チェックを入れるか、状態・工程・有機・製造日・仕上茶のいずれかを指定してください"
             }
           >
             検索

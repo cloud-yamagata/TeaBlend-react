@@ -8,7 +8,6 @@ import type {
   Factory1RresultRow,
   Factory1RresultStatusFilter
 } from "./types";
-import { FACTORY1_RRESULT_MAX_ROWS } from "./types";
 
 const selectedStatusCodes = (filter: Factory1RresultStatusFilter): Set<string> | null => {
   const items = [
@@ -22,19 +21,45 @@ const selectedStatusCodes = (filter: Factory1RresultStatusFilter): Set<string> |
   return new Set(checked.map((item) => item.code));
 };
 
-export const isFactory1RresultSearchEnabled = (year: string): boolean => year.trim().length > 0;
+export const isFactory1RresultSearchEnabled = ({
+  yearFilterEnabled,
+  year,
+  keyword1,
+  keyword2,
+  keyword3,
+  workDate,
+  statusFilter
+}: {
+  yearFilterEnabled: boolean;
+  year: string;
+  keyword1: string;
+  keyword2: string;
+  keyword3: string;
+  workDate: string;
+  statusFilter: Factory1RresultStatusFilter;
+}): boolean => {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
+  const anyInGroup = (checks: Record<string, boolean>) => Object.values(checks).some(Boolean);
+  return (
+    keyword1.trim() !== "" ||
+    keyword2.trim() !== "" ||
+    keyword3.trim() !== "" ||
+    workDate.trim() !== "" ||
+    anyInGroup(statusFilter)
+  );
+};
 
 export type Factory1RresultFilterResult = {
   rows: Factory1RresultRow[];
   totalCount: number;
-  truncated: boolean;
 };
 
 const matchesRow = (
   row: Factory1RresultRow,
   criteria: Factory1RresultAppliedSearchCriteria
 ): boolean => {
-  if (!matchesMakeYear(row.year, criteria.year)) return false;
+  if (criteria.year != null && !matchesMakeYear(row.year, criteria.year)) return false;
 
   if (criteria.materialUsableOnly && !row.isMaterialSelectable) return false;
 
@@ -60,11 +85,8 @@ export function filterFactory1RresultRows(
   criteria: Factory1RresultAppliedSearchCriteria
 ): Factory1RresultFilterResult {
   const matched = rows.filter((row) => matchesRow(row, criteria));
-  const totalCount = matched.length;
-  const truncated = totalCount > FACTORY1_RRESULT_MAX_ROWS;
   return {
-    rows: truncated ? matched.slice(0, FACTORY1_RRESULT_MAX_ROWS) : matched,
-    totalCount,
-    truncated
+    rows: matched,
+    totalCount: matched.length
   };
 }

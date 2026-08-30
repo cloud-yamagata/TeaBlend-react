@@ -1,6 +1,8 @@
 /**
  * 火入個別情報登録（旧 FirepanCategorys MainWindow 配色）
  */
+@import "../Factory2LotManufacture/factory2LotEditModal.css";
+
 .firepanCategoryPage .tableWrap {
   height: calc(100vh - 280px);
 }
@@ -30,40 +32,61 @@
   background: var(--teablend-table-body-bg, honeydew);
 }
 
-.firepanCategorySearchField {
+.firepanCategoryMakeYearWrap.isDisabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.firepanCategorySearchYearGroup {
+  gap: 4px 6px;
+}
+
+.firepanCategorySearchYearGroup .firepanCategoryMakeYearWrap {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   flex-shrink: 0;
+  width: 42px;
+  height: 22px;
 }
 
-.firepanCategoryMakeYearWrap {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
+.firepanCategorySearchYearGroup .firepanCategoryMakeYearWrap .f2EditMakeYearSpinner {
+  height: 22px;
+  width: 42px;
+  min-height: 0;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
 }
 
-.firepanCategoryMakeYearWrap .f2EditMakeYearSpinner {
-  height: 30px;
-}
-
-.firepanCategoryMakeYearWrap .f2EditMakeYearValue {
-  width: 36px;
-  height: 30px;
-  font-size: 14px;
-}
-
-.firepanCategoryMakeYearWrap .f2EditMakeYearStep {
-  min-width: 22px;
-  height: 14px;
+.firepanCategorySearchYearGroup .firepanCategoryMakeYearWrap .f2EditMakeYearValue {
+  width: 26px;
+  height: 22px;
+  min-height: 0;
   padding: 0;
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.firepanCategorySearchYearGroup .firepanCategoryMakeYearWrap .f2EditMakeYearButtons {
+  width: 16px;
+  border-left-color: #2f4f2f;
+}
+
+.firepanCategorySearchYearGroup .firepanCategoryMakeYearWrap .f2EditMakeYearStep {
+  min-width: 16px;
+  width: 16px;
+  height: 11px;
+  flex: none;
+  padding: 0;
+  font-size: 8px;
   line-height: 1;
 }
 
 .firepanCategoryGroupBox {
   display: inline-flex;
   align-items: center;
+  align-self: stretch;
   flex-wrap: nowrap;
   gap: 6px 10px;
   padding: 4px 10px;

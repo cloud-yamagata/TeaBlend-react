@@ -51,6 +51,7 @@ export default function BlendCategorysPage() {
   const [organicCheck, setOrganicCheck] = useAtom(blendCategorySearchOrganicCheckAtom);
   const [appliedCriteria, setAppliedCriteria] = useAtom(blendCategorySearchAppliedCriteriaAtom);
 
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
   const [searchMessage, setSearchMessage] = useState<string | null>(null);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<ReturnType<typeof buildBlendCategoryEditForm> | null>(
@@ -67,14 +68,21 @@ export default function BlendCategorysPage() {
   }, [allRows, appliedCriteria]);
 
   const searchExecuted = appliedCriteria != null;
-  const searchEnabled = isBlendCategorySearchEnabled(year);
+  const searchEnabled = isBlendCategorySearchEnabled({
+    yearFilterEnabled,
+    year,
+    lotStatusRadio,
+    workDate,
+    lotNameQuery,
+    organicCheck
+  });
   const hasSelection = selectedRowId != null;
 
   const handleSearch = () => {
     if (!searchEnabled) return;
 
     const criteria: BlendCategoryAppliedSearchCriteria = {
-      year: normalizeMakeYearFromForm(year),
+      year: yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
       lotStatusRadio,
       workDate: workDate.trim() || null,
       lotNameQuery: lotNameQuery.trim(),
@@ -113,7 +121,9 @@ export default function BlendCategorysPage() {
       {!loading && !masterError ? (
         <p className="blendCategoryHint">
           {searchExecuted
-            ? `一覧 ${filterResult.rows.length.toLocaleString("ja-JP")} 件（マスタ ${allRows.length.toLocaleString("ja-JP")} 件）`
+            ? `一覧 ${filterResult.rows.length.toLocaleString("ja-JP")} 件（マスタ ${allRows.length.toLocaleString("ja-JP")} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
@@ -134,12 +144,23 @@ export default function BlendCategorysPage() {
       </section>
 
       <section className="blendCategoryToolbarRow blendCategoryToolbarRowSearch" aria-label="検索条件">
-        <div className="blendCategorySearchField">
-          <span className="factory2FieldLabel factory2FieldLabelCompact">年度</span>
-          <div className="blendCategoryMakeYearWrap">
+        <fieldset className="blendCategoryGroupBox blendCategorySearchYearGroup">
+          <legend>年度</legend>
+          <label>
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`blendCategoryMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
             <Factory2MakeYearSpinner value={year} onChange={setYear} />
           </div>
-        </div>
+        </fieldset>
 
         <fieldset className="blendCategoryGroupBox">
           <legend>状態</legend>
@@ -242,7 +263,11 @@ export default function BlendCategorysPage() {
           className="factory2DarkButton"
           disabled={!searchEnabled || loading}
           onClick={handleSearch}
-          title={searchEnabled ? "検索条件で一覧を表示" : "年度を指定してください"}
+          title={
+            searchEnabled
+              ? "検索条件で一覧を表示"
+              : "年度チェックを入れるか、状態・製造日・名称・有機のいずれかを指定してください"
+          }
         >
           検索
         </button>

@@ -26,7 +26,8 @@ import {
 import { buildBlendLotList, findBlendLotByListRowId } from "./buildBlendLotList";
 import {
   defaultBlendLotOrganicCheck,
-  defaultBlendLotStatusCheck
+  defaultBlendLotStatusCheck,
+  isBlendLotSearchEnabled
 } from "./blendLotSearchCriteria";
 import { filterBlendLotRows } from "./filterBlendLotRows";
 import {
@@ -64,6 +65,8 @@ import {
   updateBlendLotAtom
 } from "./store";
 import { TrItemMasterZoomModal, type TrItemZoomFilterParams } from "../components/TrItemMasterZoomModal";
+import { Factory2MakeYearSpinner } from "../Factory2LotManufacture/Factory2MakeYearSpinner";
+import { getDefaultMakeYear, normalizeMakeYearFromForm } from "../Factory2LotManufacture/factory2MakeYear";
 import { EditModalOverlay } from "../components/modal";
 import {
   formatPackageLotStatus,
@@ -800,6 +803,8 @@ export default function BlendLotPage() {
   const [editorMode, setEditorMode] = useState<LotEditorMode>("create");
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editorInitialLot, setEditorInitialLot] = useState<TeBlendLot | null>(null);
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
+  const [year, setYear] = useState(getDefaultMakeYear);
   const [workDate, setWorkDate] = useState("");
   const [searchItemNo, setSearchItemNo] = useState("");
   const [searchItemName, setSearchItemName] = useState("");
@@ -816,10 +821,21 @@ export default function BlendLotPage() {
   }, [allRows, appliedCriteria]);
 
   const searchExecuted = appliedCriteria != null;
+  const searchEnabled = isBlendLotSearchEnabled({
+    yearFilterEnabled,
+    year,
+    lotStatusCheck,
+    organicCheck,
+    workDate,
+    itemNo: searchItemNo,
+    itemName: searchItemName
+  });
 
   const handleSearch = () => {
+    if (!searchEnabled) return;
     const itemNo = searchItemNo.trim() ? Number(searchItemNo.trim()) : null;
     setAppliedCriteria({
+      year: yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
       lotStatusCheck: { ...lotStatusCheck },
       organicCheck: { ...organicCheck },
       workDate: workDate.trim() || null,
@@ -882,48 +898,70 @@ export default function BlendLotPage() {
       {!masterLoading && !masterError ? (
         <p className="blendLotHint">
           {searchExecuted
-            ? `一覧 ${rows.length} 件（マスタ ${allRows.length} 件）`
-            : "「検索」を押すと一覧を表示します（条件は任意）"}
+            ? `一覧 ${rows.length} 件（マスタ ${allRows.length} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
+            : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
 
-      <nav className="blendLotMenuRow" aria-label="登録メニュー">
-        <button
-          type="button"
-          className="blendLotMenuItem"
-          onClick={openCreateEditor}
-          title="ブレンドロットを新規登録"
-        >
-          登録
-        </button>
-        <button
-          type="button"
-          className="blendLotMenuItem"
-          disabled={!canOpenUpdate}
-          onClick={openUpdateEditor}
-          title={
-            !hasSelection
-              ? "行を1件選択してください"
-              : isSelectedLotConfirmed
-                ? "ロット状態が確定のため変更できません"
-                : "選択行を変更モードで開く"
-          }
-        >
-          変更
-        </button>
-        <button
-          type="button"
-          className="blendLotMenuItem"
-          disabled={!hasSelection}
-          onClick={openViewEditor}
-          title={hasSelection ? "選択行を表示モードで開く" : "行を1件選択してください"}
-        >
-          表示
-        </button>
-      </nav>
+      <section className="blendLotToolbarRow blendLotToolbarRowMenu" aria-label="操作メニュー">
+        <div className="blendLotMenuActions">
+          <button
+            type="button"
+            className="factory2DarkButton"
+            onClick={openCreateEditor}
+            title="ブレンドロットを新規登録"
+          >
+            登録
+          </button>
+          <button
+            type="button"
+            className="factory2DarkButton"
+            disabled={!canOpenUpdate}
+            onClick={openUpdateEditor}
+            title={
+              !hasSelection
+                ? "行を1件選択してください"
+                : isSelectedLotConfirmed
+                  ? "ロット状態が確定のため変更できません"
+                  : "選択行を変更モードで開く"
+            }
+          >
+            変更
+          </button>
+          <button
+            type="button"
+            className="factory2DarkButton"
+            disabled={!hasSelection}
+            onClick={openViewEditor}
+            title={hasSelection ? "選択行を表示モードで開く" : "行を1件選択してください"}
+          >
+            表示
+          </button>
+        </div>
+      </section>
 
-      <section className="blendLotSearchRow" aria-label="検索条件">
-        <fieldset className="factory2GroupBox blendLotSearchGroupBox">
+      <section className="blendLotSearchPanel" aria-label="検索条件">
+        <fieldset className="blendLotSearchGroupBox blendLotSearchYearGroup">
+          <legend>年度</legend>
+          <label className="factory2CheckLabel">
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`blendLotMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
+            <Factory2MakeYearSpinner value={year} onChange={setYear} />
+          </div>
+        </fieldset>
+
+        <fieldset className="blendLotSearchGroupBox">
           <legend>状態</legend>
           <label className="factory2CheckLabel">
             <input
@@ -950,7 +988,7 @@ export default function BlendLotPage() {
             確定
           </label>
         </fieldset>
-        <fieldset className="factory2GroupBox blendLotSearchGroupBox">
+        <fieldset className="blendLotSearchGroupBox">
           <legend>有機</legend>
           <label className="factory2CheckLabel">
             <input
@@ -977,57 +1015,52 @@ export default function BlendLotPage() {
             一般茶
           </label>
         </fieldset>
-        <label className="searchField blendLotSearchDateField">
-          <span className="searchFieldLabel">製造日</span>
-          <input
-            className="searchControl"
-            type="date"
-            value={workDate}
-            onChange={(e) => setWorkDate(e.target.value)}
-          />
-        </label>
-        <div className="searchFieldItemZoomGroup">
-          <label className="searchField">
-            <span className="searchFieldLabel">商品NO</span>
-            <input
-              className="searchControl searchControlItemNo"
-              type="text"
-              inputMode="numeric"
-              value={searchItemNo}
-              onChange={(e) => setSearchItemNo(e.target.value)}
-              autoComplete="off"
-            />
-          </label>
-          <label className="searchField">
-            <span className="searchFieldLabel">商品名</span>
-            <input
-              className="searchControl searchControlItemName"
-              type="text"
-              value={searchItemName}
-              onChange={(e) => setSearchItemName(e.target.value)}
-              autoComplete="off"
-            />
-          </label>
-          <div className="searchField searchFieldZoomButtonWrap">
-            <span className="searchFieldLabel searchFieldLabelSpacer">&nbsp;</span>
-            <button type="button" className="zoomOpenButton" onClick={() => setItemZoomOpen(true)}>
-              仕上茶
-            </button>
-          </div>
-        </div>
-        <div className="searchActions">
-          <button
-            type="button"
-            className="searchSubmitButton"
-            onClick={handleSearch}
-            title="検索条件で一覧を表示（条件なしの場合は全件）"
-          >
-            検索
-          </button>
-        </div>
+        <span className="factory2FieldLabel factory2FieldLabelCompact">製造日</span>
+        <input
+          className="factory2TextInput date factory2DateCompact"
+          type="date"
+          value={workDate}
+          onChange={(e) => setWorkDate(e.target.value)}
+          aria-label="製造日"
+        />
+        <span className="factory2FieldLabel factory2FieldLabelCompact">商品NO</span>
+        <input
+          className="blendLotSearchItemNoInput"
+          type="text"
+          inputMode="numeric"
+          value={searchItemNo}
+          onChange={(e) => setSearchItemNo(e.target.value)}
+          autoComplete="off"
+          aria-label="商品NO"
+        />
+        <span className="factory2FieldLabel factory2FieldLabelCompact">商品名</span>
+        <input
+          className="blendLotSearchItemNameInput"
+          type="text"
+          value={searchItemName}
+          onChange={(e) => setSearchItemName(e.target.value)}
+          autoComplete="off"
+          aria-label="商品名"
+        />
+        <button type="button" className="factory2DarkButton" onClick={() => setItemZoomOpen(true)}>
+          仕上茶
+        </button>
+        <button
+          type="button"
+          className="factory2DarkButton blendLotSearchButton"
+          disabled={!searchEnabled}
+          onClick={handleSearch}
+          title={
+            searchEnabled
+              ? "検索条件で一覧を表示"
+              : "年度チェックを入れるか、状態・有機・製造日・商品のいずれかを指定してください"
+          }
+        >
+          検索
+        </button>
       </section>
 
-      <section className="tableWrap">
+      <section className="tableWrap blendLotTableWrap">
         <MantineZoomProvider>
           <BlendLotListMantineTable
             rows={rows}

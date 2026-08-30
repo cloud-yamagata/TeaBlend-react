@@ -37,15 +37,13 @@ export type MaterialRresultOrganicFilter = {
 
 /** 検索ボタン押下時に確定する条件 */
 export type MaterialRresultAppliedSearchCriteria = {
-  year: string;
+  year: string | null;
   keywords: string[];
   purchaseDate: string | null;
   organicFilter: MaterialRresultOrganicFilter;
   /** 原料登録可能な行のみ */
   materialUsableOnly: boolean;
 };
-
-export const MATERIAL_RRESULT_MAX_ROWS = 500;
 
 export function materialRresultRowId(
   year: number,

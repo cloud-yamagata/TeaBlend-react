@@ -2,6 +2,7 @@
  * 第2工場入出庫実績（旧 StoreTransferFa2 MainWindow 配色）
  * 共通ボタン・ラベルは Factory2LotManufacture/styles.css を併用
  */
+@import "../Factory2LotManufacture/factory2LotEditModal.css";
 
 .storeTransferFa2Page .tableWrap {
   height: calc(100vh - 300px);
@@ -55,12 +56,13 @@
 .storeTransferFa2FilterGroup {
   display: inline-flex;
   align-items: center;
+  align-self: stretch;
   flex-wrap: nowrap;
   flex-shrink: 0;
   gap: 2px 4px;
   margin: 0;
   padding: 2px 8px 2px 6px;
-  min-height: 30px;
+  box-sizing: border-box;
   background: #98fb98;
   border: 1px solid #2f4f2f;
   border-radius: 4px;
@@ -85,6 +87,57 @@
 
 .storeTransferFa2FilterGroupResult {
   flex-shrink: 0;
+}
+
+.storeTransferFa2SearchYearGroup {
+  gap: 4px 6px;
+}
+
+.storeTransferFa2SearchYearGroup .storeTransferFa2MakeYearWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 22px;
+}
+
+.storeTransferFa2MakeYearWrap.isDisabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.storeTransferFa2SearchYearGroup .storeTransferFa2MakeYearWrap .f2EditMakeYearSpinner {
+  height: 22px;
+  width: 42px;
+  min-height: 0;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.storeTransferFa2SearchYearGroup .storeTransferFa2MakeYearWrap .f2EditMakeYearValue {
+  width: 26px;
+  height: 22px;
+  min-height: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.storeTransferFa2SearchYearGroup .storeTransferFa2MakeYearWrap .f2EditMakeYearButtons {
+  width: 16px;
+  border-left-color: #2f4f2f;
+}
+
+.storeTransferFa2SearchYearGroup .storeTransferFa2MakeYearWrap .f2EditMakeYearStep {
+  min-width: 16px;
+  width: 16px;
+  height: 11px;
+  flex: none;
+  padding: 0;
+  font-size: 8px;
+  line-height: 1;
 }
 
 .storeTransferFa2SearchButton {
@@ -112,37 +165,6 @@
 
 .storeTransferFa2Page .toolbar .title {
   color: #2f4f2f;
-}
-
-.storeTransferFa2MakeYearWrap {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  width: 46px;
-}
-
-.storeTransferFa2MakeYearWrap .f2EditMakeYearSpinner {
-  height: 30px;
-  width: 46px;
-}
-
-.storeTransferFa2MakeYearWrap .f2EditMakeYearValue {
-  width: 28px;
-  height: 30px;
-  font-size: 14px;
-}
-
-.storeTransferFa2MakeYearWrap .f2EditMakeYearButtons {
-  width: 18px;
-}
-
-.storeTransferFa2MakeYearWrap .f2EditMakeYearStep {
-  min-width: 18px;
-  width: 18px;
-  height: 14px;
-  padding: 0;
-  font-size: 10px;
-  line-height: 1;
 }
 
 .storeTransferFa2SearchPanel .factory2TextInput.date {

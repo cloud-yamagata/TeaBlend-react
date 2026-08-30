@@ -1,6 +1,6 @@
 /**
  * 第1工場生産実績情報一覧（旧 Factory1Rresult MainWindow.xaml）
- * 検索エリアは仕入実績情報一覧（年度スピナー＋単一検索）に合わせる。
+ * 検索エリアは BlendLot / 仕入実績と同様（年度 fieldset＋チェック＋スピナー）。
  */
 import { atom, useAtomValue } from "jotai";
 import { useCallback, useMemo, useState } from "react";
@@ -28,7 +28,6 @@ import type {
   Factory1RresultRow,
   Factory1RresultStatusFilter
 } from "./types";
-import { FACTORY1_RRESULT_MAX_ROWS } from "./types";
 import "../MonthlyPlan/styles.css";
 import "../Factory2LotManufacture/styles.css";
 import "./styles.css";
@@ -58,6 +57,7 @@ export default function Factory1RresultPage() {
   const masterError = useAtomValue(factory1RresultMasterErrorAtom);
   const allRows = useAtomValue(factory1RresultRowsAtom);
 
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
   const [year, setYear] = useState(getDefaultMakeYear);
   const [keyword1, setKeyword1] = useState("");
   const [keyword2, setKeyword2] = useState("");
@@ -75,13 +75,21 @@ export default function Factory1RresultPage() {
 
   const filterResult = useMemo(() => {
     if (!appliedCriteria) {
-      return { rows: [], totalCount: 0, truncated: false };
+      return { rows: [], totalCount: 0 };
     }
     return filterFactory1RresultRows(allRows, appliedCriteria);
   }, [allRows, appliedCriteria]);
 
   const searchExecuted = appliedCriteria != null;
-  const searchEnabled = isFactory1RresultSearchEnabled(year);
+  const searchEnabled = isFactory1RresultSearchEnabled({
+    yearFilterEnabled,
+    year,
+    keyword1,
+    keyword2,
+    keyword3,
+    workDate,
+    statusFilter
+  });
   const hasSelection = selectedRowId != null;
   const hasBulkTransferSelection = bulkTransferSelectedIds.size > 0;
   const hasMaterialSelection = materialSelectedIds.size > 0;
@@ -100,15 +108,9 @@ export default function Factory1RresultPage() {
 
   const handleSearch = () => {
     if (!searchEnabled) return;
-    const normalizedYear = normalizeMakeYearFromForm(year);
-    if (!normalizedYear) {
-      window.alert("半角数値で入力してください。");
-      return;
-    }
-    setYear(normalizedYear);
 
     const criteria: Factory1RresultAppliedSearchCriteria = {
-      year: normalizedYear,
+      year: yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
       keywords: resolveKeywords(keyword1, keyword2, keyword3),
       workDate: workDate.trim() || null,
       statusFilter: { ...statusFilter },
@@ -120,13 +122,7 @@ export default function Factory1RresultPage() {
     setSelectedRowId(null);
     setBulkTransferSelectedIds(new Set());
     setMaterialSelectedIds(new Set());
-    setSearchMessage(
-      result.totalCount === 0
-        ? "対象データがありません"
-        : result.truncated
-          ? `対象データ：${result.totalCount.toLocaleString("ja-JP")}件。${FACTORY1_RRESULT_MAX_ROWS}件以内になるよう、条件を絞ってください`
-          : null
-    );
+    setSearchMessage(result.totalCount === 0 ? "対象データがありません" : null);
   };
 
   const handleBulkTransferToggle = useCallback((row: Factory1RresultRow) => {
@@ -194,7 +190,9 @@ export default function Factory1RresultPage() {
                 filterResult.totalCount !== filterResult.rows.length
                   ? `（該当 ${filterResult.totalCount.toLocaleString("ja-JP")} 件）`
                   : ""
-              }（マスタ ${allRows.length.toLocaleString("ja-JP")} 件）`
+              }（マスタ ${allRows.length.toLocaleString("ja-JP")} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
@@ -262,10 +260,23 @@ export default function Factory1RresultPage() {
       </section>
 
       <section className="factory1RresultToolbarRow factory1RresultToolbarRowSearch" aria-label="検索条件">
-        <span className="factory1RresultFieldLabel">年度</span>
-        <div className="factory1RresultMakeYearWrap">
-          <Factory2MakeYearSpinner value={year} onChange={setYear} />
-        </div>
+        <fieldset className="factory1RresultFilterGroup factory1RresultSearchYearGroup">
+          <legend>年度</legend>
+          <label>
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`factory1RresultMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
+            <Factory2MakeYearSpinner value={year} onChange={setYear} />
+          </div>
+        </fieldset>
 
         <span className="factory1RresultFieldLabel">キーワード</span>
         <input
@@ -341,7 +352,11 @@ export default function Factory1RresultPage() {
           className="factory2DarkButton"
           disabled={!searchEnabled || loading}
           onClick={handleSearch}
-          title={searchEnabled ? "検索条件で一覧を表示" : "年度を指定してください"}
+          title={
+            searchEnabled
+              ? "検索条件で一覧を表示"
+              : "年度チェックを入れるか、キーワード・生産日・残量状況のいずれかを指定してください"
+          }
         >
           検索
         </button>

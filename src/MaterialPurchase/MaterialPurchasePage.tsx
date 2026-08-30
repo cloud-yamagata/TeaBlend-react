@@ -57,6 +57,7 @@ export default function MaterialPurchasePage() {
   const setSearchExecuted = useSetAtom(materialPurchaseSearchExecutedAtom);
   const setDraft = useSetAtom(materialPurchaseSearchDraftAtom);
   const searchExecuted = useAtomValue(materialPurchaseSearchExecutedAtom);
+  const appliedFilters = useAtomValue(materialPurchaseSearchAppliedFiltersAtom);
   const draft = useAtomValue(materialPurchaseSearchDraftAtom);
 
   const [itemZoomOpen, setItemZoomOpen] = useState(false);
@@ -93,8 +94,7 @@ export default function MaterialPurchasePage() {
           itemName: resolved.itemName
         }
       : { ...filters };
-    if (!next.year.trim()) return;
-    setDraft(next);
+    setDraft({ ...next, year: next.year ?? draft.year ?? "" });
     setAppliedFilters(next);
     setSearchExecuted(true);
     setSelectedRowId(null);
@@ -174,7 +174,9 @@ export default function MaterialPurchasePage() {
         <h1 className="title">仕上品仕入登録</h1>
         <p className="materialPurchaseHint">
           {searchExecuted
-            ? `一覧 ${rows.length.toLocaleString("ja-JP")} 件（マスタ ${allRows.length.toLocaleString("ja-JP")} 件）`
+            ? `一覧 ${rows.length.toLocaleString("ja-JP")} 件（マスタ ${allRows.length.toLocaleString("ja-JP")} 件${
+                appliedFilters.year == null ? "・全年度" : `・年度 ${appliedFilters.year}`
+              }）`
             : `マスタ ${allRows.length.toLocaleString("ja-JP")} 件`}
         </p>
       </header>
