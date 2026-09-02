@@ -23,7 +23,7 @@ groups:
         path: /material-purchase
   - title: システム管理
     items:
-      - label: 入出庫実績
+      - label: 第3工場入出庫情報メンテナンス
         screenKey: StoreTransfer
       - label: 商品マスタメンテナンス
         screenKey: ItemCorrect
@@ -79,8 +79,6 @@ groups:
         screenKey: Factory1Rresult
       - label: 原料実績情報一覧
         screenKey: MaterialRresult
-      - label: 第二工場ロット製造登録(21年以降)
-        screenKey: CroudeTeaTest
   - title: 各種レポート
     items:
       - label: ロット別仕上茶在庫一覧

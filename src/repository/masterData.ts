@@ -216,6 +216,17 @@ export const storeTransferFa2MasterErrorAtom = atom((get) => {
   return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
 });
 
+const STORE_TRANSFER_SCREEN_FAILURE_IDS = new Set<string>(["te_store_transfer"]);
+
+/** 第3工場入出庫情報メンテナンスで見せるマスタエラー */
+export const storeTransferMasterErrorAtom = atom((get) => {
+  const list = get(masterDataFailuresAtom).filter((f) =>
+    STORE_TRANSFER_SCREEN_FAILURE_IDS.has(f.id)
+  );
+  if (list.length === 0) return null;
+  return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
+});
+
 const MATERIAL_PURCHASE_SCREEN_FAILURE_IDS = new Set<string>([
   "te_material_purchase",
   "tr_item",

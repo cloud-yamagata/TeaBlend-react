@@ -41,6 +41,7 @@ import BlendCategorysPage from "./BlendCategorys/BlendCategorysPage";
 import FinishCategorysPage from "./FinishCategorys/FinishCategorysPage";
 import FirepanCategorysPage from "./FirepanCategorys/FirepanCategorysPage";
 import StoreTransferFa2Page from "./StoreTransferFa2/StoreTransferFa2Page";
+import StoreTransferPage from "./StoreTransfer/StoreTransferPage";
 import Factory1RresultPage from "./Factory1Rresult/Factory1RresultPage";
 import MaterialRresultPage from "./MaterialRresult/MaterialRresultPage";
 import DummyPage from "./pages/DummyPage";
@@ -320,6 +321,9 @@ export default function App() {
     }
     if (screenKey === "FirepanCategorys") {
       return <FirepanCategorysPage />;
+    }
+    if (screenKey === "StoreTransfer") {
+      return <StoreTransferPage />;
     }
     if (screenKey === "StoreTransferFa2") {
       return <StoreTransferFa2Page />;

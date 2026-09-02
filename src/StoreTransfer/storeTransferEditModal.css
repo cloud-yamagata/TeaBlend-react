@@ -1,0 +1,54 @@
+/**
+ * 第3工場入出庫情報編集モーダル固有スタイル
+ */
+
+.stEditOverlay.ptEditOverlay {
+  z-index: 1300;
+}
+
+.stEditPanel.ptEditPanel {
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 24px);
+}
+
+.stEditCodeNameRow {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.stEditCodeNameRow .stEditCode {
+  width: 56px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.stEditCodeNameRow .stEditName {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.stEditReadonlyHighlight.ptEditInput,
+.stEditReadonlyHighlight.ptEditTextarea,
+.stEditCodeNameRow .ptEditInputDisabled {
+  background: #9acd32 !important;
+}
+
+.ptEditForm .ptEditTextarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 4px 8px;
+  border: 1px solid #4169e1;
+  border-radius: 2px;
+  font-size: 14px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.ptEditForm .ptEditTextarea.inputError,
+.ptEditForm .ptEditInput.inputError,
+.ptEditForm .ptEditSelect.inputError {
+  box-shadow: inset 0 0 0 2px #c62828 !important;
+  background: #fff5f5 !important;
+}

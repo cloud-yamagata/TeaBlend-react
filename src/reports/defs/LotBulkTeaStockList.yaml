@@ -73,42 +73,42 @@ grid:
       align: center
     - field: factory2_product_quantity
       header: 第2工場生産
-      minWidth: 120
+      minWidth: 70
       flex: 1.0
-      align: center
+      align: right
     - field: factory3_product_quantity
       header: 第3工場生産
-      minWidth: 120
+      minWidth: 70
       flex: 1.0
-      align: center
+      align: right
     - field: factory3_receive_quantity
       header: 第3工場受入
-      minWidth: 120
+      minWidth: 70
       flex: 1.0
-      align: center
+      align: right
     - field: factory3_input_quantity
       header: 第3工場投入
-      minWidth: 120
+      minWidth: 70
       flex: 1.0
-      align: center
+      align: right
     - field: factory3_ship_quantity
       header: 第3工場出荷
-      minWidth: 120
+      minWidth: 70
       flex: 1.0
-      align: center
+      align: right
     - field: factory3_adjust_quantity
       header: 第3工場調整
-      minWidth: 120
+      minWidth: 70
       flex: 1.0
-      align: center
+      align: right
     - field: factory2_stock
       header: 第2工場在庫
-      minWidth: 120
+      minWidth: 70
       flex: 1.0
-      align: center
+      align: right
     - field: factory3_stock
       header: 第3工場在庫
-      minWidth: 120
+      minWidth: 70
       flex: 1.0
-      align: center
+      align: right
 

@@ -45,6 +45,8 @@ export const listTablePagination = {
   firepanCategorys: LIST_TABLE_PAGE_SIZE,
   /** 第2工場入出庫実績 */
   storeTransferFa2: LIST_TABLE_PAGE_SIZE,
+  /** 第3工場入出庫実績 */
+  storeTransfer: LIST_TABLE_PAGE_SIZE,
   /** 仕上品仕入登録 */
   materialPurchase: LIST_TABLE_PAGE_SIZE,
   /** 第1工場生産実績情報一覧 */
