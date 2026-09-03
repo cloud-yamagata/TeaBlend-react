@@ -169,6 +169,11 @@ body {
   background: #15803d;
 }
 
+.searchSubmitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .status {
   margin: 8px 0 12px;
 }

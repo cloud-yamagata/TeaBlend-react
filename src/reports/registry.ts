@@ -22,14 +22,33 @@ import monthlySalesPlanYaml from "./defs/MonthlySalesPlan.yaml?raw";
 
 type Align = "left" | "center" | "right";
 
+export type ReportFilterLayout = "blendLot";
+
+export type ReportCheckGroupOption = {
+  key: string;
+  label: string;
+  field: string;
+};
+
 export type ReportFilterDef = {
   key: string;
   label: string;
-  type: "text" | "date" | "itemZoom";
+  type: "text" | "date" | "itemZoom" | "makeYear" | "checkGroup";
   default?: string;
   placeholder?: string;
   zoomCodeKey?: string;
+  /** itemZoom + blendLot レイアウト時の ZOOM ボタンラベル */
+  zoomButtonLabel?: string;
+  /** checkGroup の選択肢 */
+  options?: ReportCheckGroupOption[];
 };
+
+/** makeYear フィルタの有効フラグキー（値は "1" / "0"） */
+export const reportMakeYearEnabledKey = (key: string): string => `${key}_enabled`;
+
+/** checkGroup の各チェックキー（値は "1" / "0"） */
+export const reportCheckGroupOptionKey = (groupKey: string, optionKey: string): string =>
+  `${groupKey}_${optionKey}`;
 
 export type ReportColumnDef = {
   field: string;
@@ -62,6 +81,11 @@ export type ReportDef = {
   version: number;
   reportId: string;
   title: string;
+  filterLayout?: ReportFilterLayout;
+  /** true … 初回のみ API 全件取得、以降はフロント側で検索 */
+  fetchOnce?: boolean;
+  /** true … 検索パネル下に 実行 / Excel出力 / 抽出クリア を配置 */
+  actionBar?: boolean;
   filters: ReportFilterDef[];
   extract: ReportExtractDef[];
   grid: ReportGridDef;
@@ -73,17 +97,37 @@ const isRecord = (v: unknown): v is Record<string, unknown> =>
 const asString = (v: unknown): string | null => (typeof v === "string" ? v : v == null ? null : String(v));
 const asNumber = (v: unknown): number | null => (typeof v === "number" && Number.isFinite(v) ? v : v == null ? null : Number(v));
 
+const decodeCheckGroupOption = (raw: unknown): ReportCheckGroupOption | null => {
+  if (!isRecord(raw)) return null;
+  const key = asString(raw.key);
+  const label = asString(raw.label);
+  const field = asString(raw.field);
+  if (!key || !label || !field) return null;
+  return { key, label, field };
+};
+
 const decodeFilter = (raw: unknown): ReportFilterDef | null => {
   if (!isRecord(raw)) return null;
   const key = asString(raw.key);
   const label = asString(raw.label);
   const type = asString(raw.type);
   if (!key || !label) return null;
-  if (type !== "text" && type !== "date" && type !== "itemZoom") return null;
+  if (type === "checkGroup") {
+    const optionsRaw = raw.options;
+    if (!Array.isArray(optionsRaw)) return null;
+    const options = optionsRaw
+      .map(decodeCheckGroupOption)
+      .filter((v): v is ReportCheckGroupOption => Boolean(v));
+    if (options.length === 0) return null;
+    return { key, label, type: "checkGroup", options };
+  }
+  if (type !== "text" && type !== "date" && type !== "itemZoom" && type !== "makeYear") return null;
   const def = raw.default == null ? undefined : asString(raw.default) ?? undefined;
   const placeholder = raw.placeholder == null ? undefined : asString(raw.placeholder) ?? undefined;
   const zoomCodeKey = raw.zoomCodeKey == null ? undefined : asString(raw.zoomCodeKey) ?? undefined;
-  return { key, label, type, default: def, placeholder, zoomCodeKey };
+  const zoomButtonLabel =
+    raw.zoomButtonLabel == null ? undefined : asString(raw.zoomButtonLabel) ?? undefined;
+  return { key, label, type, default: def, placeholder, zoomCodeKey, zoomButtonLabel };
 };
 
 const decodeColumn = (raw: unknown): ReportColumnDef | null => {
@@ -122,6 +166,11 @@ const decodeReport = (yamlText: string): ReportDef => {
   const version = Number(raw.version);
   const reportId = asString(raw.reportId);
   const title = asString(raw.title);
+  const filterLayoutRaw = asString(raw.filterLayout);
+  const filterLayout: ReportFilterLayout | undefined =
+    filterLayoutRaw === "blendLot" ? "blendLot" : undefined;
+  const fetchOnce = raw.fetchOnce === true || raw.fetchOnce === "true";
+  const actionBar = raw.actionBar === true || raw.actionBar === "true";
   const filtersRaw = raw.filters;
   const extractRaw = raw.extract;
   const gridRaw = raw.grid;
@@ -153,6 +202,9 @@ const decodeReport = (yamlText: string): ReportDef => {
     version,
     reportId,
     title,
+    filterLayout,
+    fetchOnce: fetchOnce || undefined,
+    actionBar: actionBar || undefined,
     filters,
     extract,
     grid: { rowId: { mode: "concat", fields: rowIdFields }, options, columns }

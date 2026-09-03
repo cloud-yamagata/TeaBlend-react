@@ -128,6 +128,33 @@
   border-left-color: #2f4f2f;
 }
 
+.blendLotSearchPanelActions {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.blendLotSearchPanel .reportSearchPanelSubmit {
+  height: 30px;
+  min-width: 56px;
+  padding: 0 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.blendLotSearchPanel .reportSearchPanelActions {
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.blendLotSearchPanel .reportSearchPanelActions .actionButton {
+  height: 30px;
+}
+
 .blendLotSearchYearGroup .blendLotMakeYearWrap .f2EditMakeYearStep {
   min-width: 16px;
   width: 16px;

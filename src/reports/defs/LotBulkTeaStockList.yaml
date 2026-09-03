@@ -1,8 +1,30 @@
 version: 1
 reportId: LotBulkTeaStockList
 title: ロット別仕上茶在庫一覧
+filterLayout: blendLot
+fetchOnce: true
+actionBar: true
 
 filters:
+  - key: make_year
+    label: 年度
+    type: makeYear
+  - key: quantity_filter
+    label: 移動量
+    type: checkGroup
+    options:
+      - key: factory2_product
+        label: 第2工場生産量
+        field: factory2_product_quantity
+      - key: factory3_product
+        label: 第3工場生産量
+        field: factory3_product_quantity
+      - key: factory2_stock
+        label: 第2工場在庫量
+        field: factory2_stock
+      - key: factory3_stock
+        label: 第3工場在庫量
+        field: factory3_stock
   - key: item_no
     label: 商品NO
     type: text
@@ -14,6 +36,7 @@ filters:
     default: ""
     placeholder: 商品名を入力
     zoomCodeKey: item_no
+    zoomButtonLabel: 仕上茶
 
 grid:
   rowId:

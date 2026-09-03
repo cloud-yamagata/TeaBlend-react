@@ -5,6 +5,7 @@
 import { useState } from "react";
 import type { ReportExtractDef } from "../registry";
 import type { ReportExtractValues } from "../applyReportExtract";
+import ReportActionBar from "./ReportActionBar";
 
 type Props = {
   extract: ReportExtractDef[];
@@ -116,21 +117,14 @@ export default function ReportExtractPanel({
                 </label>
               );
             })}
-            <div className="searchActions reportExtractActions">
-              {onRun ? (
-                <button className="searchSubmitButton" type="button" onClick={onRun} disabled={actionsDisabled}>
-                  実行
-                </button>
-              ) : null}
-              {onExcel ? (
-                <button className="actionButton" type="button" onClick={onExcel} disabled={excelButtonDisabled}>
-                  Excel出力
-                </button>
-              ) : null}
-              <button className="actionButton" type="button" onClick={onClear} disabled={fieldsDisabled}>
-                抽出クリア
-              </button>
-            </div>
+            <ReportActionBar
+              onRun={onRun}
+              onExcel={onExcel}
+              onClear={onClear}
+              runDisabled={actionsDisabled}
+              excelDisabled={excelButtonDisabled}
+              clearDisabled={fieldsDisabled}
+            />
           </div>
           <p className="reportExtractHint">
             表示 {shownCount.toLocaleString("ja-JP")} 件 / 取得 {fetchedCount.toLocaleString("ja-JP")} 件
