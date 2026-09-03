@@ -57,6 +57,8 @@ export const listTablePagination = {
   itemCorrect: LIST_TABLE_PAGE_SIZE,
   /** 直送先マスタメンテナンス */
   shipmentCorrect: LIST_TABLE_PAGE_SIZE,
+  /** 転売先マスタメンテナンス */
+  resaleCorrect: LIST_TABLE_PAGE_SIZE,
   /** 商品原料対照表メンテナンス */
   itemBomCorrect: LIST_TABLE_PAGE_SIZE,
   /** 販売計画商品マスタメンテナンス */

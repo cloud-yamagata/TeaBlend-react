@@ -262,6 +262,15 @@ export const shipmentCorrectMasterErrorAtom = atom((get) => {
   return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
 });
 
+const RESALE_CORRECT_SCREEN_FAILURE_IDS = new Set<string>(["tr_resale"]);
+
+/** 転売先マスタメンテナンスで見せるマスタエラー */
+export const resaleCorrectMasterErrorAtom = atom((get) => {
+  const list = get(masterDataFailuresAtom).filter((f) => RESALE_CORRECT_SCREEN_FAILURE_IDS.has(f.id));
+  if (list.length === 0) return null;
+  return `マスタ取得でエラー: ${list.map((f) => `${f.id}: ${f.message}`).join(" / ")}`;
+});
+
 const ITEM_BOM_CORRECT_SCREEN_FAILURE_IDS = new Set<string>(["tr_item_bom", "tr_item"]);
 
 /** 商品原料対照表メンテナンスで見せるマスタエラー */
