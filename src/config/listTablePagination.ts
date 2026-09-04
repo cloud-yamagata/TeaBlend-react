@@ -49,6 +49,8 @@ export const listTablePagination = {
   storeTransfer: LIST_TABLE_PAGE_SIZE,
   /** 仕上品仕入登録 */
   materialPurchase: LIST_TABLE_PAGE_SIZE,
+  /** 仕上品受入登録 */
+  partsReceive: LIST_TABLE_PAGE_SIZE,
   /** 第1工場生産実績情報一覧 */
   factory1Rresult: LIST_TABLE_PAGE_SIZE,
   /** 原料実績情報一覧 */

@@ -23,6 +23,7 @@ import { BrowserRouter, Navigate, NavLink, Route, Routes, useLocation } from "re
 import { bootstrapMasterDataAtom } from "./repository/masterData";
 import MaterialListPage from "./MaterialList/MaterialListPage";
 import MaterialPurchasePage from "./MaterialPurchase/MaterialPurchasePage";
+import PartsReceivePage from "./PartsReceive/PartsReceivePage";
 import ItemCorrectPage from "./ItemCorrect/ItemCorrectPage";
 import SalesPlanItemCorrectPage from "./SalesPlanItemCorrect/SalesPlanItemCorrectPage";
 import MonthlySalesPlanCorrectPage from "./MonthlySalesPlanCorrect/MonthlySalesPlanCorrectPage";
@@ -332,6 +333,9 @@ export default function App() {
     if (screenKey === "MaterialPurchase") {
       return <MaterialPurchasePage />;
     }
+    if (screenKey === "PartsReceive") {
+      return <PartsReceivePage />;
+    }
     if (screenKey === "ItemCorrect") {
       return <ItemCorrectPage />;
     }
@@ -395,6 +399,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/material-list" element={<MaterialListPage />} />
             <Route path="/material-purchase" element={<MaterialPurchasePage />} />
+            <Route path="/parts-receive" element={<PartsReceivePage />} />
             <Route path="/purchase-resale-list" element={<PurchaseResaleListPage />} />
             <Route path="/monthly-plan" element={<MonthlyPlanPage />} />
             <Route path="/blend-lot" element={<BlendLotPage />} />

@@ -18,6 +18,7 @@ groups:
         screenKey: StoreAllocation
       - label: 仕上品受入
         screenKey: PartsReceive
+        path: /parts-receive
       - label: 仕上品仕入
         screenKey: MaterialPurchase
         path: /material-purchase
