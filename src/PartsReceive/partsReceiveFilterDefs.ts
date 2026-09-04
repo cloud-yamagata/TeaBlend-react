@@ -20,6 +20,12 @@ export const PARTS_RECEIVE_FILTER_DEFS: ReportFilterDef[] = [
     ]
   },
   {
+    key: "product_date",
+    label: "製造日",
+    type: "date",
+    default: ""
+  },
+  {
     key: "item_no",
     label: "商品NO",
     type: "text",

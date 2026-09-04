@@ -33,6 +33,16 @@ const matchesProductDateYear = (productDate: string | null, filterYearText: stri
   return matchesMakeYear(Number(m[1]), filterYearText);
 };
 
+const sameCalendarDate = (value: string | null, yyyyMmDd: string): boolean => {
+  if (!value || !yyyyMmDd) return false;
+  const norm = (s: string) => {
+    const m = s.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+    if (!m) return s;
+    return `${m[1]}-${String(Number(m[2])).padStart(2, "0")}-${String(Number(m[3])).padStart(2, "0")}`;
+  };
+  return norm(value) === norm(yyyyMmDd);
+};
+
 const toFilterRecord = (row: PartsReceiveRow): Record<string, unknown> => ({
   item_no: row.itemNo,
   product_name: row.itemName,
@@ -49,6 +59,7 @@ export function filterPartsReceiveRows(
 ): PartsReceiveRow[] {
   const makeYearEnabled = values[reportMakeYearEnabledKey("make_year")] === "1";
   const yearText = makeYearEnabled ? normalizeMakeYearFromForm(String(values.make_year ?? "")) : null;
+  const productDate = String(values.product_date ?? "").trim();
   const itemNo = String(values.item_no ?? "").trim();
   const itemName = String(values.item_name ?? "").trim();
 
@@ -56,6 +67,10 @@ export function filterPartsReceiveRows(
 
   if (yearText) {
     rows = rows.filter((row) => matchesProductDateYear(row.productDate, yearText));
+  }
+
+  if (productDate) {
+    rows = rows.filter((row) => sameCalendarDate(row.productDate, productDate));
   }
 
   if (itemNo !== "") {
