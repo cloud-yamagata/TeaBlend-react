@@ -10,12 +10,8 @@ groups:
         screenKey: PackageReport
       - label: 仕上品在庫調整
         screenKey: PartsAdjust
-      - label: 各種レポート
-        screenKey: SqlReport
   - title: 出荷／受け入れ
     items:
-      - label: 出荷引当
-        screenKey: StoreAllocation
       - label: 仕上品受入
         screenKey: PartsReceive
         path: /parts-receive
@@ -91,8 +87,6 @@ groups:
         screenKey: Factory2LotStockTransition
       - label: 第3工場仕上茶移動推移表
         screenKey: Factory3BulkTeaTransition
-      - label: 第３工場商品茶移動推移
-        screenKey: Factory3ItemTeaTransition
       - label: 通常品ロット使用実績
         screenKey: UsuallLotUusedAadoptedList
       - label: 月別仕上茶前年対比使用量
@@ -101,5 +95,3 @@ groups:
         screenKey: BulkTeaYearOnYearProduction
       - label: 月次販売計画実績一覧表
         screenKey: MonthlySalesPlan
-      - label: ロット構造一覧
-        screenKey: LotStructureList
