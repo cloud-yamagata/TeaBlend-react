@@ -34,7 +34,7 @@ export function filterLotBulkTeaStockListRows(
   if (itemNo !== "") {
     rows = rows.filter((row) => String(row.item_no ?? "").trim() === itemNo);
   } else if (itemName !== "") {
-    rows = rows.filter((row) => String(row.product_name ?? "") === itemName);
+    rows = rows.filter((row) => String(row.item_name ?? "") === itemName);
   }
 
   for (const f of filterDefs) {

@@ -24,6 +24,7 @@ import { bootstrapMasterDataAtom } from "./repository/masterData";
 import MaterialListPage from "./MaterialList/MaterialListPage";
 import MaterialPurchasePage from "./MaterialPurchase/MaterialPurchasePage";
 import PartsReceivePage from "./PartsReceive/PartsReceivePage";
+import LotDividePage from "./LotDivide/LotDividePage";
 import ItemCorrectPage from "./ItemCorrect/ItemCorrectPage";
 import SalesPlanItemCorrectPage from "./SalesPlanItemCorrect/SalesPlanItemCorrectPage";
 import MonthlySalesPlanCorrectPage from "./MonthlySalesPlanCorrect/MonthlySalesPlanCorrectPage";
@@ -336,6 +337,9 @@ export default function App() {
     if (screenKey === "PartsReceive") {
       return <PartsReceivePage />;
     }
+    if (screenKey === "LotDivide") {
+      return <LotDividePage />;
+    }
     if (screenKey === "ItemCorrect") {
       return <ItemCorrectPage />;
     }
@@ -400,6 +404,7 @@ export default function App() {
             <Route path="/material-list" element={<MaterialListPage />} />
             <Route path="/material-purchase" element={<MaterialPurchasePage />} />
             <Route path="/parts-receive" element={<PartsReceivePage />} />
+            <Route path="/lot-divide" element={<LotDividePage />} />
             <Route path="/purchase-resale-list" element={<PurchaseResaleListPage />} />
             <Route path="/monthly-plan" element={<MonthlyPlanPage />} />
             <Route path="/blend-lot" element={<BlendLotPage />} />

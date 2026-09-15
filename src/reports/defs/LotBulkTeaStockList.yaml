@@ -58,7 +58,7 @@ grid:
       minWidth: 90
       flex: 0.8
       align: center
-    - field: product_name
+    - field: item_name
       header: 商品名
       minWidth: 200
       flex: 1.6

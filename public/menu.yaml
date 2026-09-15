@@ -63,6 +63,7 @@ groups:
         screenKey: StoreTransferFa2
       - label: ロット分割
         screenKey: LotDivide
+        path: /lot-divide
       - label: 転売先マスタメンテナンス
         screenKey: ResaleCorrect
   - title: 仕入原料管理
