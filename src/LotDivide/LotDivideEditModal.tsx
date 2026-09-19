@@ -1,5 +1,6 @@
 /**
  * ロット分割による原料登録モーダル（WPF EditWindow 相当）
+ * 配色・必須赤枠は原料実績情報メンテナンス（ptEdit*）に合わせる
  * 再投入 / 転売
  */
 import { useSetAtom } from "jotai";
@@ -13,7 +14,8 @@ import { materialRegistLotDivide } from "../repositories/lotDivideRepository";
 import { useBusyTask } from "../ui/useBusyTask";
 import { refreshLotDivideMastersAtom } from "./refreshLotDivideMasters";
 import type { LotDivideEditForm } from "./types";
-import "../MaterialPurchase/materialPurchaseEditModal.css";
+import "../PurchaseTtransfer/purchaseTtransferEditModal.css";
+import "./lotDivideEditModal.css";
 
 type Props = {
   open: boolean;
@@ -28,13 +30,16 @@ type FormRowProps = {
   children: ReactNode;
 };
 
+type MandatoryKey = "divideDate" | "divideQuantity" | "divideLotName" | "reason";
+
 function FormRow({ label, required = false, children }: FormRowProps) {
+  const labelText = required ? `*${label}` : label;
   return (
-    <div className="mpEditRow">
-      <div className={`mpEditLabelCell${required ? " required" : ""}`}>
-        <span className="mpEditLabelText">{required ? `*${label}` : label}</span>
+    <div className="ptEditRow">
+      <div className={`ptEditLabelCell${required ? " required" : ""}`}>
+        <span className="ptEditLabelText">{labelText}</span>
       </div>
-      <div className="mpEditValueCell">{children}</div>
+      <div className="ptEditValueCell">{children}</div>
     </div>
   );
 }
@@ -44,12 +49,29 @@ const todayYmd = (): string => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
+const isMandatoryEmpty = (key: MandatoryKey, form: LotDivideEditForm, forResale = false): boolean => {
+  switch (key) {
+    case "divideDate":
+      return form.divideDate.trim() === "";
+    case "divideQuantity": {
+      const qty = Number(form.divideQuantity.replace(/,/g, ""));
+      return form.divideQuantity.trim() === "" || !Number.isFinite(qty) || qty <= 0;
+    }
+    case "divideLotName":
+      return form.divideLotName.trim() === "";
+    case "reason":
+      return forResale && form.reason.trim() === "";
+  }
+};
+
 export function LotDivideEditModal({ open, initialForm, onClose, onDone }: Props) {
   const runBusy = useBusyTask();
   const refreshMasters = useSetAtom(refreshLotDivideMastersAtom);
   const [form, setForm] = useState<LotDivideEditForm>(initialForm);
   const [localError, setLocalError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  /** 転売押下後に事由未入力を赤枠表示する */
+  const [resaleAttempted, setResaleAttempted] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -60,12 +82,14 @@ export function LotDivideEditModal({ open, initialForm, onClose, onDone }: Props
     });
     setLocalError("");
     setSubmitting(false);
+    setResaleAttempted(false);
   }, [open, initialForm]);
 
   if (!open) return null;
 
   const qty = Number(form.divideQuantity.replace(/,/g, ""));
   const stock = Number(form.factory2Stock.replace(/,/g, ""));
+  /** 変更前と同じ活性条件（分割日・分割ロット名・分割重量が揃ったとき） */
   const canSubmit =
     !submitting &&
     form.lotNo > 0 &&
@@ -75,20 +99,23 @@ export function LotDivideEditModal({ open, initialForm, onClose, onDone }: Props
     Number.isFinite(qty) &&
     qty > 0;
 
+  const showRed = (key: MandatoryKey) =>
+    isMandatoryEmpty(key, form, key === "reason" ? resaleAttempted : false);
+
+  const inputClass = (key?: MandatoryKey, extra = "") =>
+    `ptEditInput${extra}${key && showRed(key) ? " inputError" : ""}`;
+
   const runDivide = async (divideType: "1" | "2") => {
-    if (submitting) return;
+    if (submitting || !canSubmit) return;
     setLocalError("");
+    if (divideType === "2") setResaleAttempted(true);
 
     if (!Number.isFinite(qty) || qty <= 0 || qty > stock) {
       setLocalError("入力された分割数量が不正です");
       return;
     }
-    if (divideType === "2" && form.reason.trim() === "") {
+    if (isMandatoryEmpty("reason", form, divideType === "2")) {
       setLocalError("転売先を入力してください");
-      return;
-    }
-    if (form.divideLotName.trim() === "") {
-      setLocalError("分割ロット名を入力してください");
       return;
     }
     if (
@@ -137,20 +164,19 @@ export function LotDivideEditModal({ open, initialForm, onClose, onDone }: Props
   };
 
   return (
-    <EditModalOverlay mode="update" onClose={onClose} className="mpEditOverlay">
+    <EditModalOverlay mode="create" onClose={onClose} className="ptEditOverlay ldEditOverlay">
       <div
-        className="mpEditPanel"
+        className="ptEditPanel ldEditPanel"
         role="dialog"
         aria-modal="true"
         aria-labelledby="ld-edit-title"
         onClick={(e) => e.stopPropagation()}
-        style={{ width: "min(480px, calc(100vw - 32px))" }}
       >
-        <h2 id="ld-edit-title" className="mpEditPanelTitle">
+        <h2 id="ld-edit-title" className="ptEditPanelTitle">
           ロット分割による原料登録
         </h2>
 
-        <div className="mpEditToolbar">
+        <div className="ptEditToolbar">
           <button
             type="button"
             disabled={!canSubmit}
@@ -173,93 +199,102 @@ export function LotDivideEditModal({ open, initialForm, onClose, onDone }: Props
         </div>
 
         {localError ? (
-          <p className="mpEditError" role="alert">
+          <p className="ptEditError" role="alert">
             {localError}
           </p>
         ) : null}
 
-        <div className="mpEditForm">
-          <FormRow label="ロットNo">
-            <input className="mpEditInput mpEditInputDisabled" type="text" value={form.lotNo} readOnly />
-          </FormRow>
-          <FormRow label="工程">
-            <input
-              className="mpEditInput mpEditInputDisabled"
-              type="text"
-              value={`${form.processType} ${form.processTypeName}`.trim()}
-              readOnly
-            />
-          </FormRow>
-          <FormRow label="製造No">
-            <input className="mpEditInput mpEditInputDisabled" type="text" value={form.productNo} readOnly />
-          </FormRow>
-          <FormRow label="ロット名">
-            <input className="mpEditInput mpEditInputDisabled" type="text" value={form.lotName} readOnly />
-          </FormRow>
-          <FormRow label="通称名">
-            <input className="mpEditInput mpEditInputDisabled" type="text" value={form.itemName} readOnly />
-          </FormRow>
-          <FormRow label="在庫重量">
-            <input className="mpEditInput mpEditInputDisabled" type="text" value={form.factory2Stock} readOnly />
-          </FormRow>
-          <FormRow label="摘要">
-            <input
-              className="mpEditInput"
-              type="text"
-              value={form.remarks}
-              disabled={submitting}
-              onChange={(e) => setForm((p) => ({ ...p, remarks: e.target.value }))}
-            />
-          </FormRow>
-          <FormRow label="分割日" required>
-            <input
-              className="mpEditInput date"
-              type="date"
-              value={form.divideDate}
-              disabled={submitting}
-              onChange={(e) => setForm((p) => ({ ...p, divideDate: e.target.value }))}
-            />
-          </FormRow>
-          <FormRow label="事由">
-            <input
-              className="mpEditInput"
-              type="text"
-              value={form.reason}
-              disabled={submitting}
-              placeholder="転売時は転売先を入力"
-              onChange={(e) => setForm((p) => ({ ...p, reason: e.target.value }))}
-            />
-          </FormRow>
-          <FormRow label="分割重量" required>
-            <input
-              className="mpEditInput"
-              type="text"
-              inputMode="decimal"
-              value={form.divideQuantity}
-              disabled={submitting}
-              onChange={(e) =>
-                setForm((p) => ({
-                  ...p,
-                  divideQuantity: sanitizePurchaseDecimal2Input(e.target.value)
-                }))
-              }
-              onBlur={() =>
-                setForm((p) => ({
-                  ...p,
-                  divideQuantity: formatPurchaseDecimal2OnBlur(p.divideQuantity)
-                }))
-              }
-            />
-          </FormRow>
-          <FormRow label="分割ロット名" required>
-            <input
-              className="mpEditInput"
-              type="text"
-              value={form.divideLotName}
-              disabled={submitting}
-              onChange={(e) => setForm((p) => ({ ...p, divideLotName: e.target.value }))}
-            />
-          </FormRow>
+        <div className="ptEditForm">
+          <div className="ptEditFormHead">
+            <FormRow label="ロットNo">
+              <input className="ptEditInput ptEditInputDisabled" type="text" value={form.lotNo} readOnly />
+            </FormRow>
+            <FormRow label="工程">
+              <input
+                className="ptEditInput ptEditInputDisabled"
+                type="text"
+                value={`${form.processType} ${form.processTypeName}`.trim()}
+                readOnly
+              />
+            </FormRow>
+            <FormRow label="製造No">
+              <input className="ptEditInput ptEditInputDisabled" type="text" value={form.productNo} readOnly />
+            </FormRow>
+            <FormRow label="ロット名">
+              <input className="ptEditInput ptEditInputDisabled" type="text" value={form.lotName} readOnly />
+            </FormRow>
+            <FormRow label="通称名">
+              <input className="ptEditInput ptEditInputDisabled" type="text" value={form.itemName} readOnly />
+            </FormRow>
+            <FormRow label="在庫重量">
+              <input className="ptEditInput ptEditInputDisabled" type="text" value={form.factory2Stock} readOnly />
+            </FormRow>
+          </div>
+
+          <div className="ptEditFormBody">
+            <FormRow label="摘要">
+              <input
+                className="ptEditInput"
+                type="text"
+                value={form.remarks}
+                disabled={submitting}
+                onChange={(e) => setForm((p) => ({ ...p, remarks: e.target.value }))}
+              />
+            </FormRow>
+            <FormRow label="分割日" required>
+              <input
+                className={inputClass("divideDate", " date")}
+                type="date"
+                value={form.divideDate}
+                disabled={submitting}
+                onChange={(e) => setForm((p) => ({ ...p, divideDate: e.target.value }))}
+                aria-invalid={showRed("divideDate") || undefined}
+              />
+            </FormRow>
+            <FormRow label="事由" required={resaleAttempted}>
+              <input
+                className={inputClass("reason")}
+                type="text"
+                value={form.reason}
+                disabled={submitting}
+                placeholder="転売時は転売先を入力"
+                onChange={(e) => setForm((p) => ({ ...p, reason: e.target.value }))}
+                aria-invalid={showRed("reason") || undefined}
+              />
+            </FormRow>
+            <FormRow label="分割重量" required>
+              <input
+                className={inputClass("divideQuantity", " numeric")}
+                type="text"
+                inputMode="decimal"
+                value={form.divideQuantity}
+                disabled={submitting}
+                onChange={(e) =>
+                  setForm((p) => ({
+                    ...p,
+                    divideQuantity: sanitizePurchaseDecimal2Input(e.target.value)
+                  }))
+                }
+                onBlur={() =>
+                  setForm((p) => ({
+                    ...p,
+                    divideQuantity: formatPurchaseDecimal2OnBlur(p.divideQuantity)
+                  }))
+                }
+                aria-invalid={showRed("divideQuantity") || undefined}
+              />
+            </FormRow>
+            <FormRow label="分割ロット名" required>
+              <input
+                className={inputClass("divideLotName")}
+                type="text"
+                value={form.divideLotName}
+                disabled={submitting}
+                onChange={(e) => setForm((p) => ({ ...p, divideLotName: e.target.value }))}
+                aria-invalid={showRed("divideLotName") || undefined}
+              />
+            </FormRow>
+          </div>
         </div>
       </div>
     </EditModalOverlay>

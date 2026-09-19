@@ -13,6 +13,7 @@ import {
   storeTransferFa2MasterErrorAtom
 } from "../repository/masterData";
 import { buildLotDivideList } from "./buildLotDivideList";
+import { LOT_DIVIDE_ORGANIC_OPTIONS } from "./lotDivideDisplay";
 import { LotDivideEditModal } from "./LotDivideEditModal";
 import { LotDivideMantineTable } from "./LotDivideMantineTable";
 import {
@@ -156,13 +157,7 @@ export default function LotDividePage() {
 
         <fieldset className="blendLotSearchGroupBox">
           <legend>有機</legend>
-          {(
-            [
-              ["A", "有機"],
-              ["B", "無農薬"],
-              ["C", "一般"]
-            ] as const
-          ).map(([code, label]) => (
+          {LOT_DIVIDE_ORGANIC_OPTIONS.map(({ code, label }) => (
             <label key={code} className="factory2CheckLabel">
               <input
                 type="checkbox"

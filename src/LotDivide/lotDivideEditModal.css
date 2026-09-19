@@ -1,0 +1,17 @@
+/**
+ * ロット分割による原料登録モーダル固有スタイル（原料実績 ptEdit* ベース）
+ */
+
+.ldEditOverlay.ptEditOverlay {
+  z-index: 1300;
+}
+
+.ldEditPanel.ptEditPanel {
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 24px);
+}
+
+.ptEditForm .ptEditInput.inputError {
+  box-shadow: inset 0 0 0 2px #c62828 !important;
+  background: #fff5f5 !important;
+}

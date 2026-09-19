@@ -5,6 +5,7 @@ import { memo, useMemo } from "react";
 import { MantineScrollTable, type MantineScrollTableColumn } from "../components/mantine/MantineScrollTable";
 import { listTablePagination } from "../config/listTablePagination";
 import "../components/mantine/mantineScrollTable.css";
+import { formatLotDivideOrganicClass } from "./lotDivideDisplay";
 import type { LotDivideRow } from "./types";
 
 const numberFormatter = new Intl.NumberFormat("ja-JP", {
@@ -38,7 +39,7 @@ const COLUMNS: MantineScrollTableColumn<LotDivideRow>[] = [
   {
     key: "lotNo",
     label: "ロットNo",
-    align: "right",
+    align: "left",
     sortValue: (r) => r.lotNo,
     render: (r) => String(r.lotNo)
   },
@@ -51,7 +52,7 @@ const COLUMNS: MantineScrollTableColumn<LotDivideRow>[] = [
   {
     key: "productNo",
     label: "製造No",
-    align: "right",
+    align: "left",
     sortValue: (r) => r.productNo,
     render: (r) => String(r.productNo)
   },
@@ -64,7 +65,7 @@ const COLUMNS: MantineScrollTableColumn<LotDivideRow>[] = [
   {
     key: "makeYear",
     label: "年度",
-    align: "right",
+    align: "left",
     sortValue: (r) => r.makeYear,
     render: (r) => r.makeYear
   },
@@ -84,8 +85,8 @@ const COLUMNS: MantineScrollTableColumn<LotDivideRow>[] = [
   {
     key: "organicClass",
     label: "有機区分",
-    sortValue: (r) => r.organicClass,
-    render: (r) => r.organicClass
+    sortValue: (r) => formatLotDivideOrganicClass(r.organicClass),
+    render: (r) => formatLotDivideOrganicClass(r.organicClass)
   },
   {
     key: "productQuantity",
