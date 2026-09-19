@@ -3,13 +3,15 @@
  * 配色・必須赤枠は原料実績情報メンテナンス（ptEdit*）に合わせる
  * 再投入 / 転売
  */
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState, type ReactNode } from "react";
 import { EditModalOverlay } from "../components/modal";
+import { TrConstantZoomField } from "../components/TrConstantZoomField";
 import {
   formatPurchaseDecimal2OnBlur,
   sanitizePurchaseDecimal2Input
 } from "../PurchaseTtransfer/purchaseTtransferEditForm";
+import { masterTrConstantsAtom } from "../repository/masterData";
 import { materialRegistLotDivide } from "../repositories/lotDivideRepository";
 import { useBusyTask } from "../ui/useBusyTask";
 import { refreshLotDivideMastersAtom } from "./refreshLotDivideMasters";
@@ -67,6 +69,7 @@ const isMandatoryEmpty = (key: MandatoryKey, form: LotDivideEditForm, forResale 
 export function LotDivideEditModal({ open, initialForm, onClose, onDone }: Props) {
   const runBusy = useBusyTask();
   const refreshMasters = useSetAtom(refreshLotDivideMastersAtom);
+  const trConstants = useAtomValue(masterTrConstantsAtom);
   const [form, setForm] = useState<LotDivideEditForm>(initialForm);
   const [localError, setLocalError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -251,15 +254,17 @@ export function LotDivideEditModal({ open, initialForm, onClose, onDone }: Props
                 aria-invalid={showRed("divideDate") || undefined}
               />
             </FormRow>
-            <FormRow label="事由" required={resaleAttempted}>
-              <input
-                className={inputClass("reason")}
-                type="text"
+            <FormRow label="事由(転売先)" required={resaleAttempted}>
+              <TrConstantZoomField
                 value={form.reason}
+                onChange={(v) => setForm((p) => ({ ...p, reason: v }))}
+                constField="resale"
+                title="システム定数（転売先）"
+                constants={trConstants}
                 disabled={submitting}
-                placeholder="転売時は転売先を入力"
-                onChange={(e) => setForm((p) => ({ ...p, reason: e.target.value }))}
-                aria-invalid={showRed("reason") || undefined}
+                ariaLabel="事由(転売先)"
+                invalid={showRed("reason")}
+                inputClassName={showRed("reason") ? "inputError" : undefined}
               />
             </FormRow>
             <FormRow label="分割重量" required>
