@@ -2,10 +2,12 @@
  * ロット在庫一覧／ロット分割（WPF LotDivide MainWindow 相当）
  *
  * メニュー: 登録（行選択時）→ 編集モーダルで再投入／転売
- * 検索: 工程・有機・製造日・名称（クライアント側）
+ * 検索: 年度・工程・有機・製造日・名称（クライアント側）
  */
 import { atom, useAtomValue } from "jotai";
 import { useCallback, useMemo, useState } from "react";
+import { Factory2MakeYearSpinner } from "../Factory2LotManufacture/Factory2MakeYearSpinner";
+import { getDefaultMakeYear, normalizeMakeYearFromForm } from "../Factory2LotManufacture/factory2MakeYear";
 import { MantineZoomProvider } from "../mantine/MantineZoomProvider";
 import {
   masterDataLoadingAtom,
@@ -43,6 +45,8 @@ export default function LotDividePage() {
   const masterError = useAtomValue(storeTransferFa2MasterErrorAtom);
   const allRows = useAtomValue(lotDivideAllRowsAtom);
 
+  const [yearFilterEnabled, setYearFilterEnabled] = useState(true);
+  const [year, setYear] = useState(getDefaultMakeYear);
   const [processFilter, setProcessFilter] = useState<LotDivideProcessFilter>(defaultLotDivideProcessFilter);
   const [organicFilter, setOrganicFilter] = useState<LotDivideOrganicFilter>(defaultLotDivideOrganicFilter);
   const [productDate, setProductDate] = useState("");
@@ -60,7 +64,14 @@ export default function LotDividePage() {
   }, [allRows, appliedCriteria]);
 
   const searchExecuted = appliedCriteria != null;
-  const searchEnabled = isLotDivideSearchEnabled(processFilter, organicFilter, productDate, nameQuery);
+  const searchEnabled = isLotDivideSearchEnabled({
+    yearFilterEnabled,
+    year,
+    processFilter,
+    organicFilter,
+    productDate,
+    nameQuery
+  });
   const selectedRow = useMemo(
     () => (selectedRowId == null ? null : (filterResult.rows.find((r) => r.id === selectedRowId) ?? null)),
     [filterResult.rows, selectedRowId]
@@ -69,7 +80,13 @@ export default function LotDividePage() {
 
   const handleSearch = () => {
     if (!searchEnabled) return;
-    const criteria = buildLotDivideSearchCriteria(processFilter, organicFilter, productDate, nameQuery);
+    const criteria = buildLotDivideSearchCriteria(
+      yearFilterEnabled ? normalizeMakeYearFromForm(year) : null,
+      processFilter,
+      organicFilter,
+      productDate,
+      nameQuery
+    );
     const result = filterLotDivideRows(allRows, criteria);
     setAppliedCriteria(criteria);
     setSelectedRowId(null);
@@ -108,7 +125,9 @@ export default function LotDividePage() {
       {!loading && !masterError ? (
         <p className="blendLotHint">
           {searchExecuted
-            ? `一覧 ${filterResult.rows.length.toLocaleString("ja-JP")} 件（在庫 ${allRows.length.toLocaleString("ja-JP")} 件）`
+            ? `一覧 ${filterResult.rows.length.toLocaleString("ja-JP")} 件（在庫 ${allRows.length.toLocaleString("ja-JP")} 件${
+                appliedCriteria?.year == null ? "・全年度" : `・年度 ${appliedCriteria.year}`
+              }）`
             : "検索条件を指定して「検索」を押すと一覧を表示します"}
         </p>
       ) : null}
@@ -134,6 +153,24 @@ export default function LotDividePage() {
       </section>
 
       <section className="blendLotSearchPanel" aria-label="検索条件">
+        <fieldset className="blendLotSearchGroupBox blendLotSearchYearGroup">
+          <legend>年度</legend>
+          <label className="factory2CheckLabel">
+            <input
+              type="checkbox"
+              checked={yearFilterEnabled}
+              onChange={(e) => setYearFilterEnabled(e.target.checked)}
+              aria-label="年度で絞り込む"
+            />
+          </label>
+          <div
+            className={`blendLotMakeYearWrap${yearFilterEnabled ? "" : " isDisabled"}`}
+            aria-disabled={!yearFilterEnabled}
+          >
+            <Factory2MakeYearSpinner value={year} onChange={setYear} />
+          </div>
+        </fieldset>
+
         <fieldset className="blendLotSearchGroupBox">
           <legend>工程</legend>
           {(
@@ -196,7 +233,7 @@ export default function LotDividePage() {
           title={
             searchEnabled
               ? "検索条件で一覧を表示"
-              : "工程・有機・製造日・名称のいずれかを指定してください"
+              : "年度チェックを入れるか、工程・有機・製造日・名称のいずれかを指定してください"
           }
         >
           検索

@@ -1,6 +1,8 @@
 /**
  * ロット分割 … 検索条件（WPF MainWindow 相当）
+ * 年度 UI は第2入出庫（StoreTransferFa2）と同じチェック＋スピナー
  */
+import { matchesMakeYear } from "../Factory2LotManufacture/factory2MakeYear";
 import type {
   LotDivideAppliedSearchCriteria,
   LotDivideOrganicFilter,
@@ -34,7 +36,16 @@ const sameCalendarDate = (value: string | null, yyyyMmDd: string): boolean => {
   return norm(value) === norm(yyyyMmDd);
 };
 
+const parseRowMakeYear = (makeYear: string): number | null => {
+  const t = makeYear.trim();
+  if (!t) return null;
+  const n = Number(t);
+  if (!Number.isFinite(n)) return null;
+  return Math.floor(n);
+};
+
 export function buildLotDivideSearchCriteria(
+  year: string | null,
   processFilter: LotDivideProcessFilter,
   organicFilter: LotDivideOrganicFilter,
   productDate: string,
@@ -43,6 +54,7 @@ export function buildLotDivideSearchCriteria(
   const anyProcess = PROCESS_CODES.some((c) => processFilter[c]);
   const anyOrganic = ORGANIC_CODES.some((c) => organicFilter[c]);
   return {
+    year,
     processTypes: anyProcess ? PROCESS_CODES.filter((c) => processFilter[c]) : null,
     organicClasses: anyOrganic ? ORGANIC_CODES.filter((c) => organicFilter[c]) : null,
     productDate: productDate.trim() || null,
@@ -50,12 +62,30 @@ export function buildLotDivideSearchCriteria(
   };
 }
 
-export function isLotDivideSearchEnabled(
-  processFilter: LotDivideProcessFilter,
-  organicFilter: LotDivideOrganicFilter,
-  productDate: string,
-  nameQuery: string
-): boolean {
+type LotDivideSearchEnabledArgs = {
+  yearFilterEnabled: boolean;
+  year: string;
+  processFilter: LotDivideProcessFilter;
+  organicFilter: LotDivideOrganicFilter;
+  productDate: string;
+  nameQuery: string;
+};
+
+/**
+ * 検索ボタン活性（第2入出庫と同じ）
+ * - 年度チェック ON: 年度あり、または他条件あり
+ * - 年度チェック OFF: 他条件なしでも可（全年度）
+ */
+export function isLotDivideSearchEnabled({
+  yearFilterEnabled,
+  year,
+  processFilter,
+  organicFilter,
+  productDate,
+  nameQuery
+}: LotDivideSearchEnabledArgs): boolean {
+  if (!yearFilterEnabled) return true;
+  if (year.trim().length > 0) return true;
   const anyProcess = PROCESS_CODES.some((c) => processFilter[c]);
   const anyOrganic = ORGANIC_CODES.some((c) => organicFilter[c]);
   return anyProcess || anyOrganic || productDate.trim() !== "" || nameQuery.trim() !== "";
@@ -67,7 +97,10 @@ export function filterLotDivideRows(
   rows: LotDivideRow[],
   criteria: LotDivideAppliedSearchCriteria
 ): { rows: LotDivideRow[]; totalCount: number; truncated: boolean } {
-  let matched = rows;
+  let matched =
+    criteria.year == null
+      ? [...rows]
+      : rows.filter((r) => matchesMakeYear(parseRowMakeYear(r.makeYear), criteria.year!));
 
   if (criteria.processTypes) {
     const set = new Set(criteria.processTypes);

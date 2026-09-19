@@ -33,6 +33,8 @@ export type LotDivideRow = {
 };
 
 export type LotDivideAppliedSearchCriteria = {
+  /** null = 全年度（年度チェック OFF） */
+  year: string | null;
   processTypes: string[] | null;
   organicClasses: string[] | null;
   productDate: string | null;
