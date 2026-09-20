@@ -8,8 +8,6 @@ groups:
         path: /blend-lot
       - label: パッケージロット登録
         screenKey: PackageReport
-      - label: 仕上品在庫調整
-        screenKey: PartsAdjust
   - title: 出荷／受け入れ
     items:
       - label: 仕上品受入
