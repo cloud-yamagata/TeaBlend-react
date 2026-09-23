@@ -2,7 +2,7 @@
  * 仕入実績情報一覧（旧 PurchaseTtransfer MainWindow.xaml）
  * 一覧は bootstrap 済みマスタ（te_purchase_tea × te_purchase_transfer 集計）から構築。
  */
-import { atom, useAtomValue } from "jotai";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useMemo, useState } from "react";
 import { Factory2MakeYearSpinner } from "../Factory2LotManufacture/Factory2MakeYearSpinner";
 import { getDefaultMakeYear, normalizeMakeYearFromForm } from "../Factory2LotManufacture/factory2MakeYear";
@@ -20,9 +20,14 @@ import {
 } from "./purchaseTtransferSearchCriteria";
 import { PurchaseResaleListModal } from "../PurchaseResaleList/PurchaseResaleListModal";
 import { PurchaseCsvImportModal } from "./PurchaseCsvImportModal";
+import { PurchaseResaleReportModal } from "./PurchaseResaleReportModal";
 import { PurchaseTransferEditModal } from "./PurchaseTransferEditModal";
 import { PurchaseTtransferEditModal, type PurchaseTtransferEditModalMode } from "./PurchaseTtransferEditModal";
 import { PurchaseTtransferMantineTable } from "./PurchaseTtransferMantineTable";
+import { exportPurchaseTeaListExcel } from "./exportPurchaseTeaListExcel";
+import { materialRegistPurchaseTea } from "../repositories/purchaseTeaRepository";
+import { refreshPurchaseMaterialsAtom } from "./refreshPurchaseMaterials";
+import { refreshPurchaseTeaMasterAtom } from "./refreshPurchaseTeaMaster";
 import type {
   PurchaseTtransferAppliedSearchCriteria,
   PurchaseTtransferMaterialFilter,
@@ -78,8 +83,14 @@ export default function PurchaseTtransferPage() {
   const [editMode, setEditMode] = useState<PurchaseTtransferEditModalMode>("create");
   const [editCopyRow, setEditCopyRow] = useState<PurchaseTtransferRow | null>(null);
   const [bulkUpdateSelectedIds, setBulkUpdateSelectedIds] = useState<Set<string>>(() => new Set());
+  const [materialSelectedIds, setMaterialSelectedIds] = useState<Set<string>>(() => new Set());
   const [bulkTransferOpen, setBulkTransferOpen] = useState(false);
   const [transferListOpen, setTransferListOpen] = useState(false);
+  const [resaleReportOpen, setResaleReportOpen] = useState(false);
+  const [materialRegisting, setMaterialRegisting] = useState(false);
+
+  const refreshMaterials = useSetAtom(refreshPurchaseMaterialsAtom);
+  const refreshPurchaseTea = useSetAtom(refreshPurchaseTeaMasterAtom);
 
   const rows = useMemo(() => {
     if (!appliedCriteria) return [];
@@ -102,21 +113,15 @@ export default function PurchaseTtransferPage() {
     [rows, selectedRowId]
   );
 
-  /** 振分実績（te_purchase_transfer）が無い行のみ変更・削除可 */
-  const canModifySelectedRow = selectedRow != null && !selectedRow.hasTransfer;
-
   const hasBulkUpdateSelection = bulkUpdateSelectedIds.size > 0;
+  const hasMaterialSelection = materialSelectedIds.size > 0;
 
   const bulkTransferRows = useMemo(
     () => allRows.filter((row) => bulkUpdateSelectedIds.has(row.id)),
     [allRows, bulkUpdateSelectedIds]
   );
 
-  const modifyDisabledTitle = !hasSelection
-    ? "行を選択してください"
-    : selectedRow?.hasTransfer
-      ? "振分実績があるため操作できません"
-      : undefined;
+  const modifyDisabledTitle = hasSelection ? undefined : "行を選択してください";
 
   const handleSearch = () => {
     if (!searchEnabled) return;
@@ -129,6 +134,7 @@ export default function PurchaseTtransferPage() {
     });
     setSelectedRowId(null);
     setBulkUpdateSelectedIds(new Set());
+    setMaterialSelectedIds(new Set());
   };
 
   const handleBulkUpdateToggle = useCallback((row: PurchaseTtransferRow) => {
@@ -146,12 +152,76 @@ export default function PurchaseTtransferPage() {
   }, []);
 
   const handleOpenRegister = useCallback(() => {
-    const selected =
-      selectedRowId != null ? (rows.find((r) => r.id === selectedRowId) ?? null) : null;
     setEditMode("create");
-    setEditCopyRow(selected);
+    setEditCopyRow(selectedRow);
     setEditOpen(true);
-  }, [rows, selectedRowId]);
+  }, [selectedRow]);
+
+  const handleOpenUpdate = useCallback(() => {
+    if (!selectedRow) return;
+    setEditMode("update");
+    setEditCopyRow(null);
+    setEditOpen(true);
+  }, [selectedRow]);
+
+  const handleOpenDelete = useCallback(() => {
+    if (!selectedRow) return;
+    setEditMode("delete");
+    setEditCopyRow(null);
+    setEditOpen(true);
+  }, [selectedRow]);
+
+  const handleMaterialToggle = useCallback((row: PurchaseTtransferRow) => {
+    if (!row.isMaterialSelectable) return;
+    setMaterialSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(row.id)) next.delete(row.id);
+      else next.add(row.id);
+      return next;
+    });
+  }, []);
+
+  const handleMaterialRegist = useCallback(async () => {
+    const targets = allRows.filter((row) => materialSelectedIds.has(row.id) && row.isMaterialSelectable);
+    if (targets.length === 0) {
+      window.alert("原料登録の対象仕入品を選択してください");
+      return;
+    }
+    if (!window.confirm("チェックされた仕入品を原料登録します。\n登録します。よろしいですか？")) {
+      return;
+    }
+    setMaterialRegisting(true);
+    try {
+      for (const row of targets) {
+        if (row.year == null) continue;
+        await materialRegistPurchaseTea({
+          year: row.year,
+          purchase: row.purchase,
+          bid_no: row.bidNo
+        });
+      }
+      await refreshPurchaseTea();
+      await refreshMaterials();
+      setMaterialSelectedIds(new Set());
+      window.alert("原料登録が完了しました");
+    } catch (e) {
+      window.alert(e instanceof Error ? e.message : String(e));
+    } finally {
+      setMaterialRegisting(false);
+    }
+  }, [allRows, materialSelectedIds, refreshMaterials, refreshPurchaseTea]);
+
+  const handleExportPurchaseList = useCallback(async () => {
+    if (rows.length === 0) {
+      window.alert("出力対象データがありません");
+      return;
+    }
+    try {
+      await exportPurchaseTeaListExcel(rows);
+    } catch (e) {
+      window.alert(e instanceof Error ? e.message : String(e));
+    }
+  }, [rows]);
 
   const handleOpenBulkUpdate = useCallback(() => {
     setEditMode("bulkUpdate");
@@ -215,16 +285,18 @@ export default function PurchaseTtransferPage() {
           <button
             type="button"
             className="factory2DarkButton"
-            disabled={!canModifySelectedRow}
+            disabled={!hasSelection}
             title={modifyDisabledTitle ?? "選択行を変更"}
+            onClick={handleOpenUpdate}
           >
             変更
           </button>
           <button
             type="button"
             className="factory2DarkButton"
-            disabled={!canModifySelectedRow}
+            disabled={!hasSelection}
             title={modifyDisabledTitle ?? "選択行を削除"}
+            onClick={handleOpenDelete}
           >
             削除
           </button>
@@ -255,13 +327,37 @@ export default function PurchaseTtransferPage() {
           >
             一括振分
           </button>
-          <button type="button" className="factory2DarkButton wide" disabled={!hasSelection} title="行を選択してください">
+          <button
+            type="button"
+            className="factory2DarkButton wide"
+            disabled={!hasMaterialSelection || materialRegisting}
+            title={hasMaterialSelection ? "選択した仕入品を原料登録" : "原料対象を選択してください"}
+            onClick={() => void handleMaterialRegist()}
+          >
             原料登録
           </button>
-          <button type="button" className="factory2DarkButton wide" disabled title="未実装">
+          <button
+            type="button"
+            className="factory2DarkButton wide"
+            disabled={!searchExecuted || rows.length === 0 || loading}
+            title={
+              !searchExecuted
+                ? "検索後に出力できます"
+                : rows.length === 0
+                  ? "出力対象データがありません"
+                  : "検索結果を仕入リストとして Excel 出力"
+            }
+            onClick={() => void handleExportPurchaseList()}
+          >
             仕入リスト
           </button>
-          <button type="button" className="factory2DarkButton wide" disabled title="未実装">
+          <button
+            type="button"
+            className="factory2DarkButton wide"
+            disabled={loading}
+            title="転売リスト / 有機紐付リストを出力"
+            onClick={() => setResaleReportOpen(true)}
+          >
             転売リスト
           </button>
           <button
@@ -424,6 +520,7 @@ export default function PurchaseTtransferPage() {
       <PurchaseTransferEditModal
         open={bulkTransferOpen}
         onClose={handleCloseBulkTransfer}
+        mode="bulk"
         initialYear={year}
         bulkTransferTargetIds={bulkUpdateSelectedIds}
         bulkTransferRows={bulkTransferRows}
@@ -435,7 +532,8 @@ export default function PurchaseTtransferPage() {
         onClose={handleCloseEdit}
         mode={editMode}
         initialYear={year}
-        copySourceRow={editCopyRow}
+        copySourceRow={editMode === "create" ? editCopyRow : null}
+        targetRow={editMode === "update" || editMode === "delete" ? selectedRow : null}
         bulkUpdateTargetIds={editMode === "bulkUpdate" ? bulkUpdateSelectedIds : undefined}
         onBulkUpdateSuccess={handleBulkUpdateSuccess}
       />
@@ -452,6 +550,12 @@ export default function PurchaseTtransferPage() {
         contextRow={selectedRow}
       />
 
+      <PurchaseResaleReportModal
+        open={resaleReportOpen}
+        onClose={() => setResaleReportOpen(false)}
+        year={year}
+      />
+
       <section className="tableWrap purchaseTtransferTableWrap">
         <MantineZoomProvider>
           <PurchaseTtransferMantineTable
@@ -461,6 +565,8 @@ export default function PurchaseTtransferPage() {
             onRowSelect={handleRowSelect}
             bulkUpdateSelectedIds={bulkUpdateSelectedIds}
             onBulkUpdateToggle={handleBulkUpdateToggle}
+            materialSelectedIds={materialSelectedIds}
+            onMaterialToggle={handleMaterialToggle}
             searchExecuted={searchExecuted}
           />
         </MantineZoomProvider>

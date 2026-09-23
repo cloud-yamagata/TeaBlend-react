@@ -46,7 +46,7 @@ const selectedStatusCodes = (filter: PurchaseTtransferStatusFilter): Set<string>
 const matchesMaterialFilter = (row: PurchaseTtransferRow, filter: PurchaseTtransferMaterialFilter): boolean => {
   if (!filter.mi && !filter.sumi) return true;
 
-  const isMi = row.hasReceive && !row.hasMaterial;
+  const isMi = row.hasFactoryTransfer && !row.hasMaterial;
   const isSumi = row.hasMaterial;
   if (filter.mi && isMi) return true;
   if (filter.sumi && isSumi) return true;

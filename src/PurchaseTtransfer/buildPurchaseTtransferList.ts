@@ -37,11 +37,23 @@ const buildTransferQuantityIndex = (cache: MasterEntityCache): Map<string, numbe
   return index;
 };
 
-const buildReceiveKeySet = (cache: MasterEntityCache): Set<string> => {
+/**
+ * WPF is_chk_usable 前段相当。
+ * te_purchase_transfer.result_type='1'（工場＝第２工場）の重量合計 > 0 のキー。
+ * （キャッシュ側判定。サーバー SQL は変更しない）
+ */
+const buildFactoryTransferKeySet = (cache: MasterEntityCache): Set<string> => {
+  const weightByKey = new Map<string, number>();
+  for (const transfer of cache.te_purchase_transfer) {
+    const d = transfer.data;
+    if (d.result_type !== "1") continue;
+    const key = purchaseTeaKey(d.year, d.purchase, d.bid_no);
+    const weight = calcWeight(d.unit_weight, d.unit_number, d.fraction_weight, d.fraction_number);
+    weightByKey.set(key, (weightByKey.get(key) ?? 0) + weight);
+  }
   const keys = new Set<string>();
-  for (const receive of cache.te_purchase_receive) {
-    const d = receive.data;
-    keys.add(purchaseTeaKey(d.year, d.purchase, d.bid_no));
+  for (const [key, weight] of weightByKey) {
+    if (weight > 0) keys.add(key);
   }
   return keys;
 };
@@ -58,20 +70,9 @@ const buildMaterialKeySet = (materials: TeMaterial[]): Set<string> => {
   return keys;
 };
 
-/**
- * 原料チェック: 受入あり・原料未登録 → OFF（原料登録候補）、それ以外 → ON
- * 操作可能なのは OFF（候補）行のみ。
- */
-const resolveMaterialCheckbox = (
-  hasReceive: boolean,
-  hasMaterial: boolean
-): Pick<PurchaseTtransferRow, "isSelected" | "isMaterialSelectable"> => {
-  const isRegistrationCandidate = hasReceive && !hasMaterial;
-  return {
-    isSelected: !isRegistrationCandidate,
-    isMaterialSelectable: isRegistrationCandidate
-  };
-};
+/** 原料チェック操作可否（工場振分あり・原料未登録） */
+const resolveMaterialSelectable = (hasFactoryTransfer: boolean, hasMaterial: boolean): boolean =>
+  hasFactoryTransfer && !hasMaterial;
 
 /** bootstrap キャッシュから一覧行を構築（仕入日・入札NO 昇順） */
 export function buildPurchaseTtransferList(
@@ -79,7 +80,7 @@ export function buildPurchaseTtransferList(
   materials: TeMaterial[]
 ): PurchaseTtransferRow[] {
   const transferByKey = buildTransferQuantityIndex(cache);
-  const receiveKeys = buildReceiveKeySet(cache);
+  const factoryTransferKeys = buildFactoryTransferKeySet(cache);
   const materialKeys = buildMaterialKeySet(materials);
 
   const rows: PurchaseTtransferRow[] = cache.te_purchase_tea.map((entity) => {
@@ -89,15 +90,13 @@ export function buildPurchaseTtransferList(
     const transferQuantity = transferByKey.get(key) ?? 0;
     const hasTransfer = transferByKey.has(key);
     const status = formatRemainStatus(purchaseWeight, transferQuantity);
-    const hasReceive = receiveKeys.has(key);
+    const hasFactoryTransfer = factoryTransferKeys.has(key);
     const hasMaterial = materialKeys.has(key);
-    const materialCheckbox = resolveMaterialCheckbox(hasReceive, hasMaterial);
-
     return {
       id: key,
-      isBulkUpdateSelectable: status === "未",
-      ...materialCheckbox,
-      hasReceive,
+      isBulkUpdateSelectable: true,
+      isMaterialSelectable: resolveMaterialSelectable(hasFactoryTransfer, hasMaterial),
+      hasFactoryTransfer,
       hasMaterial,
       hasTransfer,
       year: d.year,

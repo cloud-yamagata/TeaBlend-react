@@ -6,6 +6,7 @@ export type PurchaseResaleListRow = {
   year: number;
   purchase: string;
   bidNo: string;
+  resultType: string;
   transfer: string;
   transferDate: string;
   unitWeight: number;

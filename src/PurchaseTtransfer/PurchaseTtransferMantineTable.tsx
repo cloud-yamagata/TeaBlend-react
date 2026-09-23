@@ -35,28 +35,7 @@ const multilineHeader = (line1: string, line2?: string): ReactNode => (
   </span>
 );
 
-/** Mantine Checkbox より軽量（原料列など表示専用） */
-const ReadOnlyCheckbox = ({
-  checked,
-  disabled,
-  ariaLabel
-}: {
-  checked: boolean;
-  disabled?: boolean;
-  ariaLabel: string;
-}) => (
-  <input
-    type="checkbox"
-    className="purchaseTtransferReadOnlyCheckbox"
-    checked={checked}
-    disabled={disabled}
-    readOnly
-    aria-label={ariaLabel}
-    tabIndex={-1}
-  />
-);
-
-/** 一括変更（選）チェック … 残量状況=未 の行のみ操作可 */
+/** 一括変更・一括振分（選）チェック */
 const BulkUpdateCheckbox = ({
   row,
   checked,
@@ -79,9 +58,34 @@ const BulkUpdateCheckbox = ({
   />
 );
 
+/** 原料登録対象チェック（活性行のみ操作可。工場振分あり・原料未登録） */
+const MaterialCheckbox = ({
+  row,
+  checked,
+  onToggle
+}: {
+  row: PurchaseTtransferRow;
+  checked: boolean;
+  onToggle: (row: PurchaseTtransferRow) => void;
+}) => (
+  <input
+    type="checkbox"
+    className="purchaseTtransferMaterialCheckbox"
+    checked={checked}
+    disabled={!row.isMaterialSelectable}
+    aria-label="原料登録対象"
+    onClick={(e) => e.stopPropagation()}
+    onChange={() => {
+      if (row.isMaterialSelectable) onToggle(row);
+    }}
+  />
+);
+
 const buildColumns = (
   bulkUpdateSelectedIds: ReadonlySet<string>,
-  onBulkUpdateToggle: (row: PurchaseTtransferRow) => void
+  onBulkUpdateToggle: (row: PurchaseTtransferRow) => void,
+  materialSelectedIds: ReadonlySet<string>,
+  onMaterialToggle: (row: PurchaseTtransferRow) => void
 ): MantineScrollTableColumn<PurchaseTtransferRow>[] => [
   {
     key: "bulkUpdateSel",
@@ -104,10 +108,10 @@ const buildColumns = (
     width: 30,
     sortable: false,
     render: (r) => (
-      <ReadOnlyCheckbox
-        checked={r.isSelected}
-        disabled={!r.isMaterialSelectable}
-        ariaLabel="原料登録対象"
+      <MaterialCheckbox
+        row={r}
+        checked={materialSelectedIds.has(r.id)}
+        onToggle={onMaterialToggle}
       />
     )
   },
@@ -291,6 +295,8 @@ type Props = {
   onRowSelect: (row: PurchaseTtransferRow) => void;
   bulkUpdateSelectedIds?: ReadonlySet<string>;
   onBulkUpdateToggle?: (row: PurchaseTtransferRow) => void;
+  materialSelectedIds?: ReadonlySet<string>;
+  onMaterialToggle?: (row: PurchaseTtransferRow) => void;
   searchExecuted?: boolean;
 };
 
@@ -301,11 +307,13 @@ export const PurchaseTtransferMantineTable = memo(function PurchaseTtransferMant
   onRowSelect,
   bulkUpdateSelectedIds = new Set(),
   onBulkUpdateToggle = () => {},
+  materialSelectedIds = new Set(),
+  onMaterialToggle = () => {},
   searchExecuted = true
 }: Props) {
   const columns = useMemo(
-    () => buildColumns(bulkUpdateSelectedIds, onBulkUpdateToggle),
-    [bulkUpdateSelectedIds, onBulkUpdateToggle]
+    () => buildColumns(bulkUpdateSelectedIds, onBulkUpdateToggle, materialSelectedIds, onMaterialToggle),
+    [bulkUpdateSelectedIds, onBulkUpdateToggle, materialSelectedIds, onMaterialToggle]
   );
 
   const emptyMessage = searchExecuted

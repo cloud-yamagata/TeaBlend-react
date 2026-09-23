@@ -33,7 +33,7 @@ export function PurchaseResaleListModal({ open, onClose, contextRow }: Props) {
           </button>
         </header>
 
-        <PurchaseResaleListContent contextRow={contextRow} autoSearchOnMount />
+        <PurchaseResaleListContent contextRow={contextRow} autoSearchOnMount enableTransferCrud />
       </div>
     </EditModalOverlay>
   );

@@ -13,7 +13,7 @@ export default function PurchaseResaleListPage() {
         <h1 className="title">振分実績一覧</h1>
       </header>
 
-      <PurchaseResaleListContent tableWrapClassName="tableWrap purchaseResaleListTableWrap" />
+      <PurchaseResaleListContent tableWrapClassName="tableWrap purchaseResaleListTableWrap" enableTransferCrud />
     </main>
   );
 }

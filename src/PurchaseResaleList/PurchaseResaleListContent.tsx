@@ -13,6 +13,7 @@ import {
   purchaseTtransferMasterErrorAtom
 } from "../repository/masterData";
 import type { PurchaseTtransferRow } from "../PurchaseTtransfer/types";
+import { PurchaseTransferEditModal, type PurchaseTransferEditModalMode } from "../PurchaseTtransfer/PurchaseTransferEditModal";
 import { buildPurchaseResaleList } from "./buildPurchaseResaleList";
 import { exportPurchaseResaleListExcel } from "./exportPurchaseResaleListExcel";
 import {
@@ -37,6 +38,8 @@ type Props = {
   /** true のとき表示開始時に初期検索を実行 */
   autoSearchOnMount?: boolean;
   tableWrapClassName?: string;
+  /** 振分の単件登録・変更・削除を出す（仕入実績の振分一覧） */
+  enableTransferCrud?: boolean;
 };
 
 const resolveInitialYear = (contextRow?: PurchaseTtransferRow | null): string => {
@@ -64,7 +67,8 @@ const applySearchMessage = (totalCount: number): string | null => {
 export function PurchaseResaleListContent({
   contextRow = null,
   autoSearchOnMount = false,
-  tableWrapClassName = "purchaseResaleListTableWrap"
+  tableWrapClassName = "purchaseResaleListTableWrap",
+  enableTransferCrud = false
 }: Props) {
   const loading = useAtomValue(masterDataLoadingAtom);
   const masterError = useAtomValue(purchaseTtransferMasterErrorAtom);
@@ -79,6 +83,8 @@ export function PurchaseResaleListContent({
   const [excelError, setExcelError] = useState<string | null>(null);
   const [exportingExcel, setExportingExcel] = useState(false);
   const [mountKey, setMountKey] = useState(0);
+  const [transferEditOpen, setTransferEditOpen] = useState(false);
+  const [transferEditMode, setTransferEditMode] = useState<PurchaseTransferEditModalMode>("create");
 
   const contextPurchase = contextRow?.purchase ?? null;
   const contextBidNo = contextRow?.bidNo ?? null;
@@ -165,6 +171,62 @@ export function PurchaseResaleListContent({
     }
   }, [exportRows]);
 
+  const selectedTransferRow = useMemo(
+    () => (selectedRowId != null ? (filterResult.rows.find((r) => r.id === selectedRowId) ?? null) : null),
+    [filterResult.rows, selectedRowId]
+  );
+
+  const teaParentForCreate = contextRow
+    ? {
+        year: contextRow.year,
+        purchase: contextRow.purchase,
+        bidNo: contextRow.bidNo,
+        unitWeight: contextRow.unitWeight,
+        unitNumber: contextRow.unitNumber,
+        fractionWeight: contextRow.fractionWeight,
+        fractionNumber: contextRow.fractionNumber,
+        cost: contextRow.cost,
+        discount: contextRow.discount
+      }
+    : selectedTransferRow
+      ? {
+          year: selectedTransferRow.year,
+          purchase: selectedTransferRow.purchase,
+          bidNo: selectedTransferRow.bidNo,
+          unitWeight: selectedTransferRow.unitWeight,
+          unitNumber: selectedTransferRow.unitNumber,
+          fractionWeight: selectedTransferRow.fractionWeight,
+          fractionNumber: selectedTransferRow.fractionNumber,
+          cost: selectedTransferRow.cost,
+          discount: selectedTransferRow.discount
+        }
+      : null;
+
+  const canRegisterTransfer = enableTransferCrud && teaParentForCreate != null;
+  const canModifyTransfer = enableTransferCrud && selectedTransferRow != null;
+
+  const handleOpenTransferCreate = useCallback(() => {
+    if (!canRegisterTransfer) return;
+    setTransferEditMode("create");
+    setTransferEditOpen(true);
+  }, [canRegisterTransfer]);
+
+  const handleOpenTransferUpdate = useCallback(() => {
+    if (!canModifyTransfer) return;
+    setTransferEditMode("update");
+    setTransferEditOpen(true);
+  }, [canModifyTransfer]);
+
+  const handleOpenTransferDelete = useCallback(() => {
+    if (!canModifyTransfer) return;
+    setTransferEditMode("delete");
+    setTransferEditOpen(true);
+  }, [canModifyTransfer]);
+
+  const handleTransferMutated = useCallback(() => {
+    setSelectedRowId(null);
+  }, []);
+
   return (
     <>
       <PurchaseResaleListToolbar
@@ -172,6 +234,16 @@ export function PurchaseResaleListContent({
         excelTitle={excelTitle}
         exporting={exportingExcel}
         onExcel={() => void handleExcelExport()}
+        enableTransferCrud={enableTransferCrud}
+        registerDisabled={!canRegisterTransfer}
+        registerTitle={
+          canRegisterTransfer ? "振分を登録" : "仕入行または振分行を選択してください"
+        }
+        onRegister={handleOpenTransferCreate}
+        modifyDisabled={!canModifyTransfer}
+        modifyTitle={canModifyTransfer ? undefined : "振分行を選択してください"}
+        onUpdate={handleOpenTransferUpdate}
+        onDelete={handleOpenTransferDelete}
       />
 
       {excelError ? <p className="purchaseResaleListHint error">{excelError}</p> : null}
@@ -222,6 +294,18 @@ export function PurchaseResaleListContent({
         onSelect={(_code, constName) => {
           setDraft((prev) => ({ ...prev, transfer: constName }));
         }}
+      />
+
+      <PurchaseTransferEditModal
+        open={transferEditOpen}
+        onClose={() => setTransferEditOpen(false)}
+        mode={transferEditMode}
+        initialYear={draft.year}
+        teaRow={transferEditMode === "create" ? teaParentForCreate : null}
+        transferRow={
+          transferEditMode === "update" || transferEditMode === "delete" ? selectedTransferRow : null
+        }
+        onTransferMutated={handleTransferMutated}
       />
     </>
   );

@@ -107,14 +107,16 @@ const toIntText = (value: number | null): string => (value == null ? "0" : Strin
 const toDecimal2Text = (value: number | null): string =>
   value == null ? "0.00" : (Math.round(value * 100) / 100).toFixed(2);
 
-/** 一覧選択行を COPY ベースにした登録フォーム（年度・入札NO・仕入日は初期化） */
-export function createPurchaseTtransferEditFormFromRow(row: PurchaseTtransferRow): PurchaseTtransferEditForm {
+const fillFormFromRow = (
+  row: PurchaseTtransferRow,
+  overrides?: Partial<PurchaseTtransferEditForm>
+): PurchaseTtransferEditForm => {
   const base = createEmptyPurchaseTtransferEditForm();
   return {
     ...base,
-    year: getDefaultMakeYear(),
-    bidNo: "",
-    purchaseDate: todayIsoDate(),
+    year: row.year == null ? base.year : String(row.year >= 100 ? row.year % 100 : row.year).padStart(2, "0"),
+    bidNo: row.bidNo,
+    purchaseDate: row.purchaseDate?.slice(0, 10) || todayIsoDate(),
     purchase: row.purchase,
     variety: row.variety,
     teaLife: row.teaLife || base.teaLife,
@@ -131,8 +133,23 @@ export function createPurchaseTtransferEditFormFromRow(row: PurchaseTtransferRow
     discount: toIntText(row.discount),
     target: row.target,
     targetPlan: row.targetPlan,
-    lotNo: row.lotNo
+    lotNo: row.lotNo,
+    ...overrides
   };
+};
+
+/** 一覧選択行を COPY ベースにした登録フォーム（年度・入札NO・仕入日は初期化） */
+export function createPurchaseTtransferEditFormFromRow(row: PurchaseTtransferRow): PurchaseTtransferEditForm {
+  return fillFormFromRow(row, {
+    year: getDefaultMakeYear(),
+    bidNo: "",
+    purchaseDate: todayIsoDate()
+  });
+}
+
+/** 変更・削除用（キー項目を含む全項目を行から復元） */
+export function createPurchaseTtransferEditFormForUpdate(row: PurchaseTtransferRow): PurchaseTtransferEditForm {
+  return fillFormFromRow(row);
 }
 
 const parseIntField = (label: string, text: string, errors: PurchaseTtransferEditFieldErrors, key: keyof PurchaseTtransferEditFieldErrors): number => {

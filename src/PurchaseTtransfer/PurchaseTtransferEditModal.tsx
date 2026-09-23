@@ -7,7 +7,7 @@ import { Factory2MakeYearSpinner } from "../Factory2LotManufacture/Factory2MakeY
 import { EditModalOverlay } from "../components/modal";
 import { TrConstantZoomField } from "../components/TrConstantZoomField";
 import { masterEntityCacheAtom, masterTrConstantsAtom } from "../repository/masterData";
-import { upsertPurchaseTea } from "../repositories/purchaseTeaRepository";
+import { upsertPurchaseTea, deletePurchaseTea } from "../repositories/purchaseTeaRepository";
 import {
   GRADE_OPTIONS,
   TEA_LIFE_OPTIONS,
@@ -15,6 +15,7 @@ import {
   TEA_TYPE_OPTIONS,
   createBulkUpdatePurchaseTtransferEditForm,
   createEmptyPurchaseTtransferEditForm,
+  createPurchaseTtransferEditFormForUpdate,
   createPurchaseTtransferEditFormFromRow,
   formatPurchaseDecimal2OnBlur,
   formatPurchaseDiscountOnBlur,
@@ -27,12 +28,17 @@ import {
   type PurchaseTtransferEditFieldErrors,
   type PurchaseTtransferEditForm
 } from "./purchaseTtransferEditForm";
+import { applyPurchaseTeaStoreSet } from "./applyPurchaseTeaStoreSet";
 import { refreshPurchaseTeaMasterAtom } from "./refreshPurchaseTeaMaster";
-import { applyBulkUpdatePurchaseTeaCacheAtom } from "./applyBulkUpdatePurchaseTeaCache";
+import {
+  applyBulkUpdatePurchaseTeaCacheAtom,
+  buildBulkUpdatePatchFromForm,
+  buildBulkUpdateUpsertBodies
+} from "./applyBulkUpdatePurchaseTeaCache";
 import type { PurchaseTtransferRow } from "./types";
 import "./purchaseTtransferEditModal.css";
 
-export type PurchaseTtransferEditModalMode = "create" | "bulkUpdate";
+export type PurchaseTtransferEditModalMode = "create" | "update" | "delete" | "bulkUpdate";
 
 type Props = {
   open: boolean;
@@ -41,6 +47,8 @@ type Props = {
   initialYear?: string;
   /** 選択行 COPY 登録の元データ（未選択時は null） */
   copySourceRow?: PurchaseTtransferRow | null;
+  /** 変更・削除対象行 */
+  targetRow?: PurchaseTtransferRow | null;
   /** 一括変更対象行 ID（mode=bulkUpdate 時） */
   bulkUpdateTargetIds?: ReadonlySet<string>;
   /** 一括変更成功時（キャッシュ更新後） */
@@ -91,6 +99,7 @@ export function PurchaseTtransferEditModal({
   mode = "create",
   initialYear,
   copySourceRow = null,
+  targetRow = null,
   bulkUpdateTargetIds,
   onBulkUpdateSuccess
 }: Props) {
@@ -100,6 +109,9 @@ export function PurchaseTtransferEditModal({
   const applyBulkUpdateCache = useSetAtom(applyBulkUpdatePurchaseTeaCacheAtom);
 
   const isBulkUpdate = mode === "bulkUpdate";
+  const isUpdate = mode === "update";
+  const isDelete = mode === "delete";
+  const isCreate = mode === "create";
 
   const [form, setForm] = useState<PurchaseTtransferEditForm>(() => createEmptyPurchaseTtransferEditForm(initialYear));
   const [fieldErrors, setFieldErrors] = useState<PurchaseTtransferEditFieldErrors>({});
@@ -112,8 +124,10 @@ export function PurchaseTtransferEditModal({
     if (!open) return;
     if (isBulkUpdate) {
       setForm(createBulkUpdatePurchaseTtransferEditForm());
-    } else if (copySourceRow) {
+    } else if (isCreate && copySourceRow) {
       setForm(createPurchaseTtransferEditFormFromRow(copySourceRow));
+    } else if ((isUpdate || isDelete) && targetRow) {
+      setForm(createPurchaseTtransferEditFormForUpdate(targetRow));
     } else {
       setForm(createEmptyPurchaseTtransferEditForm(initialYear));
     }
@@ -122,7 +136,7 @@ export function PurchaseTtransferEditModal({
     setError("");
     setStatus("");
     setSubmitting(false);
-  }, [open, initialYear, copySourceRow, isBulkUpdate]);
+  }, [open, initialYear, copySourceRow, isBulkUpdate, isCreate, isUpdate, isDelete, targetRow]);
 
   const updateField = useCallback(<K extends keyof PurchaseTtransferEditForm>(key: K, value: PurchaseTtransferEditForm[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -133,13 +147,13 @@ export function PurchaseTtransferEditModal({
     onClose();
   }, [onClose, submitting]);
 
-  /** 一括変更: チェック付き項目は入力可（チェックは更新対象の指定） */
-  const bulkCheckFieldDisabled = () => submitting;
-
-  /** 一括変更: チェック無し項目は常に非活性 */
-  const plainFieldDisabled = submitting || isBulkUpdate;
+  /** キー（年度・仕入先・入札NO）は登録時のみ編集可 */
+  const keyFieldDisabled = submitting || !isCreate;
+  /** 一括変更の非対象項目 / 削除時は入力不可 */
+  const valueFieldDisabled = submitting || isBulkUpdate || isDelete;
 
   const handleRegister = useCallback(async () => {
+    if (!isCreate || submitting) return;
     setSubmitAttempted(true);
     setError("");
     setStatus("");
@@ -148,9 +162,14 @@ export function PurchaseTtransferEditModal({
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
-    const year = Number(form.year);
-    const purchase = form.purchase.trim();
-    const bidNo = form.bidNo.trim();
+    if (!window.confirm("登録内容に間違いがないか確認してください。登録を実行します。よろしいですか？")) {
+      return;
+    }
+
+    const adjusted = applyPurchaseTeaStoreSet(form);
+    const year = Number(adjusted.year);
+    const purchase = adjusted.purchase.trim();
+    const bidNo = adjusted.bidNo.trim();
     const duplicate = cache.te_purchase_tea.some(
       (row) => row.data.year === year && row.data.purchase === purchase && row.data.bid_no === bidNo
     );
@@ -161,18 +180,74 @@ export function PurchaseTtransferEditModal({
 
     setSubmitting(true);
     try {
-      await upsertPurchaseTea(purchaseTtransferEditFormToUpsertBody(form));
+      await upsertPurchaseTea(purchaseTtransferEditFormToUpsertBody(adjusted));
       await refreshPurchaseTea();
-      setStatus("登録しました。");
+      window.alert("登録が完了しました");
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setSubmitting(false);
     }
-  }, [cache.te_purchase_tea, form, onClose, refreshPurchaseTea]);
+  }, [cache.te_purchase_tea, form, isCreate, onClose, refreshPurchaseTea, submitting]);
 
-  const handleBulkUpdate = useCallback(() => {
+  const handleUpdate = useCallback(async () => {
+    if (!isUpdate || submitting) return;
+    setSubmitAttempted(true);
+    setError("");
+    setStatus("");
+
+    const errors = validatePurchaseTtransferEditForm(form);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
+    if (!window.confirm("更新内容に間違いがないか確認してください。更新を実行します。よろしいですか？")) {
+      return;
+    }
+
+    const adjusted = applyPurchaseTeaStoreSet(form);
+    setSubmitting(true);
+    try {
+      await upsertPurchaseTea(purchaseTtransferEditFormToUpsertBody(adjusted));
+      await refreshPurchaseTea();
+      window.alert("更新が完了しました");
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setSubmitting(false);
+    }
+  }, [form, isUpdate, onClose, refreshPurchaseTea, submitting]);
+
+  const handleDelete = useCallback(async () => {
+    if (!isDelete || submitting || !targetRow) return;
+    if (!window.confirm("削除データに間違いがないか確認してください。削除を実行します。よろしいですか？")) {
+      return;
+    }
+    if (targetRow.year == null) {
+      setError("年度が不正です");
+      return;
+    }
+    setSubmitting(true);
+    setError("");
+    try {
+      await deletePurchaseTea({
+        year: targetRow.year,
+        purchase: targetRow.purchase,
+        bid_no: targetRow.bidNo
+      });
+      await refreshPurchaseTea();
+      window.alert("削除が完了しました");
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setSubmitting(false);
+    }
+  }, [isDelete, onClose, refreshPurchaseTea, submitting, targetRow]);
+
+  const handleBulkUpdate = useCallback(async () => {
+    if (!isBulkUpdate || submitting) return;
     setSubmitAttempted(true);
     setError("");
     setStatus("");
@@ -188,16 +263,43 @@ export function PurchaseTtransferEditModal({
       return;
     }
 
-    const updatedCount = applyBulkUpdateCache({ form, targetIds: bulkUpdateTargetIds! });
-    if (updatedCount === 0) {
+    if (!window.confirm("チェックされた仕入品の格付を一括更新します。\nよろしいですか？")) {
+      return;
+    }
+
+    const patch = buildBulkUpdatePatchFromForm(form);
+    const bodies = buildBulkUpdateUpsertBodies(cache, bulkUpdateTargetIds!, patch);
+    if (bodies.length === 0) {
       setError("更新対象の仕入実績が見つかりませんでした。");
       return;
     }
 
-    setStatus(`${updatedCount} 件を更新しました。`);
-    onBulkUpdateSuccess?.();
-    onClose();
-  }, [applyBulkUpdateCache, bulkUpdateTargetIds, form, onBulkUpdateSuccess, onClose]);
+    setSubmitting(true);
+    try {
+      for (const body of bodies) {
+        await upsertPurchaseTea(body);
+      }
+      applyBulkUpdateCache({ form, targetIds: bulkUpdateTargetIds! });
+      await refreshPurchaseTea();
+      window.alert(`${bodies.length} 件を更新しました`);
+      onBulkUpdateSuccess?.();
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setSubmitting(false);
+    }
+  }, [
+    applyBulkUpdateCache,
+    bulkUpdateTargetIds,
+    cache,
+    form,
+    isBulkUpdate,
+    onBulkUpdateSuccess,
+    onClose,
+    refreshPurchaseTea,
+    submitting
+  ]);
 
   if (!open) return null;
 
@@ -207,10 +309,15 @@ export function PurchaseTtransferEditModal({
   const selectClass = (enabled: boolean) =>
     enabled ? "ptEditSelect preset" : "ptEditSelect preset ptEditInputDisabled";
 
-  const checkFieldInputEnabled = !isBulkUpdate || !submitting;
+  const checkValueDisabled = submitting || isDelete;
+  const checkFieldInputEnabled = !checkValueDisabled;
 
   return (
-    <EditModalOverlay mode={isBulkUpdate ? "update" : "create"} onClose={handleClose} className="ptEditOverlay">
+    <EditModalOverlay
+      mode={isDelete ? "view" : isUpdate || isBulkUpdate ? "update" : "create"}
+      onClose={handleClose}
+      className="ptEditOverlay"
+    >
       <div
         className="ptEditPanel"
         role="dialog"
@@ -223,13 +330,13 @@ export function PurchaseTtransferEditModal({
         </h2>
 
         <div className="ptEditToolbar">
-          <button type="button" disabled={submitting || isBulkUpdate} onClick={() => void handleRegister()}>
+          <button type="button" disabled={submitting || !isCreate} onClick={() => void handleRegister()}>
             登録
           </button>
-          <button type="button" disabled title="行を選択して変更">
+          <button type="button" disabled={submitting || !isUpdate} onClick={() => void handleUpdate()}>
             変更
           </button>
-          <button type="button" disabled title="行を選択して削除">
+          <button type="button" disabled={submitting || !isDelete} onClick={() => void handleDelete()}>
             削除
           </button>
           <button
@@ -251,7 +358,7 @@ export function PurchaseTtransferEditModal({
                 <Factory2MakeYearSpinner
                   value={form.year}
                   onChange={(v) => updateField("year", v)}
-                  readOnly={plainFieldDisabled}
+                  readOnly={keyFieldDisabled}
                 />
               </div>
             </FormRow>
@@ -263,7 +370,7 @@ export function PurchaseTtransferEditModal({
                 constField="purchase"
                 title="システム定数（仕入先）"
                 constants={trConstants}
-                disabled={plainFieldDisabled}
+                disabled={keyFieldDisabled}
                 ariaLabel="仕入先"
                 invalid={fieldError("purchase") != null}
               />
@@ -271,10 +378,10 @@ export function PurchaseTtransferEditModal({
 
             <FormRow label="入札NO" required>
               <input
-                className={`ptEditInput${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+                className={`ptEditInput${keyFieldDisabled ? " ptEditInputDisabled" : ""}`}
                 type="text"
                 value={form.bidNo}
-                disabled={plainFieldDisabled}
+                disabled={keyFieldDisabled}
                 onChange={(e) => updateField("bidNo", e.target.value)}
                 aria-invalid={fieldError("bidNo") != null}
                 aria-label="入札NO"
@@ -285,10 +392,10 @@ export function PurchaseTtransferEditModal({
           <div className="ptEditFormBody">
           <FormRow label="仕入日">
             <input
-              className={`ptEditInput date${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+              className={`ptEditInput date${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
               type="date"
               value={form.purchaseDate}
-              disabled={plainFieldDisabled}
+              disabled={valueFieldDisabled}
               onChange={(e) => updateField("purchaseDate", e.target.value)}
               aria-invalid={fieldError("purchaseDate") != null}
               aria-label="仕入日"
@@ -308,7 +415,7 @@ export function PurchaseTtransferEditModal({
               constField="variety"
               title="システム定数（品種）"
               constants={trConstants}
-              disabled={isBulkUpdate ? bulkCheckFieldDisabled() : submitting}
+              disabled={checkValueDisabled}
               ariaLabel="品種"
             />
           </FormRow>
@@ -323,7 +430,7 @@ export function PurchaseTtransferEditModal({
             <select
               className={selectClass(checkFieldInputEnabled)}
               value={form.teaLife}
-              disabled={isBulkUpdate ? bulkCheckFieldDisabled() : submitting}
+              disabled={checkValueDisabled}
               onChange={(e) => updateField("teaLife", e.target.value)}
               aria-label="茶期"
             >
@@ -345,7 +452,7 @@ export function PurchaseTtransferEditModal({
             <select
               className={selectClass(checkFieldInputEnabled)}
               value={form.grade}
-              disabled={isBulkUpdate ? bulkCheckFieldDisabled() : submitting}
+              disabled={checkValueDisabled}
               onChange={(e) => updateField("grade", e.target.value)}
               aria-label="格付"
             >
@@ -367,7 +474,7 @@ export function PurchaseTtransferEditModal({
             <select
               className={selectClass(checkFieldInputEnabled)}
               value={form.teaType}
-              disabled={isBulkUpdate ? bulkCheckFieldDisabled() : submitting}
+              disabled={checkValueDisabled}
               onChange={(e) => updateField("teaType", e.target.value)}
               aria-label="茶種"
             >
@@ -389,7 +496,7 @@ export function PurchaseTtransferEditModal({
             <select
               className={selectClass(checkFieldInputEnabled)}
               value={form.teaRank}
-              disabled={isBulkUpdate ? bulkCheckFieldDisabled() : submitting}
+              disabled={checkValueDisabled}
               onChange={(e) => updateField("teaRank", e.target.value)}
               aria-label="品柄"
             >
@@ -412,7 +519,7 @@ export function PurchaseTtransferEditModal({
               className={`ptEditInput${!checkFieldInputEnabled ? " ptEditInputDisabled" : ""}`}
               type="text"
               value={form.fieldNo}
-              disabled={isBulkUpdate ? bulkCheckFieldDisabled() : submitting}
+              disabled={checkValueDisabled}
               onChange={(e) => updateField("fieldNo", e.target.value)}
               aria-label="圃場"
             />
@@ -425,18 +532,18 @@ export function PurchaseTtransferEditModal({
               constField="producer"
               title="システム定数（生産者）"
               constants={trConstants}
-              disabled={plainFieldDisabled}
+              disabled={valueFieldDisabled}
               ariaLabel="生産者"
             />
           </FormRow>
 
           <FormRow label="仕入単価">
             <input
-              className={`ptEditInput numeric${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+              className={`ptEditInput numeric${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
               type="text"
               inputMode="numeric"
               value={form.cost}
-              disabled={plainFieldDisabled}
+              disabled={valueFieldDisabled}
               onChange={(e) => updateField("cost", e.target.value)}
               aria-invalid={fieldError("cost") != null}
               aria-label="仕入単価"
@@ -446,22 +553,22 @@ export function PurchaseTtransferEditModal({
           <FormRow label="梱包(重量/数)">
             <div className="ptEditPair">
               <input
-                className={`ptEditInput numeric${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+                className={`ptEditInput numeric${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
                 type="text"
                 inputMode="decimal"
                 value={form.unitWeight}
-                disabled={plainFieldDisabled}
+                disabled={valueFieldDisabled}
                 onChange={(e) => updateField("unitWeight", sanitizePurchaseDecimal2Input(e.target.value))}
                 onBlur={() => updateField("unitWeight", formatPurchaseDecimal2OnBlur(form.unitWeight))}
                 aria-invalid={fieldError("unitWeight") != null}
                 aria-label="梱包重量"
               />
               <input
-                className={`ptEditInput numeric${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+                className={`ptEditInput numeric${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
                 type="text"
                 inputMode="numeric"
                 value={form.unitNumber}
-                disabled={plainFieldDisabled}
+                disabled={valueFieldDisabled}
                 onChange={(e) => updateField("unitNumber", sanitizePurchaseIntegerInput(e.target.value))}
                 aria-invalid={fieldError("unitNumber") != null}
                 aria-label="梱包数"
@@ -472,22 +579,22 @@ export function PurchaseTtransferEditModal({
           <FormRow label="端数(重量/数)">
             <div className="ptEditPair">
               <input
-                className={`ptEditInput numeric${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+                className={`ptEditInput numeric${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
                 type="text"
                 inputMode="decimal"
                 value={form.fractionWeight}
-                disabled={plainFieldDisabled}
+                disabled={valueFieldDisabled}
                 onChange={(e) => updateField("fractionWeight", sanitizePurchaseDecimal2Input(e.target.value))}
                 onBlur={() => updateField("fractionWeight", formatPurchaseDecimal2OnBlur(form.fractionWeight))}
                 aria-invalid={fieldError("fractionWeight") != null}
                 aria-label="端数重量"
               />
               <input
-                className={`ptEditInput numeric${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+                className={`ptEditInput numeric${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
                 type="text"
                 inputMode="numeric"
                 value={form.fractionNumber}
-                disabled={plainFieldDisabled}
+                disabled={valueFieldDisabled}
                 onChange={(e) => updateField("fractionNumber", sanitizePurchaseIntegerInput(e.target.value))}
                 aria-invalid={fieldError("fractionNumber") != null}
                 aria-label="端数数"
@@ -497,11 +604,11 @@ export function PurchaseTtransferEditModal({
 
           <FormRow label="粉引(%)">
             <input
-              className={`ptEditInput numeric${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+              className={`ptEditInput numeric${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
               type="text"
               inputMode="numeric"
               value={form.discount}
-              disabled={plainFieldDisabled}
+              disabled={valueFieldDisabled}
               onChange={(e) => updateField("discount", sanitizePurchaseDiscountInput(e.target.value))}
               onBlur={() => updateField("discount", formatPurchaseDiscountOnBlur(form.discount))}
               aria-invalid={fieldError("discount") != null}
@@ -520,7 +627,7 @@ export function PurchaseTtransferEditModal({
               className={`ptEditInput${!checkFieldInputEnabled ? " ptEditInputDisabled" : ""}`}
               type="text"
               value={form.target}
-              disabled={isBulkUpdate ? bulkCheckFieldDisabled() : submitting}
+              disabled={checkValueDisabled}
               onChange={(e) => updateField("target", e.target.value)}
               aria-label="用途"
             />
@@ -537,7 +644,7 @@ export function PurchaseTtransferEditModal({
               className={`ptEditInput${!checkFieldInputEnabled ? " ptEditInputDisabled" : ""}`}
               type="text"
               value={form.targetPlan}
-              disabled={isBulkUpdate ? bulkCheckFieldDisabled() : submitting}
+              disabled={checkValueDisabled}
               onChange={(e) => updateField("targetPlan", e.target.value)}
               aria-label="予定用途"
             />
@@ -545,10 +652,10 @@ export function PurchaseTtransferEditModal({
 
           <FormRow label="ロットNO">
             <input
-              className={`ptEditInput${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+              className={`ptEditInput${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
               type="text"
               value={form.lotNo}
-              disabled={plainFieldDisabled}
+              disabled={valueFieldDisabled}
               onChange={(e) => updateField("lotNo", e.target.value)}
               aria-label="ロットNO"
             />
@@ -556,10 +663,10 @@ export function PurchaseTtransferEditModal({
 
           <FormRow label="摘要">
             <input
-              className={`ptEditInput${plainFieldDisabled ? " ptEditInputDisabled" : ""}`}
+              className={`ptEditInput${valueFieldDisabled ? " ptEditInputDisabled" : ""}`}
               type="text"
               value={form.remarks}
-              disabled={plainFieldDisabled}
+              disabled={valueFieldDisabled}
               onChange={(e) => updateField("remarks", e.target.value)}
               aria-label="摘要"
             />

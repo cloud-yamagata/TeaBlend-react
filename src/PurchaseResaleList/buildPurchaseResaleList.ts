@@ -44,6 +44,7 @@ export function buildPurchaseResaleList(cache: MasterEntityCache): PurchaseResal
       year: t.year,
       purchase: t.purchase,
       bidNo: t.bid_no,
+      resultType: t.result_type,
       transfer: t.transfer,
       transferDate: t.transfer_date,
       unitWeight: t.unit_weight,
