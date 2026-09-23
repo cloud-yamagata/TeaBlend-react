@@ -5,7 +5,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Factory2LotEditFormData, Factory2LotEditMode, Factory2LotEditPartRow } from "./factory2LotEditTypes";
 import { Factory2LotEditPartsTable } from "./Factory2LotEditPartsTable";
-import { isFactory2LotStatusConfirmed, isFactory2OrganicTea, normalizeProcessTypeCode } from "./factory2LotDisplay";
+import { isFactory2LotStatusComplete, isFactory2LotStatusConfirmed, isFactory2OrganicTea, normalizeProcessTypeCode } from "./factory2LotDisplay";
 import type { Factory2ProcessFilter } from "./types";
 import { EditModalOverlay } from "../components/modal";
 import "../MonthlyPlan/styles.css";
@@ -18,18 +18,25 @@ import {
 } from "./collectFactory2LotEditPayload";
 import { Factory2MakeYearSpinner } from "./Factory2MakeYearSpinner";
 import { getDefaultMakeYear, normalizeMakeYearFromForm } from "./factory2MakeYear";
+import { sumFactory2LotInputQuantity } from "./buildFactory2LotEditForm";
 import {
+  confirmFactory2LotStockAtom,
   createFactory2LotAtom,
   deleteFactory2LotAtom,
   factory2LotMutationErrorAtom,
   updateFactory2LotAtom
 } from "./store";
 import { Factory2StockZoomModal } from "../components/Factory2StockZoomModal";
+import {
+  TrItemMasterZoomModal,
+  type TrItemZoomFilterParams
+} from "../components/TrItemMasterZoomModal";
 import { MantineZoomProvider } from "../mantine/MantineZoomProvider";
 import {
   previewFactory2GradeReportViaHelper,
   previewFactory2ReportViaHelper
 } from "./factory2ReportHelperApi";
+import "../PackageReport/packageLotEditModal.css";
 
 const numberFormatter = new Intl.NumberFormat("ja-JP");
 
@@ -77,6 +84,23 @@ const normalizeUseQuantityInput = (text: string, maxStock: number | null): strin
 const useQuantityFromStock = (stock: number | null | undefined): string => {
   if (stock == null || stock <= 0) return "";
   return formatUseQuantityValue(stock);
+};
+
+/** 製造数(Kg) = 梱包重量×梱包数 + 端数重量×端数数 */
+const calcProductQuantityText = (
+  unitWeight: string,
+  unitNumber: string,
+  fractionWeight: string,
+  fractionNumber: string
+): string => {
+  const parse = (t: string): number => {
+    const n = Number(t.trim().replace(/,/g, ""));
+    return Number.isFinite(n) ? n : 0;
+  };
+  const qty =
+    parse(unitWeight) * parse(unitNumber) + parse(fractionWeight) * parse(fractionNumber);
+  if (qty <= 0) return "";
+  return numberFormatter.format(Math.round(qty * 100) / 100);
 };
 
 /** `type="time"` 用に "HH:MM" へ正規化（空欄可） */
@@ -167,9 +191,19 @@ function Factory2LotEditModalContent({
   const createLot = useSetAtom(createFactory2LotAtom);
   const updateLot = useSetAtom(updateFactory2LotAtom);
   const deleteLot = useSetAtom(deleteFactory2LotAtom);
+  const confirmLotStock = useSetAtom(confirmFactory2LotStockAtom);
   const mutationError = useAtomValue(factory2LotMutationErrorAtom);
   const setMutationError = useSetAtom(factory2LotMutationErrorAtom);
   const [partItems, setPartItems] = useState<Factory2LotEditPartRow[]>(() => [...form.partRows]);
+  const [inputQuantity, setInputQuantity] = useState(() => form.inputQuantity);
+  const [unitWeight, setUnitWeight] = useState(() => form.unitWeight);
+  const [unitNumber, setUnitNumber] = useState(() => form.unitNumber);
+  const [fractionWeight, setFractionWeight] = useState(() => form.fractionWeight);
+  const [fractionNumber, setFractionNumber] = useState(() => form.fractionNumber);
+  const [productQuantity, setProductQuantity] = useState(() => form.productQuantity);
+  const [itemNo, setItemNo] = useState(() => form.itemNo);
+  const [itemName, setItemName] = useState(() => form.itemName);
+  const [itemZoomOpen, setItemZoomOpen] = useState(false);
   const [stockEntryError, setStockEntryError] = useState<string>("");
   const [stockZoomOpen, setStockZoomOpen] = useState(false);
   const [localError, setLocalError] = useState<string>("");
@@ -190,7 +224,32 @@ function Factory2LotEditModalContent({
     setOrganicClassCode(toOrganicClassCode(form.organicClassCode));
     const normalizedYear = normalizeMakeYearFromForm(form.makeYear);
     setMakeYear(normalizedYear || getDefaultMakeYear());
-  }, [form.organicClassCode, form.makeYear, form.lotNo, form.productNo]);
+    setPartItems([...form.partRows]);
+    setInputQuantity(form.inputQuantity);
+    setUnitWeight(form.unitWeight);
+    setUnitNumber(form.unitNumber);
+    setFractionWeight(form.fractionWeight);
+    setFractionNumber(form.fractionNumber);
+    setProductQuantity(form.productQuantity);
+    setItemNo(form.itemNo);
+    setItemName(form.itemName);
+  }, [
+    form.organicClassCode,
+    form.makeYear,
+    form.lotNo,
+    form.productNo,
+    form.partRows,
+    form.inputQuantity,
+    form.unitWeight,
+    form.unitNumber,
+    form.fractionWeight,
+    form.fractionNumber,
+    form.productQuantity,
+    form.itemNo,
+    form.itemName
+  ]);
+
+  const trItemZoomFilterParams = useMemo<TrItemZoomFilterParams>(() => ({ systemClass: "2" }), []);
 
   const stockIndex = useMemo(() => {
     const m = new Map<string, ViFactory2Stock>();
@@ -293,23 +352,27 @@ function Factory2LotEditModalContent({
       setStockEntryError("既に一覧にある使用部品は追加できません。");
       return;
     }
-    setPartItems((prev) => [
-      ...prev,
-      {
-        id: `stock-${s.lot_no}-${s.product_no}-${Date.now()}`,
-        parentLotNo: "",
-        partLotNo: String(s.lot_no),
-        lotNo: String(s.lot_no),
-        processName: s.process_type_name ?? "",
-        partNo: String(s.lot_no),
-        productNo: String(s.product_no),
-        partName: s.lot_name ?? "",
-        makeYear: s.make_year ?? "",
-        count: s.count ?? "",
-        useQuantity: qtyText,
-        remarks: ""
-      }
-    ]);
+    setPartItems((prev) => {
+      const next = [
+        ...prev,
+        {
+          id: `stock-${s.lot_no}-${s.product_no}-${Date.now()}`,
+          parentLotNo: String(s.lot_no),
+          partLotNo: String(s.lot_no),
+          lotNo: String(s.lot_no),
+          processName: s.process_type_name ?? "",
+          partNo: String(s.lot_no),
+          productNo: String(s.product_no),
+          partName: s.lot_name ?? "",
+          makeYear: s.make_year ?? "",
+          count: s.count ?? "",
+          useQuantity: qtyText,
+          remarks: ""
+        }
+      ];
+      setInputQuantity(sumFactory2LotInputQuantity(next));
+      return next;
+    });
     setStockEntryError("");
     setStockEntry({ lotNo: "", productNo: "", useQuantity: "", stockKey: "" });
   };
@@ -322,9 +385,38 @@ function Factory2LotEditModalContent({
   const canEditParts = mode === "update" || mode === "create";
   const canOpenReport = isUpdate || isView;
   const canOpenGradeSheet = (isUpdate || isView) && isFactory2OrganicTea(organicClassCode);
+  /** WPF IsRegistChk: lot_status == 2（完了）のみ在庫確定可 */
+  const canConfirmStock = isUpdate && isFactory2LotStatusComplete(form.lotStatusCode);
+  /** 通称名（商品NO・商品名）未選択時は必須赤枠 */
+  const isTsushomeiMandatoryEmpty =
+    canEditParts && (!itemNo.trim() || !itemName.trim());
   const handleDeletePartRow = useCallback((id: string) => {
-    setPartItems((prev) => prev.filter((r) => r.id !== id));
+    setPartItems((prev) => {
+      const next = prev.filter((r) => r.id !== id);
+      setInputQuantity(sumFactory2LotInputQuantity(next));
+      return next;
+    });
   }, []);
+
+  const updatePackingField = (
+    field: "unitWeight" | "unitNumber" | "fractionWeight" | "fractionNumber",
+    value: string
+  ) => {
+    const next = {
+      unitWeight,
+      unitNumber,
+      fractionWeight,
+      fractionNumber,
+      [field]: value
+    };
+    if (field === "unitWeight") setUnitWeight(value);
+    if (field === "unitNumber") setUnitNumber(value);
+    if (field === "fractionWeight") setFractionWeight(value);
+    if (field === "fractionNumber") setFractionNumber(value);
+    setProductQuantity(
+      calcProductQuantityText(next.unitWeight, next.unitNumber, next.fractionWeight, next.fractionNumber)
+    );
+  };
   const canEditOrganicClass = mode === "create" || mode === "update";
   const canEditMakeYear = mode === "create" || mode === "update";
 
@@ -368,12 +460,17 @@ function Factory2LotEditModalContent({
   const handleRegister = async () => {
     setLocalError("");
     setMutationError(null);
+    if (!itemNo.trim() || !itemName.trim()) {
+      setLocalError("通称名（商品NO・商品名）を選択してください。");
+      return;
+    }
     const panel = panelRef.current;
     if (!panel) {
       setLocalError("画面の読み取りに失敗しました。");
       return;
     }
-    const payload = collectFactory2LotCreatePayload(panel, form, partItems, organicClassCode, makeYear);
+    const formForSave = { ...form, itemNo, itemName };
+    const payload = collectFactory2LotCreatePayload(panel, formForSave, partItems, organicClassCode, makeYear);
     const ok = await runBusy(async () => createLot(payload), "登録処理中…");
     if (ok) onClose();
   };
@@ -381,12 +478,17 @@ function Factory2LotEditModalContent({
   const handleUpdate = async () => {
     setLocalError("");
     setMutationError(null);
+    if (!itemNo.trim() || !itemName.trim()) {
+      setLocalError("通称名（商品NO・商品名）を選択してください。");
+      return;
+    }
     const panel = panelRef.current;
     if (!panel) {
       setLocalError("画面の読み取りに失敗しました。");
       return;
     }
-    const payload = collectFactory2LotUpdatePayload(panel, form, partItems, organicClassCode, makeYear);
+    const formForSave = { ...form, itemNo, itemName };
+    const payload = collectFactory2LotUpdatePayload(panel, formForSave, partItems, organicClassCode, makeYear);
     if (!payload) {
       setLocalError("ロットNoが不正です。");
       return;
@@ -413,6 +515,28 @@ function Factory2LotEditModalContent({
     }
   };
 
+  const handleConfirmStock = async () => {
+    const lotNo = form.lotNo;
+    if (lotNo == null || !Number.isFinite(lotNo)) {
+      setLocalError("ロットNoが不正です。");
+      return;
+    }
+    if (
+      !window.confirm(
+        "在庫の確定を行います。確定後は製造報告書の変更はできません。確定を行います。よろしいですか？"
+      )
+    ) {
+      return;
+    }
+    setLocalError("");
+    setMutationError(null);
+    const ok = await runBusy(async () => confirmLotStock(lotNo), "在庫確定処理中…");
+    if (ok) {
+      onDeleted?.();
+      onClose();
+    }
+  };
+
   const handlePreviewReport = async () => {
     setLocalError("");
     setMutationError(null);
@@ -422,7 +546,7 @@ function Factory2LotEditModalContent({
           previewFactory2ReportViaHelper(
             {
               panel: panelRef.current,
-              form,
+              form: { ...form, itemNo, itemName },
               partRows: partItems,
               organicClassCode,
               makeYear,
@@ -450,7 +574,7 @@ function Factory2LotEditModalContent({
           previewFactory2GradeReportViaHelper(
             {
               panel: panelRef.current,
-              form,
+              form: { ...form, itemNo, itemName },
               partRows: partItems,
               organicClassCode,
               makeYear,
@@ -527,7 +651,18 @@ function Factory2LotEditModalContent({
         >
           格付表
         </button>
-        <button type="button" disabled={mode !== "update"}>
+        <button
+          type="button"
+          disabled={!canConfirmStock}
+          title={
+            canConfirmStock
+              ? "在庫を確定する"
+              : isUpdate
+                ? "ロット状態が完了のときのみ在庫確定できます"
+                : "変更モードでのみ利用できます"
+          }
+          onClick={() => void handleConfirmStock()}
+        >
           在庫確定
         </button>
         {showGradeNo ? (
@@ -590,15 +725,44 @@ function Factory2LotEditModalContent({
             readOnly={!canEditMakeYear}
           />
         </ValueCell>
-        <LabelCell width={50}>通称名</LabelCell>
+        <button
+          type="button"
+          className="pkgEditZoomButton f2EditTsushomeiZoomBtn"
+          disabled={!canEditParts}
+          onClick={() => setItemZoomOpen(true)}
+          title="商品マスターから通称名を選択"
+        >
+          通称名
+        </button>
         <ValueCell width={200}>
-          <input
-            className="f2EditInput f2EditReadonly"
-            type="text"
-            defaultValue={form.itemName}
-            readOnly
-            aria-label="通称名"
-          />
+          <div
+            className={`pkgEditItemZoomFields f2EditTsushomeiZoomFields${
+              isTsushomeiMandatoryEmpty ? " f2EditMandatoryEmpty" : ""
+            }`}
+          >
+            <div className="pkgEditItemZoomCell pkgEditItemZoomNoCell">
+              <input
+                className={`f2EditInput f2EditReadonly pkgEditItemZoomNo${
+                  isTsushomeiMandatoryEmpty ? " f2EditMandatoryEmpty" : ""
+                }`}
+                type="text"
+                readOnly
+                value={itemNo}
+                aria-label="商品NO"
+              />
+            </div>
+            <div className="pkgEditItemZoomCell pkgEditItemZoomNameCell">
+              <input
+                className={`f2EditInput f2EditReadonly pkgEditItemZoomName${
+                  isTsushomeiMandatoryEmpty ? " f2EditMandatoryEmpty" : ""
+                }`}
+                type="text"
+                readOnly
+                value={itemName}
+                aria-label="商品名"
+              />
+            </div>
+          </div>
         </ValueCell>
         <LabelCell width={35}>回数</LabelCell>
         <ValueCell width={30}>
@@ -672,11 +836,7 @@ function Factory2LotEditModalContent({
             <th scope="col">端数重量</th>
             <th scope="col">端数数</th>
             <th scope="col">製造数(Kg)</th>
-            <th scope="col">
-              <button type="button" className="f2EditBtnPaleGreen">
-                投入数(Kg)
-              </button>
-            </th>
+            <th scope="col">投入数(Kg)</th>
             <th scope="col">適用</th>
           </tr>
         </thead>
@@ -686,25 +846,53 @@ function Factory2LotEditModalContent({
               <input className="f2EditInput" type="text" defaultValue={form.lotName} aria-label="部品名" />
             </td>
             <td>
-              <input className="f2EditInput f2EditInputRight" type="text" defaultValue={form.unitWeight} aria-label="梱包重量" />
+              <input
+                className="f2EditInput f2EditInputRight"
+                type="text"
+                value={unitWeight}
+                onChange={(e) => updatePackingField("unitWeight", e.target.value)}
+                readOnly={!canEditParts}
+                aria-label="梱包重量"
+              />
             </td>
             <td>
-              <input className="f2EditInput f2EditInputRight" type="text" defaultValue={form.unitNumber} aria-label="梱包数" />
+              <input
+                className="f2EditInput f2EditInputRight"
+                type="text"
+                value={unitNumber}
+                onChange={(e) => updatePackingField("unitNumber", e.target.value)}
+                readOnly={!canEditParts}
+                aria-label="梱包数"
+              />
             </td>
             <td>
-              <input className="f2EditInput f2EditInputRight" type="text" defaultValue={form.fractionWeight} aria-label="端数重量" />
+              <input
+                className="f2EditInput f2EditInputRight"
+                type="text"
+                value={fractionWeight}
+                onChange={(e) => updatePackingField("fractionWeight", e.target.value)}
+                readOnly={!canEditParts}
+                aria-label="端数重量"
+              />
             </td>
             <td>
-              <input className="f2EditInput f2EditInputRight" type="text" defaultValue={form.fractionNumber} aria-label="端数数" />
+              <input
+                className="f2EditInput f2EditInputRight"
+                type="text"
+                value={fractionNumber}
+                onChange={(e) => updatePackingField("fractionNumber", e.target.value)}
+                readOnly={!canEditParts}
+                aria-label="端数数"
+              />
             </td>
             <td>
               <span className="f2EditReadonly f2EditReadonlyRight" style={{ display: "block", padding: "4px" }}>
-                {form.productQuantity}
+                {productQuantity}
               </span>
             </td>
             <td>
               <span className="f2EditReadonly f2EditReadonlyRight" style={{ display: "block", padding: "4px" }}>
-                {form.inputQuantity}
+                {inputQuantity}
               </span>
             </td>
             <td>
@@ -974,6 +1162,19 @@ function Factory2LotEditModalContent({
         onSelect={(stock) => {
           setSelectedStock(stock);
           setStockEntryError("");
+        }}
+      />
+
+      <TrItemMasterZoomModal
+        open={itemZoomOpen}
+        onClose={() => setItemZoomOpen(false)}
+        initialCode={itemNo}
+        initialName={itemName}
+        filterParams={trItemZoomFilterParams}
+        onSelect={(code, name) => {
+          setItemNo(code);
+          setItemName(name);
+          setItemZoomOpen(false);
         }}
       />
     </section>

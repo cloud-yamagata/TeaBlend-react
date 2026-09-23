@@ -5,10 +5,12 @@ import { atom } from "jotai";
 import { masterEntityCacheAtom } from "../repository/masterData";
 import {
   createFactory2LotManufacture,
+  confirmFactory2LotStock,
   deleteFactory2LotManufacture,
   updateFactory2LotManufacture
 } from "../repositories/factory2LotManufactureRepository";
 import { applyFactory2LotCacheCreate } from "./applyFactory2LotCacheCreate";
+import { applyFactory2LotCacheConfirmStock } from "./applyFactory2LotCacheConfirmStock";
 import { applyFactory2LotCacheDelete } from "./applyFactory2LotCacheDelete";
 import { applyFactory2LotCacheUpdate } from "./applyFactory2LotCacheUpdate";
 import type {
@@ -74,7 +76,11 @@ export const createFactory2LotAtom = atom(null, async (get, set, payload: Factor
       masterEntityCacheAtom,
       applyFactory2LotCacheCreate(
         cache,
-        { lot_no: apiResult.lot_no, product_no: apiResult.product_no! },
+        {
+          lot_no: apiResult.lot_no,
+          product_no: apiResult.product_no!,
+          grade_no: apiResult.grade_no ?? null
+        },
         payload
       )
     );
@@ -112,6 +118,21 @@ export const deleteFactory2LotAtom = atom(null, async (get, set, lotNo: number) 
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     set(factory2LotMutationErrorAtom, `削除処理に失敗しました: ${message}`);
+    return false;
+  }
+});
+
+/** 在庫確定：API 成功後に lot_status=3 */
+export const confirmFactory2LotStockAtom = atom(null, async (get, set, lotNo: number) => {
+  set(factory2LotMutationErrorAtom, null);
+  try {
+    await confirmFactory2LotStock(lotNo);
+    const cache = get(masterEntityCacheAtom);
+    set(masterEntityCacheAtom, applyFactory2LotCacheConfirmStock(cache, lotNo));
+    return true;
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    set(factory2LotMutationErrorAtom, `在庫確定に失敗しました: ${message}`);
     return false;
   }
 });

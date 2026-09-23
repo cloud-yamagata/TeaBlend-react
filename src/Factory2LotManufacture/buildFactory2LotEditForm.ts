@@ -115,7 +115,7 @@ const buildPartRows = (
 
     return {
       id: `part-${parentLotNo}-${childLotNo}-${index}`,
-      parentLotNo: "",
+      parentLotNo: String(childLotNo),
       partLotNo: String(childLotNo),
       lotNo: String(childLotNo),
       processName: childBase ? processShortName(childBase.process_type) : "",
@@ -139,10 +139,16 @@ const sumInputQuantity = (rows: Factory2LotEditPartRow[]): string => {
   return total > 0 ? formatNum(total, 2) : "";
 };
 
-/** 新規登録モーダル用（1段目の工程・通称名のみ事前セット） */
+/** 使用部品の使用量合計（投入数 Kg） */
+export function sumFactory2LotInputQuantity(rows: readonly Factory2LotEditPartRow[]): string {
+  return sumInputQuantity([...rows]);
+}
+
+/** 新規登録モーダル用（1段目の工程のみ事前セット。通称名はモーダル内 ZOOM） */
 export function buildFactory2LotEditFormForCreate(
   menuProcess: Factory2ProcessFilter,
-  itemName: string
+  itemName: string = "",
+  itemNo: string = ""
 ): Factory2LotEditFormData {
   return {
     lotNo: null,
@@ -152,6 +158,7 @@ export function buildFactory2LotEditFormForCreate(
     processTypeCode: menuProcess,
     productNo: null,
     makeYear: getDefaultMakeYear(),
+    itemNo: itemNo.trim(),
     itemName: itemName.trim(),
     count: "",
     workDate: "",
@@ -205,6 +212,7 @@ export function buildFactory2LotEditFormFromRow(
     productNo: row.productNo ?? base?.product_no ?? null,
     makeYear:
       row.makeYear != null ? normalizeMakeYearFromForm(String(row.makeYear)) : "",
+    itemNo: row.itemNo != null ? String(row.itemNo) : "",
     itemName: str(row.itemName),
     count: row.count != null ? String(row.count) : "",
     workDate: toDateInputValue(row.workDate ?? base?.work_date ?? null),

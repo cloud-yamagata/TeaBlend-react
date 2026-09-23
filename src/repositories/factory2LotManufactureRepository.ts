@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 第二工場ロット製造登録：変更・削除 API
  */
 import { getMaterialApiBaseUrl } from "../config/api";
@@ -43,7 +43,8 @@ export function toApiUpdateBody(payload: Factory2LotUpdatePayload): Record<strin
       remarks: bf.remarks,
       make_year: bf.make_year,
       count: bf.count,
-      use_name: bf.use_name
+      use_name: bf.use_name,
+      use_no: bf.use_no
     },
     category_fields: { ...cf },
     part_rows: toApiPartRows(payload.partRows)
@@ -54,6 +55,8 @@ export type Factory2LotMutationApiResult = {
   ok: boolean;
   lot_no: number;
   product_no: number | null;
+  grade_no?: number | null;
+  lot_status?: string | null;
 };
 
 async function postMutation(path: string, body: unknown): Promise<Factory2LotMutationApiResult> {
@@ -89,7 +92,8 @@ export function toApiCreateBody(payload: Factory2LotCreatePayload): Record<strin
       remarks: bf.remarks,
       make_year: bf.make_year,
       count: bf.count,
-      use_name: bf.use_name
+      use_name: bf.use_name,
+      use_no: bf.use_no
     },
     category_fields: { ...cf },
     part_rows: toApiPartRows(payload.partRows)
@@ -112,4 +116,8 @@ export async function updateFactory2LotManufacture(payload: Factory2LotUpdatePay
 
 export async function deleteFactory2LotManufacture(lotNo: number): Promise<void> {
   await postMutation("/delete", { lot_no: lotNo });
+}
+
+export async function confirmFactory2LotStock(lotNo: number): Promise<Factory2LotMutationApiResult> {
+  return postMutation("/confirm_stock", { lot_no: lotNo });
 }

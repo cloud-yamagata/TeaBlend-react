@@ -12,6 +12,8 @@ export type Factory2LotRow = {
   lotStatusName: string | null;
   lotName: string | null;
   makeYear: number | null;
+  /** 商品NO（te_lot_use_item.use_no） */
+  itemNo: number | null;
   itemName: string | null;
   count: number | null;
   /** 有機区分コード（te_lot_base.organic_class → tr_constant.grade 等） */

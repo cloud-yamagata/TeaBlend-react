@@ -7,6 +7,7 @@
  * ④ te_lot_categorys_common INSERT
  */
 import {
+  TeGrade,
   TeLotBase,
   TeLotPart,
   TeLotUseItem,
@@ -18,6 +19,7 @@ import type { Factory2LotCreatePayload } from "./collectFactory2LotEditPayload";
 export type Factory2LotCreateResult = {
   lot_no: number;
   product_no: number;
+  grade_no?: number | null;
 };
 
 const nowIso = (): string => new Date().toISOString();
@@ -37,21 +39,35 @@ const parseUseQuantity = (text: string): number | null => {
   return Math.round(n * 10) / 10;
 };
 
+/** WPF: product_quantity > 0 → lot_status 2、否则 1 */
+const lotStatusFromBaseFields = (unitWeight: number, unitNumber: number, fractionWeight: number | null, fractionNumber: number | null): string => {
+  const qty =
+    Number(unitWeight || 0) * Number(unitNumber || 0) +
+    Number(fractionWeight || 0) * Number(fractionNumber || 0);
+  return qty > 0 ? "2" : "1";
+};
+
 export function applyFactory2LotCacheCreate(
   cache: MasterEntityCache,
   result: Factory2LotCreateResult,
   payload: Factory2LotCreatePayload
 ): MasterEntityCache {
-  const { lot_no: parentLotNo, product_no: productNo } = result;
+  const { lot_no: parentLotNo, product_no: productNo, grade_no: gradeNo } = result;
   const bf = payload.baseFields;
   const processType = payload.process_type.trim();
   const organic = payload.organic_class.trim().toUpperCase() || "C";
+  const lotStatus = lotStatusFromBaseFields(
+    bf.unit_weight,
+    bf.unit_number,
+    bf.fraction_weight,
+    bf.fraction_number
+  );
 
   const newBase = TeLotBase.parse({
     lot_no: parentLotNo,
     process_type: processType,
     product_no: productNo,
-    lot_status: "1",
+    lot_status: lotStatus,
     lot_name: bf.lot_name,
     work_date: bf.work_date,
     organic_class: organic,
@@ -66,7 +82,7 @@ export function applyFactory2LotCacheCreate(
   const insertedUseItems = [
     TeLotUseItem.parse({
       lot_no: parentLotNo,
-      use_no: productNo,
+      use_no: bf.use_no != null && Number.isFinite(bf.use_no) ? bf.use_no : productNo,
       use_name: bf.use_name || null,
       make_year: bf.make_year || null,
       count: bf.count || null
@@ -140,11 +156,17 @@ export function applyFactory2LotCacheCreate(
     update_time: nowIso()
   });
 
+  const nextGrades =
+    gradeNo != null && Number.isFinite(gradeNo)
+      ? [...cache.te_grade, TeGrade.parse({ grade_no: gradeNo, lot_no: parentLotNo })]
+      : cache.te_grade;
+
   return {
     ...cache,
     te_lot_base: [...cache.te_lot_base, newBase],
     te_lot_use_item: [...cache.te_lot_use_item, ...insertedUseItems],
     te_lot_part: [...cache.te_lot_part, ...insertedParts],
-    te_lot_categorys_common: [...cache.te_lot_categorys_common, newCategory]
+    te_lot_categorys_common: [...cache.te_lot_categorys_common, newCategory],
+    te_grade: nextGrades
   };
 }

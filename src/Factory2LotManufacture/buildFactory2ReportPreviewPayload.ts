@@ -93,7 +93,7 @@ const buildBaseRow = (
     product_no: form.productNo ?? 0,
     lot_name: readInput(panel, "部品名", form.lotName),
     make_year: makeYear,
-    blend_name_base: readInput(panel, "通称名", form.itemName),
+    blend_name_base: readInput(panel, "商品名", form.itemName),
     count: readInput(panel, "回数", form.count),
     organic_class_base: organicClassCode,
     unit_weight: unitWeight,

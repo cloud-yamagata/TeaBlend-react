@@ -534,3 +534,36 @@
 .f2EditSpacerLg {
   height: 10px;
 }
+
+.f2EditTsushomeiZoomBtn {
+  width: 50px;
+  min-height: 26px;
+  padding: 2px 4px;
+  font-size: 12px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.f2EditTsushomeiZoomFields {
+  width: 100%;
+  min-height: 26px;
+  border: 1px solid #999;
+}
+
+.f2EditTsushomeiZoomFields .pkgEditItemZoomCell {
+  border-right: 1px solid #999;
+}
+
+.f2EditTsushomeiZoomFields .f2EditInput {
+  width: 100%;
+  height: 100%;
+  border: none;
+  box-sizing: border-box;
+}
+
+/* 必須項目未入力（通称名 ZOOM） */
+.f2EditInput.f2EditMandatoryEmpty,
+input.f2EditMandatoryEmpty,
+.f2EditTsushomeiZoomFields.f2EditMandatoryEmpty {
+  box-shadow: inset 0 0 0 1px #c62828;
+}

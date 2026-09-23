@@ -47,18 +47,24 @@ export function applyFactory2LotCacheUpdate(
   const oldChildLotNos = oldParts.map((p) => p.data.part_no);
   const useItemDeleteLotNos = new Set<number>([parentLotNo, ...oldChildLotNos]);
 
-  const parentUseNo = resolveUseNo(cache, parentLotNo);
+  const parentUseNoResolved = resolveUseNo(cache, parentLotNo);
   const parentBase = cache.te_lot_base.find((b) => b.data.lot_no === parentLotNo);
   if (!parentBase) {
     return cache;
   }
 
   const b0 = parentBase.data;
+  const lotStatus =
+    Number(baseFields.unit_weight || 0) * Number(baseFields.unit_number || 0) +
+      Number(baseFields.fraction_weight || 0) * Number(baseFields.fraction_number || 0) >
+    0
+      ? "2"
+      : "1";
   const updatedBase = TeLotBase.parse({
     lot_no: b0.lot_no,
     process_type: b0.process_type,
     product_no: b0.product_no,
-    lot_status: b0.lot_status,
+    lot_status: lotStatus,
     lot_name: baseFields.lot_name,
     work_date: baseFields.work_date,
     organic_class: organicCode,
@@ -73,6 +79,10 @@ export function applyFactory2LotCacheUpdate(
   const remainingUseItems = cache.te_lot_use_item.filter((u) => !useItemDeleteLotNos.has(u.data.lot_no));
   const remainingParts = cache.te_lot_part.filter((p) => p.data.lot_no !== parentLotNo);
 
+  const parentUseNo =
+    baseFields.use_no != null && Number.isFinite(baseFields.use_no)
+      ? baseFields.use_no
+      : parentUseNoResolved;
   const insertedUseItems = [
     TeLotUseItem.parse({
       lot_no: parentLotNo,

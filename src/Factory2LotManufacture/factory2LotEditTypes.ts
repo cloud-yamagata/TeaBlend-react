@@ -58,6 +58,9 @@ export type Factory2LotEditFormData = {
   processTypeCode: Factory2ProcessFilter | string;
   productNo: number | null;
   makeYear: string;
+  /** 商品NO（te_lot_use_item.use_no / tr_item.item_no） */
+  itemNo: string;
+  /** 商品名＝通称名（te_lot_use_item.use_name） */
   itemName: string;
   count: string;
   workDate: string;

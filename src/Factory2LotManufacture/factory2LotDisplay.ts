@@ -97,6 +97,13 @@ export function normalizeLotStatusCode(code: string): string {
   return c;
 }
 
+/** ロット状態「完了」（lot_status = 2）… 在庫確定の前提 */
+export const FACTORY2_LOT_STATUS_COMPLETE = "2";
+
+export function isFactory2LotStatusComplete(lotStatusCode: string): boolean {
+  return normalizeLotStatusCode(lotStatusCode) === FACTORY2_LOT_STATUS_COMPLETE;
+}
+
 /** ロット状態「確定」（tr_constant.lot_status = 3） */
 export const FACTORY2_LOT_STATUS_CONFIRMED = "3";
 

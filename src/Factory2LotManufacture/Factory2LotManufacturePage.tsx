@@ -18,10 +18,6 @@ import {
   buildFactory2LotEditFormForCreate,
   buildFactory2LotEditFormFromRow
 } from "./buildFactory2LotEditForm";
-import {
-  buildFactory2LotEditFormFromMonthlyPlan,
-  findMonthlyPlanByPlanNo
-} from "./buildFactory2LotEditFormFromMonthlyPlan";
 import { Factory2LotEditModal } from "./Factory2LotEditModal";
 import { Factory2LotManufactureMantineTable } from "./Factory2LotManufactureMantineTable";
 import type { Factory2LotEditFormData, Factory2LotEditMode } from "./factory2LotEditTypes";
@@ -30,15 +26,10 @@ import type { Factory2LotRegistProcessFilter, Factory2LotRow, Factory2ProcessFil
 import {
   factory2LotMasterErrorAtom,
   masterDataLoadingAtom,
-  masterEntityCacheAtom,
-  masterMonthlyPlansAtom,
-  masterTrItemsAtom
+  masterEntityCacheAtom
 } from "../repository/masterData";
 import {
   factory2LotProcessFilterAtom,
-  factory2LotRegistItemNameAtom,
-  factory2LotRegistItemNoAtom,
-  factory2LotRegistPlanNoAtom,
   factory2LotSearchAppliedCriteriaAtom,
   factory2LotSearchItemNameAtom,
   factory2LotSearchLotStatusAtom,
@@ -53,8 +44,6 @@ import "./factory2LotManufactureTable.css";
 
 export default function Factory2LotManufacturePage() {
   const cache = useAtomValue(masterEntityCacheAtom);
-  const monthlyPlans = useAtomValue(masterMonthlyPlansAtom);
-  const trItems = useAtomValue(masterTrItemsAtom);
   const loading = useAtomValue(masterDataLoadingAtom);
   const masterError = useAtomValue(factory2LotMasterErrorAtom);
 
@@ -62,11 +51,7 @@ export default function Factory2LotManufacturePage() {
   const [year, setYear] = useAtom(factory2LotSearchYearAtom);
   const [productDate, setProductDate] = useAtom(factory2LotSearchProductDateAtom);
   const [selectedItemName, setSelectedItemName] = useAtom(factory2LotSearchItemNameAtom);
-  const [registItemNo, setRegistItemNo] = useAtom(factory2LotRegistItemNoAtom);
-  const [registItemName, setRegistItemName] = useAtom(factory2LotRegistItemNameAtom);
-  const [registPlanNo, setRegistPlanNo] = useAtom(factory2LotRegistPlanNoAtom);
-  const [itemZoomTarget, setItemZoomTarget] = useState<"search" | "register" | null>(null);
-  const itemZoomOpen = itemZoomTarget !== null;
+  const [itemZoomOpen, setItemZoomOpen] = useState(false);
   const [editModal, setEditModal] = useState<{
     mode: Factory2LotEditMode;
     form: Factory2LotEditFormData;
@@ -131,48 +116,13 @@ export default function Factory2LotManufacturePage() {
   const isRegistProcessSelected = (code: Factory2LotRegistProcessFilter): code is Factory2ProcessFilter =>
     code === "02" || code === "03" || code === "04" || code === "05";
 
-  const canOpenCreate =
-    isRegistProcessSelected(processFilter) && registItemName.trim().length > 0;
+  const canOpenCreate = isRegistProcessSelected(processFilter);
 
   const openCreateModal = () => {
     if (!canOpenCreate) return;
-    let form = buildFactory2LotEditFormForCreate(processFilter, registItemName);
-    const planWarnings: string[] = [];
-    const planNoText = registPlanNo.trim();
-
-    if (planNoText) {
-      const planNo = Number(planNoText);
-      const plan = findMonthlyPlanByPlanNo(monthlyPlans, planNoText);
-      if (!plan) {
-        planWarnings.push(
-          `計画No ${planNoText} は見つかりません。工程・通称名のみで開きます。`
-        );
-        if (Number.isFinite(planNo) && planNo > 0) {
-          form = {
-            ...form,
-            planContext: { planNo, year: null, month: null }
-          };
-        }
-      } else {
-        const merged = buildFactory2LotEditFormFromMonthlyPlan(form, plan, {
-          menuProcess: processFilter,
-          registItemName,
-          registItemNo,
-          stocks: cache.vi_factory2_stock,
-          trItems
-        });
-        form = merged.form;
-        planWarnings.push(...merged.warnings);
-      }
-    }
-
-    if (planWarnings.length > 0) {
-      form = { ...form, planWarnings };
-    }
-
     setEditModal({
       mode: "create",
-      form
+      form: buildFactory2LotEditFormForCreate(processFilter)
     });
   };
 
@@ -256,34 +206,13 @@ export default function Factory2LotManufacturePage() {
             仕上配合
           </label>
         </fieldset>
-        <div className="factory2PlanNoGroup">
-          <span className="factory2FieldLabel factory2FieldLabelCompact">計画No</span>
-          <input
-            className="factory2PlanNoInput"
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={registPlanNo}
-            onChange={(e) => setRegistPlanNo(e.target.value.replace(/\D/g, ""))}
-            aria-label="計画No"
-            autoComplete="off"
-          />
-        </div>
-        <Factory2FinishedTeaZoomField
-          value={registItemName}
-          onOpenZoom={() => setItemZoomTarget("register")}
-        />
         <div className="factory2MenuActions">
           <button
             type="button"
             className="factory2DarkButton"
             disabled={!canOpenCreate}
             onClick={openCreateModal}
-            title={
-              canOpenCreate
-                ? "新規登録画面を開く"
-                : "工程を選択し、仕上茶ZOOMで通称名を指定してください"
-            }
+            title={canOpenCreate ? "新規登録画面を開く" : "工程を選択してください"}
           >
             登録
           </button>
@@ -410,7 +339,7 @@ export default function Factory2LotManufacturePage() {
         <Factory2FinishedTeaZoomField
           value={selectedItemName}
           fillRemaining
-          onOpenZoom={() => setItemZoomTarget("search")}
+          onOpenZoom={() => setItemZoomOpen(true)}
         />
         <div className="factory2MenuActions">
           <button
@@ -445,7 +374,7 @@ export default function Factory2LotManufacturePage() {
         <Factory2LotEditModal
           key={
             editModal.mode === "create"
-              ? `create-${processFilter}-${registItemName}-${registPlanNo}`
+              ? `create-${processFilter}`
               : `lot-${editModal.form.lotNo ?? "x"}-${editModal.mode}`
           }
           open
@@ -462,29 +391,17 @@ export default function Factory2LotManufacturePage() {
 
       <TrItemMasterZoomModal
         open={itemZoomOpen}
-        onClose={() => setItemZoomTarget(null)}
-        initialCode={itemZoomTarget === "register" ? registItemNo : ""}
-        initialName={itemZoomTarget === "register" ? registItemName : selectedItemName}
+        onClose={() => setItemZoomOpen(false)}
+        initialCode=""
+        initialName={selectedItemName}
         filterParams={factory2TrItemZoomFilterParams}
-        onSelect={(code, name) => {
-          const trimmedName = name.trim();
-          const trimmedCode = code.trim();
-          if (itemZoomTarget === "register") {
-            setRegistItemNo(trimmedCode);
-            setRegistItemName(trimmedName);
-          } else {
-            setSelectedItemName(trimmedName);
-          }
-          setItemZoomTarget(null);
+        onSelect={(_code, name) => {
+          setSelectedItemName(name.trim());
+          setItemZoomOpen(false);
         }}
         onClear={() => {
-          if (itemZoomTarget === "register") {
-            setRegistItemNo("");
-            setRegistItemName("");
-          } else {
-            setSelectedItemName("");
-          }
-          setItemZoomTarget(null);
+          setSelectedItemName("");
+          setItemZoomOpen(false);
         }}
       />
     </main>

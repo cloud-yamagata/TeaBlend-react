@@ -29,12 +29,12 @@ export function Factory2LotEditPartsTable({ rows, canDelete, onDeleteRow }: Prop
   const columns = useMemo((): MantineScrollTableColumn<Factory2LotEditPartRow>[] => {
     const base: MantineScrollTableColumn<Factory2LotEditPartRow>[] = [
       {
-        key: "parentLotNo",
+        key: "lotNo",
         label: "ロットNo",
         align: "right",
         sortable: false,
-        sortValue: (r) => r.parentLotNo,
-        render: (r) => r.parentLotNo
+        sortValue: (r) => r.lotNo,
+        render: (r) => r.lotNo
       },
       {
         key: "processName",

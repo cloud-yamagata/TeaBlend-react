@@ -95,6 +95,7 @@ export function buildFactory2LotEditFormFromMonthlyPlan(
   const planItem = plan.itemNo != null ? options.trItems.find((i) => i.itemNo === plan.itemNo) : undefined;
   const planItemName = planItem?.itemName?.trim() ?? "";
   const screenItemName = options.registItemName.trim();
+  const screenItemNo = options.registItemNo.trim();
   if (planItemName && screenItemName && planItemName !== screenItemName) {
     warnings.push(
       `計画の通称名（${planItemName}）と画面の通称名が異なります。画面の通称名を使用します。`
@@ -113,6 +114,7 @@ export function buildFactory2LotEditFormFromMonthlyPlan(
 
   const form: Factory2LotEditFormData = {
     ...baseForm,
+    itemNo: screenItemNo || baseForm.itemNo,
     itemName: screenItemName || baseForm.itemName,
     makeYear: planMakeYear || baseForm.makeYear,
     workDate: toDateInputValue(plan.workDate) || baseForm.workDate,

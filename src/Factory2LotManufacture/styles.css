@@ -209,7 +209,7 @@
 .factory2MenuActions {
   display: inline-flex;
   gap: 4px;
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .factory2Hint {
@@ -228,13 +228,19 @@
 
 .factory2ToolbarRowSearch .factory2GroupBox {
   align-self: stretch;
-  gap: 2px 5px;
-  padding: 2px 5px;
+  gap: 2px 4px;
+  padding: 2px 8px 2px 6px;
   min-height: 28px;
+  background: #98fb98;
+  border: 1px solid #2f4f2f;
+  border-radius: 4px;
 }
 
 .factory2ToolbarRowSearch .factory2GroupBox legend {
-  padding: 0 2px;
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2d4a2d;
+  white-space: nowrap;
 }
 
 .factory2ToolbarRowSearch .factory2CheckLabel {
@@ -297,7 +303,6 @@
 }
 
 .factory2ToolbarRowSearch .factory2MenuActions {
-  margin-left: 0;
   flex-shrink: 0;
 }
 

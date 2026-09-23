@@ -53,6 +53,7 @@ export type Factory2LotUpdatePayload = {
     make_year: string;
     count: string;
     use_name: string;
+    use_no: number | null;
   };
   categoryFields: Factory2LotCategoryFields;
   partRows: Factory2LotEditPartRow[];
@@ -139,7 +140,11 @@ const collectBaseFields = (
   remarks: readInput(panelEl, "適用") || null,
   make_year: (makeYear ?? form.makeYear).trim(),
   count: readInput(panelEl, "回数"),
-  use_name: form.itemName.trim()
+  use_name: form.itemName.trim(),
+  use_no: (() => {
+    const n = Number(form.itemNo.trim());
+    return Number.isFinite(n) && n > 0 ? n : null;
+  })()
 });
 
 /** 登録モーダル DOM からペイロードを組み立てる */

@@ -61,6 +61,7 @@ export function buildFactory2LotList(cache: MasterEntityCache): Factory2LotRow[]
       lotStatusName: formatFactory2LotStatus(statusCode),
       lotName: b.lot_name,
       makeYear: parseOptionalInt(u.make_year),
+      itemNo: u.use_no ?? null,
       itemName: u.use_name,
       count: parseOptionalInt(u.count),
       organicClassCode: organicCode,
